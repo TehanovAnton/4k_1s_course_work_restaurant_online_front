@@ -29,23 +29,51 @@
 </script>
 
 <template>
-  <form>
-    <p>
-      <input type="text" v-model="customer.name" />
-    </p>
+    <form class="sign-up-form centrenize-content-row">
+        <div class="form-elements centrenize-content-column">
+            <input type="text" class="form-element" v-model="customer.name" />
 
-    <p>
-      <input type="text" v-model="customer.email" />
-    </p>
+            <input type="text" class="form-element" v-model="customer.email" />
 
-    <p>
-      <input type="text" v-model="customer.password" />
-    </p>
+            <input type="text" class="form-element" v-model="customer.password" />
 
-    <p>
-      <input type="text" v-model="customer.password_confirmation" />
-    </p>
-    
-    <button type="button" @click="sign_up">Sign Up</button>
-  </form>
+            <input type="text" class="form-element" v-model="customer.password_confirmation" />
+            
+            <button type="button" class="form-element" @click="sign_up">Sign Up</button>
+        </div>
+    </form>
 </template>
+
+<style>
+    .block {
+        border: 3px solid black;
+        padding: 3px;
+    }
+
+    .centrenize-content-column {
+        display: flex;
+        justify-content: space-around;        
+        flex-direction: column;
+    }
+
+    .centrenize-content-row {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;        
+    }
+
+    .form-elements {
+        width: 20%;
+        height: 100%;        
+    }
+
+    .form-element {
+        margin: 7% 10% 7% 10%;
+        flex: 1;
+        font-size: 25px;
+    }
+
+    .sign-up-form {
+        height: 35em;
+    }
+</style>

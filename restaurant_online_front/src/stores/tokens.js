@@ -10,7 +10,6 @@ export const useTokensStore = defineStore('tokens', () => {
   })
 
   function setAuthTokens(headers) {
-    debugger
     auth_tokens.value.access_token = headers['access-token']
     auth_tokens.value.client = headers.client
     auth_tokens.value.uid = headers.uid
