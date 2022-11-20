@@ -17,13 +17,9 @@
     .catch((error) => {
       console.log(error);
     })
-    
-    debugger
+
     if (response && response.status === 200) {
       router.push({ name: 'sign_in' })
-    } else {
-      debugger
-      errors = JSON.parse(response.data)
     }
   }
 </script>
