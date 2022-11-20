@@ -1,55 +1,68 @@
 <script setup>
-  import axios from 'axios';
-  import { ref } from 'vue'
-  import router from '../../router/router'
-  import { useTokensStore } from '../../stores/tokens';
+    import ErrorsVue from '../../components/errors/Errors.vue';
+    import axios from 'axios';
+    import { ref } from 'vue'
+    import router from '../../router/router'
+    import { useTokensStore } from '../../stores/tokens';
 
-  const customer = ref({
-    email: 'tehanovanton@gmail.com',
-    password: 'ewqqwe',
-  })
-  const tokens = useTokensStore();
-  const user = ref({})
+    const customer = ref({
+        email: 'tehanovanton@gmail.com',
+        password: 'ewqqwe',
+    })
+    const user = ref({})
+    const errors = ref([])
 
-  const testRequest = async () => {
-    debugger
-    let response = await axios.get('http://localhost:3000/users/10', {
-      headers: tokens.auth_headers
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    
-    if (response && response.status === 200) {
-      user.value = response.data
-    } else {
-      errors = JSON.parse(response.data)
-    }
-  }
+    const tokens = useTokensStore();
 
-  const sign_in = async () => {
-    let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
-    .catch((error) => {
-      console.log(error);
-    })
+    const testRequest = async () => {    
+        let response = await axios.get('http://localhost:3000/users/10', {
+        headers: tokens.auth_headers
+        })
+        .catch((error) => {
+        console.log(error);
+        })
         
-    if (response && response.status === 200) {
-      tokens.setAuthTokens(response.headers)
-      router.push({ name: 'home' })
-    } else {
-      errors = JSON.parse(response.data)
+        if (response && response.status === 200) {
+        user.value = response.data
+        } else {
+        errors = JSON.parse(response.data)
+        }
     }
-  }
+
+    const sign_in = async () => {
+        let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
+        .catch((error) => {        
+            errors.value = error.response.data.errors;
+        })
+            
+        if (response && response.status === 200) {
+        tokens.setAuthTokens(response.headers)
+        router.push({ name: 'home' })
+        }
+    }
+
+    const isErrorsPresent = () => {
+        return errors.value.length != 0;
+    }
+
+    const sign_up = () => {
+        router.push({ name:'sign_up ' })
+    }
 </script>
 
 <template>
+    <ErrorsVue :errors="errors"/>
+    
     <form class="sign-in-form centrenize-content-row">
         <div class="form-elements centrenize-content-column">
             <input type="text" class="form-element" v-model="customer.email" />
 
             <input type="text" class="form-element"  v-model="customer.password" />
             
-            <button type="button" class="form-element" @click="sign_in">Sign Up</button>
+            <div>
+                <button type="button" class="form-element" @click="sign_in">Sign In</button>
+                <button type="button" class="form-element" @click="sign_up">Sign Up</button>    
+            </div>
         </div>        
     </form>
 </template>
