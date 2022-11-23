@@ -16,17 +16,15 @@
 
     const testRequest = async () => {    
         let response = await axios.get('http://localhost:3000/users/10', {
-        headers: tokens.auth_headers
+            headers: tokens.auth_headers
         })
         .catch((error) => {
-        console.log(error);
+            console.log(error);
         })
         
         if (response && response.status === 200) {
-        user.value = response.data
-        } else {
-        errors = JSON.parse(response.data)
-        }
+            user.value = response.data
+        }   
     }
 
     const sign_in = async () => {
@@ -35,9 +33,10 @@
             errors.value = error.response.data.errors;
         })
             
-        if (response && response.status === 200) {
-        tokens.setAuthTokens(response.headers)
-        router.push({ name: 'home' })
+        if (response && response.status === 200) {          
+
+            tokens.setAuthTokens(response.headers)
+            router.push({ name: 'home' })
         }
     }
 

@@ -1,29 +1,25 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useTokensStore = defineStore('tokens', () => {
-  const auth_tokens = ref({
-    access_token: '',
-    client: '',
-    uid: '',
-    expiry: ''
-  })
+export const useTokensStore = defineStore('tokens', () => {  
 
-  function setAuthTokens(headers) {
-    auth_tokens.value.access_token = headers['access-token']
-    auth_tokens.value.client = headers.client
-    auth_tokens.value.uid = headers.uid
-    auth_tokens.value.expiry = headers.expiry
+  function setAuthTokens(headers) {    
+    if (headers['access-token'] !== '') {
+      sessionStorage.setItem('access-token', headers['access-token'])
+      sessionStorage.setItem('client', headers['client'])
+      sessionStorage.setItem('uid', headers['uid'])
+      sessionStorage.setItem('expiry', headers['expiry'])
+    }
   }
 
   const auth_headers = computed(() => {
     return {
-      'access-token': auth_tokens.value.access_token,
-      'client': auth_tokens.value.client,
-      'uid': auth_tokens.value.uid,
-      'expiry': auth_tokens.value.expiry
+      'access-token': sessionStorage.getItem('access-token'),
+      'client': sessionStorage.getItem('client'),
+      'uid': sessionStorage.getItem('uid'),
+      'expiry': sessionStorage.getItem('expiry')
     }
   })
 
-  return { auth_tokens, setAuthTokens, auth_headers }
+  return { setAuthTokens, auth_headers }
 })
