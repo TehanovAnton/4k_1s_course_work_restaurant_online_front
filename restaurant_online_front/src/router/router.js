@@ -20,7 +20,7 @@ const router = createRouter({
     },
     {
       path: '/menu/:id/dishes',
-      menu_dishes: 'menu_dishes',
+      name: 'menu_dishes',
       component: () => import('../views/restaurants/menus/MenuDishesView.vue')
     }
   ]

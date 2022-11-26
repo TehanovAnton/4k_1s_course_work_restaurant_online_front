@@ -8,10 +8,12 @@
   })
 
   const menuDishesView = (menu) => {
-    router.push({ 
+    let view = { 
       name:'menu_dishes', 
       params: { id: menu.id }
-    })
+    }
+    
+    router.push(view)
   }
 </script>
 
