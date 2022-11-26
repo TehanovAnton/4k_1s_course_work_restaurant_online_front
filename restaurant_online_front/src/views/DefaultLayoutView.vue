@@ -2,13 +2,11 @@
   import axios from 'axios';
   import { onBeforeMount, ref } from 'vue';
   import { useTokensStore } from '../stores/tokens'
-  import { useActiveRestaurant } from '../stores/activeRestaurant'
-
   import RestuarantMenus from '../components/restaurants/menus/RestuarantMenus.vue'
   import Restaurants from '../components/restaurants/Restaurants.vue'
 
   const restaurants = ref([])
-  const activeRestaurant = useActiveRestaurant()
+  const activeRestaurant = ref()
   const tokens = useTokensStore()
 
   onBeforeMount(async () => {
@@ -24,10 +22,14 @@
 
     if (response && response.status === 200) {      
       restaurants.value = response.data
-      activeRestaurant.setActiveRestaurant(restaurants.value[0])
+      activeRestaurant.value = restaurants.value[0]
 
       tokens.setAuthTokens(response.headers)
     }
+  }
+
+  const setActiveRestaurant = (restaurant) => {
+    activeRestaurant.value = restaurant
   }
 </script>
 
@@ -38,7 +40,9 @@
 
   <div class="centrenize-content-row">
     <div class="menu centrenize-content-column">
-      <Restaurants :restaurants="restaurants" :active-restaurant="activeRestaurant"/>
+      <Restaurants :restaurants="restaurants"
+                   :active-restaurant="activeRestaurant" 
+                   @change-active-restaurant="setActiveRestaurant" />
     </div>
 
     <div v-if="activeRestaurant" class="content block centrenize-content-row">

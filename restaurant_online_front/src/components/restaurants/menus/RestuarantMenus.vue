@@ -4,7 +4,7 @@
 
   const props = defineProps(['restaurant'])
   const menus = computed(() => {    
-    return props.restaurant.value.menus
+    return props.restaurant.menus
   })
 
   const menuDishesView = (menu) => {

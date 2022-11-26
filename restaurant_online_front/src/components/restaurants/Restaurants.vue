@@ -1,11 +1,15 @@
 <script setup>
+import { def } from '@vue/shared';
+
   const props = defineProps([
     'restaurants',
-    'activeRestaurant'
+    'activeRestaurant',
   ])
 
-  const restaurantClass = (restaurant) => {    
-    if (restaurant.id === props.activeRestaurant.value.id) {
+  const emits = defineEmits(['change-active-restaurant'])
+
+  const restaurantClass = (restaurant) => {
+    if (restaurant.id === props.activeRestaurant.id) {
       return 'active-block'
     }
 
@@ -16,25 +20,8 @@
 <template>
   <div v-for="restaurant in restaurants"
     v-bind:class="restaurantClass(restaurant)"
-    @click="activeRestaurant.setActiveRestaurant(restaurant)"
+    @click="$emit('change-active-restaurant', restaurant)"
   >
     {{ restaurant.name }}
   </div>
 </template>
-
-<!-- <style>
-  .active-block {
-    border: 3px solid black;
-    padding: 3px;
-    margin: 3px;
-    background-color: black;
-    color: white;
-  }
-
-
-  .block {
-    border: 3px solid black;
-    padding: 3px;
-    margin: 3px;
-  }
-</style> -->
