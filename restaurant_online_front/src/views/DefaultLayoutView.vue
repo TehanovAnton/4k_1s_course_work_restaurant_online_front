@@ -2,11 +2,13 @@
   import axios from 'axios';
   import { onBeforeMount, ref } from 'vue';
   import { useTokensStore } from '../stores/tokens'
+  import { useActiveRestaurant } from '../stores/activeRestaurant'
 
-  import MenuVue from '../components/restaurants/menus/Menu.vue'
+  import RestuarantMenus from '../components/restaurants/menus/RestuarantMenus.vue'
+  import Restaurants from '../components/restaurants/Restaurants.vue'
 
   const restaurants = ref([])
-  const activeRestaurant = ref({})
+  const activeRestaurant = useActiveRestaurant()
   const tokens = useTokensStore()
 
   onBeforeMount(async () => {
@@ -14,30 +16,18 @@
   })
 
   const getRestaurants = async () => {        
-    let response = await axios.get('http://localhost:3000/restaurants', {
-      headers: tokens.auth_headers
-    })
+    let response = await axios.get('http://localhost:3000/restaurants',
+                                   { headers: tokens.auth_headers })
     .catch((error) => {            
       console.log(error);
     })
 
     if (response && response.status === 200) {      
       restaurants.value = response.data
-      activeRestaurant.value = restaurants.value[0]
+      activeRestaurant.setActiveRestaurant(restaurants.value[0])
+
       tokens.setAuthTokens(response.headers)
     }
-  }
-
-  const restaurantClass = (restaurant) => {
-    if (restaurant.id === activeRestaurant.value.id){
-      return 'active-block'
-    } else {
-      return 'block'
-    }
-  }
-  
-  const setActiveRestaurant = (restaurant) => {
-    activeRestaurant.value = restaurant
   }
 </script>
 
@@ -48,16 +38,11 @@
 
   <div class="centrenize-content-row">
     <div class="menu centrenize-content-column">
-      <div v-for="restaurant in restaurants"
-            v-bind:class="restaurantClass(restaurant)"
-            @click="setActiveRestaurant(restaurant)"
-      >
-        {{ restaurant.name }}
-      </div>
+      <Restaurants :restaurants="restaurants" :active-restaurant="activeRestaurant"/>
     </div>
 
     <div v-if="activeRestaurant" class="content block centrenize-content-row">
-      <MenuVue :restaurant="activeRestaurant"/>
+      <RestuarantMenus :restaurant="activeRestaurant" />
     </div>
   </div>
 
