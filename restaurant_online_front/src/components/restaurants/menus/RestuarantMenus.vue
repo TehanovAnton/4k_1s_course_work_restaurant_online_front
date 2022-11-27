@@ -1,46 +1,19 @@
 <script setup>
-  import { computed } from '@vue/reactivity';
-  import router from '../../../router/router';
+  const props = defineProps(['menus', 'activeMenu'])
 
-  const props = defineProps(['restaurant'])
-  const menus = computed(() => {    
-    return props.restaurant.menus
-  })
-
-  const menuDishesView = (menu) => {
-    let view = { 
-      name:'menu_dishes', 
-      params: { id: menu.id }
+  const menuClass = (menu) => {
+    if (props.activeMenu && menu.id === props.activeMenu.id) {
+      return 'active-block'
     }
-    
-    router.push(view)
-  }
+
+    return 'block'
+  } 
 </script>
 
 <template>
   <div class="menu centrenize-content-column">
-    <p v-for="menu in menus" class="block"  @click="menuDishesView(menu)">
+    <p v-for="menu in menus" v-bind:class="menuClass(menu)"  @click="$emit('menu-click',  menu)">
       {{ menu.name }}
     </p>
   </div>
 </template>
-
-<style>
-  .block {
-    border: 3px solid black;
-    padding: 3px;
-    margin: 3px;
-  }
-
-  .centrenize-content-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-
-  .menu {
-    flex: 1;
-
-    margin: 1.5px;
-  }
-</style>

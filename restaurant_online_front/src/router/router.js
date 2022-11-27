@@ -19,8 +19,8 @@ const router = createRouter({
       component: () => import('../views/auth/SignInView.vue')
     },
     {
-      path: '/menu/:id/dishes',
-      name: 'menu_dishes',
+      path: '/restaurants/:id/menus',
+      name: 'restaurant_menus',
       component: () => import('../views/restaurants/menus/MenuDishesView.vue')
     }
   ]
