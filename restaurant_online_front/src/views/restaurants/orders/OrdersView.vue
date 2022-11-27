@@ -1,49 +1,45 @@
 <script setup>
-  import axios from 'axios';
+  import axios from 'axios';  
   import { onBeforeMount, ref } from 'vue';
-  import { useRoute } from 'vue-router';
   import { useTokensStore } from '../../../stores/tokens';
+  import { useRoute } from 'vue-router';
 
-  import RestuarantMenus from '../../../components/restaurants/menus/RestuarantMenus.vue'
-  import MenuDishes from '../../../components/restaurants/menus/dishes/MenuDishes.vue' 
+  import UserOrders from "../../../components/users/orders/UserOrders.vue";
+  import Restaurants from '../../../components/restaurants/Restaurants.vue'
+  import { computed } from '@vue/reactivity';
 
-  const route = useRoute();
-  const menus = ref()
-  const activeMenu = ref()
+  const orders = ref({})
+  const activeRestaurant = ref({})
   const tokens = useTokensStore()
+  const route = useRoute()
 
-  onBeforeMount(async () => {
-    let response = await requestMenus()
-
-    setRefs(response)
+  const restaurants = computed(() => {
+    let rests = orders.value.map(order => order.restaurant)
+    return rests
   })
 
-  const requestMenus = async () => {
-    let url = `http://localhost:3000/restaurants/${route.params.id}/menus/`
+  onBeforeMount(async () => {
+    let respones = await getOrders()
+
+    setRefs(respones)
+  })
+
+  const getOrders = async () => {
+    let url = `http://localhost:3000/users/${route.params.id}/orders`
     let headers = { headers: tokens.auth_headers }
 
     let response = await axios.get(url, headers)
-                              .catch(errorshandler)
+                              .catch(errorsHandler)
 
     return response
-  }
-
-  const setActiveMenu = (menu) => {    
-    activeMenu.value = menu
-  }
-
-  // ############
-
-  let errorshandler = (error) => {            
-    console.log(error);
   }
 
   const setRefs = (response) => {
     let successfulResponse = isSuccessfulResponse(response)
 
     if (successfulResponse) {   
-      menus.value = response.data      
-      activeMenu.value = menus.value[0]
+      orders.value = response.data      
+      // activeRestaurant.value = restaurants[0]
 
       tokens.setAuthTokens(response.headers)
     }
@@ -51,6 +47,13 @@
 
   const isSuccessfulResponse = (response) => response && response.status === 200
 
+  let errorsHandler = (error) => {            
+    console.log(error);
+  }
+
+  const setActiveRestaurant = (restaurant) => {
+    activeRestaurant.value = restaurant
+  }
 </script>
 
 <template>
@@ -61,13 +64,12 @@
   <div class="centrenize-content-row">
 
     <div class="menu centrenize-content-column">
-      <RestuarantMenus :menus="menus"
-                       :active-menu="activeMenu"
-                       @menu-click="setActiveMenu" />
+      <Restaurants :restaurants="restaurants"
+                   @change-active-restaurant="setActiveRestaurant" />
     </div>
 
-    <div v-if="activeMenu" class="content centrenize-content-column">
-      <MenuDishes :dishes="activeMenu.dishes" />
+    <div class="menu centrenize-content-column">
+      <UserOrders :orders="orders" />
     </div>
 
   </div>

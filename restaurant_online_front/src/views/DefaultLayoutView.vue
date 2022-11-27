@@ -52,6 +52,7 @@
   </header>
 
   <div class="centrenize-content-row">
+
     <div class="menu centrenize-content-column">
       <Restaurants :restaurants="restaurants"
                    :active-restaurant="activeRestaurant" 
@@ -62,6 +63,7 @@
       <RestuarantMenus :menus="activeRestaurant.menus"
                        @menu-click="restaurantMenusView" />
     </div>
+    
   </div>
 
   <footer class="block centrenize-content-row">
@@ -91,15 +93,17 @@
   }
 
   .centrenize-content-column {
-    display: flex;
-    flex-direction: column;
+    display: flex;        
     justify-content: space-around;
+
+    flex-direction: column;    
   }
 
   .centrenize-content-row {
     display: flex;
-    flex-direction: row ;        
-    justify-content: space-around;        
+    justify-content: space-around;
+    
+    flex-direction: row;                
   }
 
   .menu {
