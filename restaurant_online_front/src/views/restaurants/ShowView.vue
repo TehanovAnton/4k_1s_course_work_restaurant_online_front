@@ -1,31 +1,32 @@
 <script setup>
   import { ref } from 'vue';
+  import ModeSwitch from '../../components/ModeSwitch.vue';
   import EditRestaurant from './EditView.vue'
 
   const props = defineProps(['restaurant'])
-  const mode = ref('show')
+  const modes = ref(['show', 'edit'])
+  const currentMode = ref('show')
+  const modesClass = ref('modeSwitch')
 
   const setMode = (modeName) => {
-    if (mode.value !== modeName) {
-      mode.value = modeName
+    if (currentMode.value !== modeName) {
+      currentMode.value = modeName
     } else {
-      mode.value = modeName
+      currentMode.value = modeName
     }
   }
 </script>
 
 <template>
-  <label for="showModeSwitch">Show: </label>
-  <input id="showModeSwitch" name="modeSwith" type="radio" @click="setMode('show')" />
+  <div>
+    <ModeSwitch v-for="mode in modes" :mode="mode" :modes-class="modesClass" @switch-mode="setMode" />
+  </div>
 
-  <label for="editModeSwitch">Edit: </label>
-  <input id="editModeSwitch" name="modeSwith" type="radio" @click="setMode('edit')" />
-
-  <div v-if="mode == 'show'">
+  <div v-if="currentMode == 'show'">
     Name: {{ restaurant.name }}
   </div>
 
-  <div v-if="mode == 'edit'">
+  <div v-if="currentMode == 'edit'">
     <EditRestaurant :restaurant="restaurant" />
-  </div>
+  </div>  
 </template>

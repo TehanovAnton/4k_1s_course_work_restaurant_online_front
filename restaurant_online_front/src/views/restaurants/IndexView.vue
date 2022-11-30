@@ -10,6 +10,7 @@
   const activeRestaurant = ref()
   const tokens = useTokensStore()
   const router = useRouter()
+  const mode = ref('index')
 
   onBeforeMount(async () => {
     await getRestaurants()
@@ -25,6 +26,14 @@
       tokens.setAuthTokens(response.headers)
     }
   }
+
+  const setMode = (modeName) => {
+    if (mode.value !== modeName) {
+      mode.value = modeName
+    } else {
+      mode.value = modeName
+    }
+  }
 </script>
 
 <template>
@@ -35,6 +44,7 @@
   <div class="centrenize-content-row">
 
     <div class="menu block centrenize-content-column">
+      
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
       <div v-for="restaurant in restaurants">
