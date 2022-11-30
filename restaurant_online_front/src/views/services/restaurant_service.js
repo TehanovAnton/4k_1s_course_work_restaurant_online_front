@@ -27,6 +27,19 @@ const apiUpdateRestaurants = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const apiCreateRestaurants = async (authHeaders, restaurant) => {
+  let createUrl = `http://localhost:3000/restaurants`
+  let data = { restaurant: restaurant }  
+  
+  let response = await axios.post(
+    createUrl, 
+    data, 
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
 const isSuccessful = (response) => {
   return response && response.status === 200
 }
@@ -35,4 +48,4 @@ const errorshandler = (error) => {
   console.log(error);
 }
 
-export default { apiIndexRestaurants, apiUpdateRestaurants }
+export default { apiIndexRestaurants, apiUpdateRestaurants, apiCreateRestaurants }

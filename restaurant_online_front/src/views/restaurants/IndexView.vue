@@ -32,6 +32,11 @@
     }
   }
 
+  const refreshData = async () => {
+    await getRestaurants()
+    setMode('show')
+  }
+
   const setMode = (modeName) => {
     if (currentMode.value !== modeName) {
       currentMode.value = modeName
@@ -55,11 +60,11 @@
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
       <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">
-        <ShowRestaurant :restaurant="restaurant" @data-change="getRestaurants"/>
+        <ShowRestaurant :restaurant="restaurant" @data-change="refreshData"/>
       </div>
 
       <div v-if="currentMode == 'create'">
-        <CreateRestaurant />
+        <CreateRestaurant @data-change="refreshData" />
       </div>
 
     </div>  
