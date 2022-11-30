@@ -1,16 +1,9 @@
 <script setup>
+import RestaurantForm from '../../components/restaurants/RestaurantForm.vue';
+
   const props = defineProps(['restaurant'])
 </script>
 
 <template>  
-  <form class="block">
-    <div class="centrenize-content-column">
-      <input v-model="restaurant.name"/>
-      <input v-model="restaurant.email"/>
-      <input v-model="restaurant.address"/>
-    </div>
-
-    <button type="button">cancel</button>
-  </form>
-
+  <RestaurantForm :restaurant="props.restaurant" action-name="update" @form-submit="() => {}"/>
 </template>

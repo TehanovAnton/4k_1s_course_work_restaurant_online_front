@@ -24,7 +24,10 @@
   </div>
 
   <div v-if="currentMode == 'show'">
-    Name: {{ restaurant.name }}
+    <div class="centrenize-content-column">
+      Name: {{ restaurant.name }}
+      <button type="button" @click="() => {}">destroy</button>
+    </div>
   </div>
 
   <div v-if="currentMode == 'edit'">

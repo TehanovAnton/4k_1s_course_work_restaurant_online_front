@@ -6,6 +6,7 @@
   import ShowRestaurant from './ShowView.vue'
   import service from '../services/restaurant_service'
   import ModeSwitch from '../../components/ModeSwitch.vue';
+  import CreateRestaurant from './CreateView.vue';
 
   const emits = defineEmits(['restaurantsMode'])
 
@@ -56,6 +57,10 @@
       <!-- For this view it recives restaurant, in separate should fetch by id -->
       <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">
         <ShowRestaurant :restaurant="restaurant" />
+      </div>
+
+      <div v-if="currentMode == 'create'">
+        <CreateRestaurant />
       </div>
 
     </div>  
