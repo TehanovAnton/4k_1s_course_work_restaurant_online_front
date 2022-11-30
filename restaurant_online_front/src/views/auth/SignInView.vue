@@ -9,23 +9,9 @@
         email: 'tehanovanton@gmail.com',
         password: 'ewqqwe',
     })
-    const user = ref({})
     const errors = ref([])
 
-    const tokens = useTokensStore();
-
-    const testRequest = async () => {    
-        let response = await axios.get('http://localhost:3000/users/10', {
-            headers: tokens.auth_headers
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-        
-        if (response && response.status === 200) {
-            user.value = response.data
-        }   
-    }
+    const tokens = useTokensStore();    
 
     const sign_in = async () => {
         let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
@@ -34,14 +20,9 @@
         })
             
         if (response && response.status === 200) {          
-
             tokens.setAuthTokens(response.headers)
             router.push({ name: 'home' })
         }
-    }
-
-    const isErrorsPresent = () => {
-        return errors.value.length != 0;
     }
 
     const sign_up = () => {
