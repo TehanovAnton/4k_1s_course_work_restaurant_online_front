@@ -4,11 +4,12 @@
 
 <template>  
   <form class="block">
-    <p>
+    <div class="centrenize-content-column">
       <input v-model="restaurant.name"/>
-    </p>
+      <input v-model="restaurant.email"/>
+      <input v-model="restaurant.address"/>
+    </div>
 
-    <button type="button">save</button>
     <button type="button">cancel</button>
   </form>
 
