@@ -1,10 +1,10 @@
 <script setup>
   import axios from 'axios';
-  import { onBeforeMount, ref } from 'vue';
-  import { useTokensStore } from '../../stores/tokens'
+  import { onBeforeMount, ref } from 'vue';  
   import { useRouter } from 'vue-router';
   import ShowRestaurant from './ShowView.vue'
   import service from '../services/restaurant_service'
+  import tokensService from '../services/tokensService';
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import CreateRestaurant from './CreateView.vue';
 
@@ -12,7 +12,6 @@
 
   const restaurants = ref([])
   const activeRestaurant = ref()
-  const tokens = useTokensStore()
   const router = useRouter()
   const modes = ref(['index', 'create'])
   const currentMode = ref('index')
@@ -23,13 +22,13 @@
   })
 
   const getRestaurants = async () => {      
-    let { response, isSuccessful } = await service.apiRestaurants(tokens.auth_headers)
+    let { response, isSuccessful } = await service.apiIndexRestaurants(tokensService.auth_headers())
 
     if (isSuccessful) {      
       restaurants.value = response.data
       activeRestaurant.value = restaurants.value[0]
 
-      tokens.setAuthTokens(response.headers)
+      tokensService.setAuthTokens(response.headers)
     }
   }
 
@@ -56,7 +55,7 @@
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
       <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">
-        <ShowRestaurant :restaurant="restaurant" />
+        <ShowRestaurant :restaurant="restaurant" @data-change="getRestaurants"/>
       </div>
 
       <div v-if="currentMode == 'create'">

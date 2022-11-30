@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiRestaurants = async (authHeaders) => {
+const apiIndexRestaurants = async (authHeaders) => {
   let response = await axios.get('http://localhost:3000/restaurants',
                                  { headers: authHeaders })
                             .catch(errorshandler)
@@ -10,8 +10,29 @@ const apiRestaurants = async (authHeaders) => {
   return { response: response, isSuccessful: isSuccessful }
 }
 
+const apiUpdateRestaurants = async (authHeaders, restaurant) => {
+  let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
+  let data = {
+    name: restaurant.name,
+    email: restaurant.email,
+    address: restaurant.address
+  }
+  
+  let response = await axios.put(
+    updateUrl, 
+    data, 
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
+const isSuccessful = (response) => {
+  return response && response.status === 200
+}
+
 const errorshandler = (error) => {            
   console.log(error);
 }
 
-export default { apiRestaurants }
+export default { apiIndexRestaurants, apiUpdateRestaurants }

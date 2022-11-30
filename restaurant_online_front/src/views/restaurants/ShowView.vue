@@ -4,6 +4,7 @@
   import EditRestaurant from './EditView.vue'
 
   const props = defineProps(['restaurant'])  
+  const emits = defineEmits(['data-change'])
 
   const modes = ref(['show', 'edit'])
   const currentMode = ref('show')
@@ -31,6 +32,6 @@
   </div>
 
   <div v-if="currentMode == 'edit'">
-    <EditRestaurant :restaurant="restaurant" />
+    <EditRestaurant :restaurant="restaurant" @data-change="$emit('data-change')" />
   </div>  
 </template>

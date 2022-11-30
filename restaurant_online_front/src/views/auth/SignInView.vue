@@ -3,7 +3,7 @@
     import axios from 'axios';
     import { ref } from 'vue'
     import router from '../../router/router'
-    import { useTokensStore } from '../../stores/tokens';
+    import tokensService from '../services/tokensService';
 
     const customer = ref({
         email: 'tehanovanton@gmail.com',
@@ -11,18 +11,16 @@
     })
     const errors = ref([])
 
-    const tokens = useTokensStore();    
-
     const sign_in = async () => {
-        let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
-        .catch((error) => {        
-            errors.value = error.response.data.errors;
-        })
-            
-        if (response && response.status === 200) {          
-            tokens.setAuthTokens(response.headers)
-            router.push({ name: 'home' })
-        }
+      let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
+      .catch((error) => {        
+        errors.value = error.response.data.errors;
+      })
+          
+      if (response && response.status === 200) {          
+        tokensService.setAuthTokens(response.headers)
+        router.push({ name: 'home' })
+      }
     }
 
     const sign_up = () => {
