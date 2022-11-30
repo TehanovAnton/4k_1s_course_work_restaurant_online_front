@@ -1,7 +1,9 @@
 <script setup>
-import { computed } from '@vue/reactivity';
+  import { computed } from '@vue/reactivity';
 
-  const props = defineProps(['mode', 'modesClass'])  
+  const props = defineProps(['mode', 'modesClass']) 
+  const emits = defineEmits(['switchMode'])
+
   const modeId = computed(() => {
     return `${props.mode}ModeSwitch`
   })

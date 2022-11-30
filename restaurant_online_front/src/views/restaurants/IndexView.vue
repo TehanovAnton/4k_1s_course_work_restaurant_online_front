@@ -5,12 +5,17 @@
   import { useRouter } from 'vue-router';
   import ShowRestaurant from './ShowView.vue'
   import service from '../services/restaurant_service'
+  import ModeSwitch from '../../components/ModeSwitch.vue';
+
+  const emits = defineEmits(['restaurantsMode'])
 
   const restaurants = ref([])
   const activeRestaurant = ref()
   const tokens = useTokensStore()
   const router = useRouter()
-  const mode = ref('index')
+  const modes = ref(['index', 'create'])
+  const currentMode = ref('index')
+  const modesClass = ref("restaurans-class")
 
   onBeforeMount(async () => {
     await getRestaurants()
@@ -28,10 +33,10 @@
   }
 
   const setMode = (modeName) => {
-    if (mode.value !== modeName) {
-      mode.value = modeName
+    if (currentMode.value !== modeName) {
+      currentMode.value = modeName
     } else {
-      mode.value = modeName
+      currentMode.value = modeName
     }
   }
 </script>
@@ -44,10 +49,12 @@
   <div class="centrenize-content-row">
 
     <div class="menu block centrenize-content-column">
-      
+      <div >
+        <ModeSwitch v-for="mode in modes" :mode="mode" :modes-class="modesClass" @switch-mode="setMode" />
+      </div>
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
-      <div v-for="restaurant in restaurants">
+      <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">
         <ShowRestaurant :restaurant="restaurant" />
       </div>
 

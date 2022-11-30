@@ -3,10 +3,11 @@
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import EditRestaurant from './EditView.vue'
 
-  const props = defineProps(['restaurant'])
+  const props = defineProps(['restaurant'])  
+
   const modes = ref(['show', 'edit'])
   const currentMode = ref('show')
-  const modesClass = ref('modeSwitch')
+  const modesClass = ref('restaurant-class')
 
   const setMode = (modeName) => {
     if (currentMode.value !== modeName) {
