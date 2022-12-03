@@ -4,7 +4,7 @@
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import EditRestaurant from './EditView.vue'
   import tokensService from '../services/tokensService';
-  import service from '../services/restaurant_service'
+  import service from '../services/restaurants/restaurant_service'
 
   const props = defineProps(['restaurant'])  
   const emits = defineEmits(['data-change'])

@@ -3,10 +3,13 @@
   import { onBeforeMount, ref } from 'vue';  
   import { useRouter } from 'vue-router';
   import ShowRestaurant from './ShowView.vue'
-  import service from '../services/restaurant_service'
+  import service from '../services/restaurants/restaurant_service'
   import tokensService from '../services/tokensService';
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import CreateRestaurant from './CreateView.vue';
+
+  import { useRestaurantAuthStore } from '../../stores/restaurants/restaurntAuth'
+  const restAuth = useRestaurantAuthStore()
 
   const emits = defineEmits(['restaurantsMode'])
 
@@ -30,7 +33,7 @@
     await getRestaurants()
   })
 
-  const getRestaurants = async () => {      
+  const getRestaurants = async () => {
     let { response, isSuccessful } = await service.apiIndexRestaurants(tokensService.auth_headers())
 
     if (isSuccessful) {      
@@ -65,7 +68,7 @@
         <ShowRestaurant :restaurant="restaurant" @data-change="refreshData"/>
       </div>
 
-      <div v-if="currentMode == 'create'">
+      <div v-if="(currentMode == 'create' && restAuth.can('create'))">
         <CreateRestaurant @data-change="refreshData" />
       </div>
 

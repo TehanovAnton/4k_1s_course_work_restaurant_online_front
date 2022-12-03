@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue';
   import RestaurantForm from '../../components/restaurants/RestaurantForm.vue';  
-  import service from '../services/restaurant_service'
+  import service from '../services/restaurants/restaurant_service'
   import tokensService from '../services/tokensService';
 
   const props = defineProps(['restaurant'])

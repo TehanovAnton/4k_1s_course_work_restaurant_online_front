@@ -1,31 +1,41 @@
 <script setup>
-    import ErrorsVue from '../../components/errors/Errors.vue';
-    import axios from 'axios';
-    import { ref } from 'vue'
-    import router from '../../router/router'
-    import tokensService from '../services/tokensService';
+  import ErrorsVue from '../../components/errors/Errors.vue';
+  import axios from 'axios';
+  import { ref } from 'vue'
+  import router from '../../router/router'
+  import tokensService from '../services/tokensService';
+  import userService from '../services/users/user_service'
 
-    const customer = ref({
-        email: 'tehanovanton@gmail.com',
-        password: 'ewqqwe',
+  import { useCurrentUserStore } from '../../stores/users/currentUser';
+  const currentUserStore = useCurrentUserStore()
+
+  const customer = ref({
+      email: 'tehanovanton@gmail.com',
+      password: 'ewqqwe',
+  })
+  const errors = ref([])
+
+  const sign_in = async () => {
+    let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
+    .catch((error) => {        
+      errors.value = error.response.data.errors;
     })
-    const errors = ref([])
+        
+    if (response && response.status === 200) {          
+      tokensService.setAuthTokens(response.headers)
 
-    const sign_in = async () => {
-      let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
-      .catch((error) => {        
-        errors.value = error.response.data.errors;
-      })
-          
-      if (response && response.status === 200) {          
-        tokensService.setAuthTokens(response.headers)
-        router.push({ name: 'home' })
-      }
-    }
+      let userRepsonse = await userService.apiShowUser(tokensService.auth_headers(), response.data.data.id)      
+      currentUserStore.setCurrentUser(userRepsonse.response.data)
+            
+      tokensService.setAuthTokens(userRepsonse.response.headers)
 
-    const sign_up = () => {
-        router.push({ name:'sign_up ' })
+      router.push({ name: 'home' })
     }
+  }
+
+  const sign_up = () => {
+      router.push({ name:'sign_up ' })
+  }
 </script>
 
 <template>

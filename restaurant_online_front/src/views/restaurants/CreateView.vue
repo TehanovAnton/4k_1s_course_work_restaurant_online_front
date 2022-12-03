@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue';
   import RestaurantForm from '../../components/restaurants/RestaurantForm.vue';
-  import restaurant_service from '../services/restaurant_service';
+  import restaurant_service from '../services/restaurants/restaurant_service';
   import tokensService from '../services/tokensService';
   
   const emits = defineEmits(['data-change'])
