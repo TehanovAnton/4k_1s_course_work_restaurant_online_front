@@ -3,6 +3,8 @@
   import { ref } from 'vue';
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import EditRestaurant from './EditView.vue'
+  import tokensService from '../services/tokensService';
+  import service from '../services/restaurant_service'
 
   const props = defineProps(['restaurant'])  
   const emits = defineEmits(['data-change'])
@@ -25,6 +27,18 @@
     setMode('show')
     emits('data-change')
   }
+
+  const destroyRestaurant = async () => {
+    let { 
+      response, 
+      isSuccessful
+    } = await service.apiDestroyRestaurants(tokensService.auth_headers(), props.restaurant)
+
+    if (isSuccessful) {      
+      tokensService.setAuthTokens(response.headers)
+      emits('data-change')
+    }
+  }
 </script>
 
 <template>
@@ -37,7 +51,7 @@
   <div v-if="currentMode == 'show'">
     <div class="centrenize-content-column">
       Name: {{ restaurant.name }}
-      <button type="button" @click="() => {}">destroy</button>
+      <button type="button" @click="destroyRestaurant()">destroy</button>
     </div>
   </div>
 

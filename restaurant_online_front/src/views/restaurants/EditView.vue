@@ -14,7 +14,7 @@
     } = await service.apiUpdateRestaurants(tokensService.auth_headers(), props.restaurant)
 
     if (isSuccessful) {      
-      props.restaurant.value = response.data
+      // props.restaurant.value = response.data
       tokensService.setAuthTokens(response.headers)
       emits('data-change')
     }

@@ -40,6 +40,17 @@ const apiCreateRestaurants = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const apiDestroyRestaurants = async (authHeaders, restaurant) => {
+  let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
+  
+  let response = await axios.delete(
+    updateUrl,
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
 const isSuccessful = (response) => {
   return response && response.status === 200
 }
@@ -48,4 +59,9 @@ const errorshandler = (error) => {
   console.log(error);
 }
 
-export default { apiIndexRestaurants, apiUpdateRestaurants, apiCreateRestaurants }
+export default {
+  apiIndexRestaurants,
+  apiUpdateRestaurants,
+  apiCreateRestaurants,
+  apiDestroyRestaurants
+}
