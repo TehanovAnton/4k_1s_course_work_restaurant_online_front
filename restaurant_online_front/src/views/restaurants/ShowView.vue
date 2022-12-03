@@ -1,6 +1,6 @@
 <script setup>
   import { computed } from '@vue/reactivity';
-import { ref } from 'vue';
+  import { ref } from 'vue';
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import EditRestaurant from './EditView.vue'
 

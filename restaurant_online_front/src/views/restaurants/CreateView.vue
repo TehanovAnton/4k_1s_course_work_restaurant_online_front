@@ -13,7 +13,6 @@
       isSuccessful
     } = await restaurant_service.apiCreateRestaurants(tokensService.auth_headers(), newRestaurant.value)
 
-    debugger
     if (isSuccessful) {      
       tokensService.setAuthTokens(response.headers)
       emits('data-change')
