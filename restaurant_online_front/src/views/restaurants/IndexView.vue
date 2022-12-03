@@ -13,10 +13,19 @@
   const restaurants = ref([])
   const activeRestaurant = ref()
   const router = useRouter()
+// 
   const modes = ref(['index', 'create'])
   const currentMode = ref('index')
   const modesClass = ref("restaurans-class")
 
+  const setMode = (modeName) => {
+    if (currentMode.value !== modeName) {
+      currentMode.value = modeName
+    } else {
+      currentMode.value = modeName
+    }
+  }
+// 
   onBeforeMount(async () => {
     await getRestaurants()
   })
@@ -35,15 +44,7 @@
   const refreshData = async () => {
     await getRestaurants()
     setMode('index')
-  }
-
-  const setMode = (modeName) => {
-    if (currentMode.value !== modeName) {
-      currentMode.value = modeName
-    } else {
-      currentMode.value = modeName
-    }
-  }
+  }  
 </script>
 
 <template>
@@ -55,7 +56,8 @@
 
     <div class="menu block centrenize-content-column">
       <div >
-        <ModeSwitch v-for="mode in modes" :mode="mode" :modes-class="modesClass" @switch-mode="setMode" />
+        <ModeSwitch v-for="mode in modes" :mode="mode" :modes-class="modesClass" :current-mode="currentMode"
+                    @switch-mode="setMode" />
       </div>
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
