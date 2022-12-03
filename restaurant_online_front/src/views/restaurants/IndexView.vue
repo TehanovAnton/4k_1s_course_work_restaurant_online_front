@@ -34,7 +34,7 @@
 
   const refreshData = async () => {
     await getRestaurants()
-    setMode('show')
+    setMode('index')
   }
 
   const setMode = (modeName) => {

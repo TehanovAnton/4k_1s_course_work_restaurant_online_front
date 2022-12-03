@@ -10,6 +10,12 @@
   const currentMode = ref('show')
   const modesClass = ref('restaurant-class')
 
+  const showDataChange = () => {
+    debugger
+    setMode('show')
+    emits('data-change')
+  }
+
   const setMode = (modeName) => {
     if (currentMode.value !== modeName) {
       currentMode.value = modeName
@@ -32,6 +38,6 @@
   </div>
 
   <div v-if="currentMode == 'edit'">
-    <EditRestaurant :restaurant="restaurant" @data-change="$emit('data-change')" />
+    <EditRestaurant :restaurant="restaurant" @data-change="showDataChange" />
   </div>  
 </template>
