@@ -5,13 +5,12 @@
   import ShowRestaurant from './ShowView.vue'
   import service from '../services/restaurants/restaurant_service'
   import tokensService from '../services/tokensService';
-  import ModeSwitch from '../../components/ModeSwitch.vue';
   import CreateRestaurant from './CreateView.vue';
   import { computed } from '@vue/reactivity';
+  import Modes from '../../components/Modes.vue';
 
   onBeforeMount(async () => {
     await getRestaurants()
-    await getModesAllowabilities()
     dataReady.value = true
   })
 
@@ -30,26 +29,7 @@
   })
   const currentMode = ref('index')
   const modesClass = ref("restaurans-class")
-
-  const setMode = (modeName) => {
-    if (currentMode.value !== modeName) {
-      currentMode.value = modeName
-    } else {
-      currentMode.value = modeName
-    }
-  }
-
-  const getModesAllowabilities = async () => {
-    modes.value.forEach(async mode => { 
-      await setModeAlowability(mode)
-    })
-  }
-
-  const setModeAlowability = async (mode) => {
-    let modeProperties = modesProperties.value[mode]    
-    modesProperties.value[mode].allowed = await service.can(modeProperties.action, ['index', 'show'])
-  }
-
+  const setMode = (modeName) => currentMode.value = modeName
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
   const modeVisibility = (mode) => modesProperties.value[mode].visible
 //  
@@ -79,20 +59,16 @@
   <div v-if="dataReady" class="centrenize-content-row">
     <div class="menu block centrenize-content-column">
 
-      <div class="centrenize-content-row">
-        <div v-for="mode in modes">
-          <ModeSwitch :allowed="modeAlowability(mode)"  :mode="mode"              :modes-class="modesClass" 
-                      :current-mode="currentMode"       :visible="modeVisibility(mode)"
-                      @switch-mode="setMode" />
-        </div>
-      </div>
+      <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
+             :current-mode="currentMode"
+             @set-mode="setMode"/>
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
       <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">
         <ShowRestaurant :restaurant="restaurant" @data-change="refreshData"/>
       </div>
 
-      <div v-if="(currentMode == 'create' && can('create'))">
+      <div v-if="(currentMode == 'create' && modeAlowability('create'))">
         <CreateRestaurant @data-change="refreshData" />
       </div>
 
