@@ -28,7 +28,7 @@ const apiUpdateRestaurants = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
-const apiCanUpdateRestaurants = async (authHeaders, restaurant) => {
+const apiCanUpdateRestaurant = async (authHeaders, restaurant) => {
   let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/can_update`
   
   let response = await axios.get(
@@ -74,7 +74,7 @@ const apiDestroyRestaurants = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
-const apiCanDestroyRestaurants = async (authHeaders, restaurant) => {
+const apiCanDestroyRestaurant = async (authHeaders, restaurant) => {
   let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/can_destroy`
   
   let response = await axios.get(
@@ -90,20 +90,23 @@ const can = async (action, public_actions, record) => {
 
   if (action == 'create') {
     response = await apiCanCreateRestaurants(tokensService.auth_headers())
-    tokensService.setAuthTokens(response.response.headers)
   } else if (action == 'update') {
-    debugger
-    response = await apiCanUpdateRestaurants(tokensService.auth_headers(), record)
-    tokensService.setAuthTokens(response.response.headers)
+    response = await apiCanUpdateRestaurant(tokensService.auth_headers(), record)
+  } else if (action == 'destroy') {
+    response = await apiCanDestroyRestaurant(tokensService.auth_headers(), record)
   }
    else if (public_actions.includes(action)) {
     return true
-  } 
+  }
+  
+  if (response.response.status == 401) {
+    router.push({ name: 'sign_in' })
+  }
 
+  tokensService.setAuthTokens(response.response.headers)
+  
   if (response.isSuccessful) {
     return !!response.response.data
-  } else if (response.response.status == 401) {
-    router.push({ name: 'sign_in' })
   }
 
   return false
@@ -123,7 +126,7 @@ export default {
   apiCreateRestaurants,
   apiDestroyRestaurants,
   apiCanCreateRestaurants,
-  apiCanUpdateRestaurants,
-  apiCanDestroyRestaurants,
+  apiCanUpdateRestaurant,
+  apiCanDestroyRestaurant,
   can
 }

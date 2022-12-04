@@ -7,8 +7,7 @@
   import service from '../services/restaurants/restaurant_service'
 
   onBeforeMount(async () => {
-    await getModesAllowabilities()
-    debugger
+    await getModesAllowabilities()    
     dataReady.value = true
   })
 
@@ -16,10 +15,11 @@
   const emits = defineEmits(['data-change'])
   const dataReady = ref('false')
 // 
-  const modes = ref(['show', 'edit'])
+  const modes = ref(['show', 'edit', 'delete'])
   const modesProperties = ref({
-    show:{ action:'show', allowed:true },
-    edit:{ action:'update', allowed:false }
+    show:{ action:'show', allowed:true, visible:true },
+    edit:{ action:'update', allowed:false, visible:true },
+    delete:{ action:'destroy', allowed:false, visible:false } 
   })
   const currentMode = ref('show')
   const modesClass = ref('restaurant-class')
@@ -43,6 +43,9 @@
     let modeProperties = modesProperties.value[mode]    
     modesProperties.value[mode].allowed = await service.can(modeProperties.action, ['index', 'show'], props.restaurant)
   }
+  
+  const modeAlowability = (mode) => modesProperties.value[mode].allowed
+  const modeVisibility = (mode) => modesProperties.value[mode].visible
 // 
   const showDataChange = () => {    
     setMode('show')
@@ -64,16 +67,19 @@
 
 <template>
   <div v-if="dataReady">
-    <div>
+    <div class="raw">
       <ModeSwitch v-for="mode in modes" 
-                  :mode="mode" :modes-class="modeClassName" :current-mode="currentMode"
+                  :mode="mode"                      :modes-class="modeClassName" :current-mode="currentMode"
+                  :allowed="modeAlowability(mode)"  :visible="modeVisibility(mode)"
                   @switch-mode="setMode" />
     </div>
 
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
         Name: {{ restaurant.name }}
-        <button type="button" @click="destroyRestaurant()">destroy</button>
+        <button v-if="modeAlowability('delete')"
+                type="button"
+                @click="destroyRestaurant()">destroy</button>
       </div>
     </div>
 

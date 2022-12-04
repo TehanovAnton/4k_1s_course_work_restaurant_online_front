@@ -1,11 +1,10 @@
 <script setup>
   import { computed } from '@vue/reactivity';
 
-  const props = defineProps(['mode', 'modesClass', 'currentMode', 'allowed']) 
+  const props = defineProps(['mode', 'modesClass', 'currentMode', 'allowed', 'visible']) 
   const emits = defineEmits(['switchMode'])
 
-
-  const modeId = computed(() => {         
+  const modeId = computed(() => {             
     return `${props.mode}ModeSwitch`
   })
 
@@ -13,7 +12,7 @@
 </script>
 
 <template>
-  <div v-if="allowed">
+  <div v-if="(allowed && visible)">
     <label v-bind:for="modeId">{{ mode }}: </label>
     <input v-bind:id="modeId" v-bind:name="modesClass" type="radio" :checked="modeActivity"
           @click="$emit('switchMode', mode)" />

@@ -25,8 +25,8 @@
 // 
   const modes = ref(['index', 'create'])
   const modesProperties = ref({
-    index:{ action:'index', allowed:false },
-    create:{ action:'create', allowed:false }
+    index:{ action:'index', allowed:false, visible:true },
+    create:{ action:'create', allowed:false, visible:true }
   })
   const currentMode = ref('index')
   const modesClass = ref("restaurans-class")
@@ -49,6 +49,9 @@
     let modeProperties = modesProperties.value[mode]    
     modesProperties.value[mode].allowed = await service.can(modeProperties.action, ['index', 'show'])
   }
+
+  const modeAlowability = (mode) => modesProperties.value[mode].allowed
+  const modeVisibility = (mode) => modesProperties.value[mode].visible
 //  
 
   const getRestaurants = async () => {
@@ -78,7 +81,8 @@
 
       <div class="centrenize-content-row">
         <div v-for="mode in modes">
-          <ModeSwitch :allowed="modesProperties[mode].allowed" :mode="mode" :modes-class="modesClass" :current-mode="currentMode"
+          <ModeSwitch :allowed="modeAlowability(mode)"  :mode="mode"              :modes-class="modesClass" 
+                      :current-mode="currentMode"       :visible="modeVisibility(mode)"
                       @switch-mode="setMode" />
         </div>
       </div>
@@ -146,5 +150,9 @@
     flex: 1;
 
     margin: 1.5px;
+  }
+
+  .raw {
+    display: flex;
   }
 </style>
