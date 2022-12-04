@@ -7,9 +7,7 @@
   import tokensService from '../services/tokensService';
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import CreateRestaurant from './CreateView.vue';
-
-  import { useRestaurantAuthStore } from '../../stores/restaurants/restaurntAuth'
-  const restAuth = useRestaurantAuthStore()
+import { computed } from '@vue/reactivity';
 
   const emits = defineEmits(['restaurantsMode'])
 
@@ -48,6 +46,20 @@
     await getRestaurants()
     setMode('index')
   }  
+
+  const can = async (action) => {
+    let response
+
+    if (action == 'create') {
+      response = await service.apiCanCreateRestaurants(tokensService.auth_headers())
+    }
+
+    if (response.isSuccessful) {
+      return response.response.data
+    }
+
+    return false
+  }
 </script>
 
 <template>
@@ -68,7 +80,7 @@
         <ShowRestaurant :restaurant="restaurant" @data-change="refreshData"/>
       </div>
 
-      <div v-if="(currentMode == 'create' && restAuth.can('create'))">
+      <div v-if="(currentMode == 'create' && can('create'))">
         <CreateRestaurant @data-change="refreshData" />
       </div>
 

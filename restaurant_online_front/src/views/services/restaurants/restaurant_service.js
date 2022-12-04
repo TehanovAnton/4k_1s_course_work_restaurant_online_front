@@ -27,6 +27,17 @@ const apiUpdateRestaurants = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const apiCanUpdateRestaurants = async (authHeaders, restaurant) => {
+  let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/can_update`
+  
+  let response = await axios.get(
+    canUrl, 
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
 const apiCreateRestaurants = async (authHeaders, restaurant) => {
   let createUrl = `http://localhost:3000/restaurants`
   let data = { restaurant: restaurant }  
@@ -40,11 +51,33 @@ const apiCreateRestaurants = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const apiCanCreateRestaurants = async (authHeaders) => {
+  let canUrl = `http://localhost:3000/restaurants/can_create`
+  
+  let response = await axios.get(
+    canUrl,
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
 const apiDestroyRestaurants = async (authHeaders, restaurant) => {
   let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
   
   let response = await axios.delete(
     updateUrl,
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
+const apiCanDestroyRestaurants = async (authHeaders, restaurant) => {
+  let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/can_destroy`
+  
+  let response = await axios.get(
+    canUrl,
     { headers: authHeaders }
   ).catch(errorshandler)
 
@@ -63,5 +96,8 @@ export default {
   apiIndexRestaurants,
   apiUpdateRestaurants,
   apiCreateRestaurants,
-  apiDestroyRestaurants
+  apiDestroyRestaurants,
+  apiCanCreateRestaurants,
+  apiCanUpdateRestaurants,
+  apiCanDestroyRestaurants
 }
