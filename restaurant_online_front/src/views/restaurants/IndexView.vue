@@ -7,15 +7,27 @@
   import tokensService from '../services/tokensService';
   import ModeSwitch from '../../components/ModeSwitch.vue';
   import CreateRestaurant from './CreateView.vue';
-import { computed } from '@vue/reactivity';
+  import { computed } from '@vue/reactivity';
+
+  onBeforeMount(async () => {
+    await getRestaurants()
+    await getModesAllowabilities()
+    dataReady.value = true
+  })
 
   const emits = defineEmits(['restaurantsMode'])
 
   const restaurants = ref([])
   const activeRestaurant = ref()
   const router = useRouter()
+  const dataReady = ref(false)
+  
 // 
   const modes = ref(['index', 'create'])
+  const modesProperties = ref({
+    index:{ action:'index', allowed:false },
+    create:{ action:'create', allowed:false }
+  })
   const currentMode = ref('index')
   const modesClass = ref("restaurans-class")
 
@@ -26,10 +38,18 @@ import { computed } from '@vue/reactivity';
       currentMode.value = modeName
     }
   }
-// 
-  onBeforeMount(async () => {
-    await getRestaurants()
-  })
+
+  const getModesAllowabilities = async () => {
+    modes.value.forEach(async mode => { 
+      await setModeAlowability(mode)
+    })
+  }
+
+  const setModeAlowability = async (mode) => {
+    let modeProperties = modesProperties.value[mode]    
+    modesProperties.value[mode].allowed = await service.can(modeProperties.action, ['index', 'show'])
+  }
+//  
 
   const getRestaurants = async () => {
     let { response, isSuccessful } = await service.apiIndexRestaurants(tokensService.auth_headers())
@@ -45,20 +65,6 @@ import { computed } from '@vue/reactivity';
   const refreshData = async () => {
     await getRestaurants()
     setMode('index')
-  }  
-
-  const can = async (action) => {
-    let response
-
-    if (action == 'create') {
-      response = await service.apiCanCreateRestaurants(tokensService.auth_headers())
-    }
-
-    if (response.isSuccessful) {
-      return response.response.data
-    }
-
-    return false
   }
 </script>
 
@@ -67,12 +73,14 @@ import { computed } from '@vue/reactivity';
     HEADER
   </header>
 
-  <div class="centrenize-content-row">
-
+  <div v-if="dataReady" class="centrenize-content-row">
     <div class="menu block centrenize-content-column">
-      <div >
-        <ModeSwitch v-for="mode in modes" :mode="mode" :modes-class="modesClass" :current-mode="currentMode"
-                    @switch-mode="setMode" />
+
+      <div class="centrenize-content-row">
+        <div v-for="mode in modes">
+          <ModeSwitch :allowed="modesProperties[mode].allowed" :mode="mode" :modes-class="modesClass" :current-mode="currentMode"
+                      @switch-mode="setMode" />
+        </div>
       </div>
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import tokensService from '../../services/tokensService';
 
 const apiIndexRestaurants = async (authHeaders) => {
   let response = await axios.get('http://localhost:3000/restaurants',
@@ -20,7 +21,7 @@ const apiUpdateRestaurants = async (authHeaders, restaurant) => {
   
   let response = await axios.put(
     updateUrl, 
-    data, 
+    data,
     { headers: authHeaders }
   ).catch(errorshandler)
 
@@ -84,6 +85,30 @@ const apiCanDestroyRestaurants = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const can = async (action, public_actions, record) => {
+  let response
+
+  if (action == 'create') {
+    response = await apiCanCreateRestaurants(tokensService.auth_headers())
+    tokensService.setAuthTokens(response.response.headers)
+  } else if (action == 'update') {
+    debugger
+    response = await apiCanUpdateRestaurants(tokensService.auth_headers(), record)
+    tokensService.setAuthTokens(response.response.headers)
+  }
+   else if (public_actions.includes(action)) {
+    return true
+  } 
+
+  if (response.isSuccessful) {
+    return !!response.response.data
+  } else if (response.response.status == 401) {
+    router.push({ name: 'sign_in' })
+  }
+
+  return false
+}
+
 const isSuccessful = (response) => {
   return response && response.status === 200
 }
@@ -99,5 +124,6 @@ export default {
   apiDestroyRestaurants,
   apiCanCreateRestaurants,
   apiCanUpdateRestaurants,
-  apiCanDestroyRestaurants
+  apiCanDestroyRestaurants,
+  can
 }
