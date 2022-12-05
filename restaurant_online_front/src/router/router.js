@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import IndexView from '../views/users/IndexView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,15 +19,11 @@ const router = createRouter({
       name: 'sign_in',
       component: () => import('../views/auth/SignInView.vue')
     },
+    
     {
-      path: '/restaurants/:id/menus',
-      name: 'restaurant_menus',
-      component: () => import('../views/restaurants/menus/MenuDishesView.vue')
-    },
-    {
-      path: '/users/:id/orders',
-      name: 'user_orders',  
-      component: () => import('../views/restaurants/orders/OrdersView.vue')
+      path: '/users',
+      name: 'users',  
+      component: IndexView
     }
   ]
 })

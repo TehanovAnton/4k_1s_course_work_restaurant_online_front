@@ -14,7 +14,8 @@ import ModeSwitch from './ModeSwitch.vue';
     'modesProperties',
     'currentMode',
     'modesClass',
-    'record'
+    'record',
+    'service'
   ])
 
   const emits = defineEmits(['set-mode'])
@@ -36,7 +37,7 @@ import ModeSwitch from './ModeSwitch.vue';
 
   const setModeAlowability = async (mode) => {
     let modeProperties = props.modesProperties[mode]    
-    props.modesProperties[mode].allowed = await service.can(modeProperties.action, ['index', 'show'], props.record)
+    props.modesProperties[mode].allowed = await props.service.can(modeProperties.action, ['index', 'show'], props.record)
   }
   
   const modeAlowability = (mode) => props.modesProperties[mode].allowed

@@ -1,11 +1,11 @@
 <script setup>
   import Modes from '../../components/Modes.vue';
-  import EditRestaurant from './EditView.vue'
+  import EditUser from './EditView.vue'
   import tokensService from '../services/tokensService';
-  import service from '../services/restaurants/restaurant_service'
+  import service from '../services/users/user_service'
   import { ref } from 'vue';
 
-  const props = defineProps(['restaurant'])  
+  const props = defineProps(['user'])  
   const emits = defineEmits(['data-change'])
 // 
   const modes = ref(['show', 'edit', 'delete'])
@@ -15,7 +15,7 @@
     delete:{ action:'destroy', allowed:false, visible:false } 
   })
   const currentMode = ref('show')
-  const modesClass = ref('restaurant-class')
+  const modesClass = ref('user-class')
   const setMode = (modeName) => currentMode.value = modeName  
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
 // 
@@ -24,11 +24,11 @@
     emits('data-change')
   }
 
-  const destroyRestaurant = async () => {
+  const destroyUser = async () => {
     let { 
       response, 
       isSuccessful
-    } = await service.apiDestroyRestaurants(tokensService.auth_headers(), props.restaurant)
+    } = await service.apiDestroyUser(tokensService.auth_headers(), props.user)
 
     if (isSuccessful) {      
       tokensService.setAuthTokens(response.headers)
@@ -40,20 +40,20 @@
 <template>
   <div>
     <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-           :current-mode="currentMode"  :record="restaurant"                :service="service"
+           :current-mode="currentMode"  :record="user"                      :service="service"
            @set-mode="setMode"/>
 
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
-        Name: {{ restaurant.name }}
+        Name: {{ user.name }}
         <button v-if="modeAlowability('delete')"
                 type="button"
-                @click="destroyRestaurant()">destroy</button>
+                @click="destroyUser()">destroy</button>
       </div>
     </div>
 
     <div v-if="currentMode == 'edit'">
-      <EditRestaurant :restaurant="restaurant" @data-change="showDataChange" />
+      <EditUser :user="user" @data-change="showDataChange" />
     </div>  
   </div>
 </template>

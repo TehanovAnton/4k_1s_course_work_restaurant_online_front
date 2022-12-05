@@ -1,22 +1,26 @@
 <script setup>
   import { onBeforeMount, ref } from 'vue';  
   import { useRouter } from 'vue-router';
-  import ShowRestaurant from './ShowView.vue'
-  import service from '../services/restaurants/restaurant_service'
+  import ShowUser from './ShowView.vue'
+  import CreateUser from './CreateView.vue'
+  import service from '../services/users/user_service'
   import tokensService from '../services/tokensService';
-  import CreateRestaurant from './CreateView.vue';
   import Modes from '../../components/Modes.vue';
 
+  import { useCurrentUserStore } from '../../stores/users/currentUser';
+  const currentUser = useCurrentUserStore();
+
+
   onBeforeMount(async () => {
-    await getRestaurants()
+    await getUsers()
     dataReady.value = true
   })
 
-  const emits = defineEmits(['restaurantsMode'])
+  // const emits = defineEmits(['restaurantsMode'])
 
-  const restaurants = ref([])
-  const activeRestaurant = ref()
-  const router = useRouter()
+  const users = ref([])
+  const activeUser = ref()
+  // const router = useRouter()
   const dataReady = ref(false)
   
 
@@ -27,26 +31,28 @@
     create:{ action:'create', allowed:false, visible:true }
   })
   const currentMode = ref('index')
-  const modesClass = ref("restaurans-class")
+  const modesClass = ref("users-class")
   const setMode = (modeName) => currentMode.value = modeName
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
   const modeVisibility = (mode) => modesProperties.value[mode].visible
 
 
 
-  const getRestaurants = async () => {
-    let { response, isSuccessful } = await service.apiIndexRestaurants(tokensService.auth_headers())
+  const getUsers = async () => {
+    let { response, isSuccessful } = await service.apiIndexUsers(tokensService.auth_headers())
 
     if (isSuccessful) {      
-      restaurants.value = response.data
-      activeRestaurant.value = restaurants.value[0]
+      users.value = response.data
+      activeUser.value = users.value.find(u => {
+        return u.name == currentUser.user.name
+      })
 
       tokensService.setAuthTokens(response.headers)
     }
   }
 
   const refreshData = async () => {
-    await getRestaurants()
+    await getUsers()
     setMode('index')
   }
 </script>
@@ -63,13 +69,13 @@
              :current-mode="currentMode"  :service="service"
              @set-mode="setMode"/>
 
-      <!-- For this view it recives restaurant, in separate should fetch by id -->
-      <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">
-        <ShowRestaurant :restaurant="restaurant" @data-change="refreshData"/>
+      <!-- For this view it recives user, in separate should fetch by id -->
+      <div v-if="currentMode == 'index'" v-for="user in users">
+        <ShowUser :user="user" @data-change="refreshData"/>
       </div>
 
       <div v-if="(currentMode == 'create' && modeAlowability('create'))">
-        <CreateRestaurant @data-change="refreshData" />
+        <CreateUser @data-change="refreshData" />
       </div>
 
     </div>  
