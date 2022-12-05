@@ -40,7 +40,7 @@
 <template>
   <div>
     <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-           :current-mode="currentMode"  :record="restaurant"
+           :current-mode="currentMode"  :record="restaurant"                :service="service"
            @set-mode="setMode"/>
 
     <div v-if="currentMode == 'show'">

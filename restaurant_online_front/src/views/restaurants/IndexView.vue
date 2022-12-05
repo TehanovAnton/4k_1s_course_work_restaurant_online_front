@@ -60,7 +60,7 @@
     <div class="menu block centrenize-content-column">
 
       <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-             :current-mode="currentMode"
+             :current-mode="currentMode"  :service="service"
              @set-mode="setMode"/>
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
