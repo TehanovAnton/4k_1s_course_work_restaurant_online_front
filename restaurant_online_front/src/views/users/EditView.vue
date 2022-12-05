@@ -14,7 +14,6 @@
     } = await service.apiUpdateUser(tokensService.auth_headers(), props.user)
 
     if (isSuccessful) {      
-      // props.user.value = response.data
       tokensService.setAuthTokens(response.headers)
       emits('data-change')
     }

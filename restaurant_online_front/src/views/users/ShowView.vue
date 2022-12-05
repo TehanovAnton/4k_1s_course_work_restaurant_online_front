@@ -24,17 +24,17 @@
     emits('data-change')
   }
 
-  // const destroyUser = async () => {
-  //   let { 
-  //     response, 
-  //     isSuccessful
-  //   } = await service.apiDestroyUsers(tokensService.auth_headers(), props.user)
+  const destroyUser = async () => {
+    let { 
+      response, 
+      isSuccessful
+    } = await service.apiDestroyUser(tokensService.auth_headers(), props.user)
 
-  //   if (isSuccessful) {      
-  //     tokensService.setAuthTokens(response.headers)
-  //     emits('data-change')
-  //   }
-  // }
+    if (isSuccessful) {      
+      tokensService.setAuthTokens(response.headers)
+      emits('data-change')
+    }
+  }
 </script>
 
 <template>

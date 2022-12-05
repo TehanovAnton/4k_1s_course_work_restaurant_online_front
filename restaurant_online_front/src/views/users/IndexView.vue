@@ -2,6 +2,7 @@
   import { onBeforeMount, ref } from 'vue';  
   import { useRouter } from 'vue-router';
   import ShowUser from './ShowView.vue'
+  import CreateUser from './CreateView.vue'
   import service from '../services/users/user_service'
   import tokensService from '../services/tokensService';
   import Modes from '../../components/Modes.vue';
@@ -51,7 +52,8 @@
   }
 
   const refreshData = async () => {
-    await getRestaurants()
+    await getUsers()
+    debugger
     setMode('index')
   }
 </script>
@@ -74,8 +76,7 @@
       </div>
 
       <div v-if="(currentMode == 'create' && modeAlowability('create'))">
-        <!-- <CreateRestaurant @data-change="refreshData" /> -->
-        Create
+        <CreateUser @data-change="refreshData" />
       </div>
 
     </div>  

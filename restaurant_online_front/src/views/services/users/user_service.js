@@ -25,7 +25,7 @@ const apiUpdateUser = async (authHeaders, user) => {
     name: user.name,
     email: user.email
   }
-  
+    
   let response = await axios.put(
     updateUrl, 
     data,
@@ -35,8 +35,35 @@ const apiUpdateUser = async (authHeaders, user) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const apiCreateUser = async (authHeaders, user) => {
+  let createUrl = `http://localhost:3000/users `
+  let data = { user: user }  
+  
+  debugger
+  let response = await axios.post(
+    createUrl, 
+    data, 
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
+const apiDestroyUser = async (authHeaders, user) => {
+  let destroyUrl = `http://localhost:3000/users/${user.id}`
+  
+  let response = await axios.delete(
+    destroyUrl,
+    { headers: authHeaders }
+  ).catch(errorshandler)
+
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
 export default {
   apiShowUser,
   apiIndexUsers,
-  apiUpdateUser
+  apiUpdateUser,
+  apiCreateUser,
+  apiDestroyUser
 }
