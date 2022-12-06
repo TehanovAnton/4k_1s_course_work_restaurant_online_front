@@ -34,7 +34,7 @@
   }
 
   const sign_up = () => {
-      router.push({ name:'sign_up ' })
+    router.push({ name:'sign_up' })
   }
 </script>
 
