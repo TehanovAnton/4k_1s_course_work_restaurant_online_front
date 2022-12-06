@@ -4,6 +4,7 @@
   import ShowRestaurant from './ShowView.vue'
   import service from '../services/restaurants/restaurant_service'
   import tokensService from '../services/tokensService';
+  import auttService from '../services/auth_service'
   import CreateRestaurant from './CreateView.vue';
   import Modes from '../../components/Modes.vue';
 
@@ -53,7 +54,7 @@
 
 <template>
   <header class="block centrenize-content-row">
-    HEADER
+    <button type="button" @click="auttService.apiSignOut(tokensService.auth_headers())">sign out</button>
   </header>
 
   <div v-if="dataReady" class="centrenize-content-row">

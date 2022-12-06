@@ -5,7 +5,8 @@
   import CreateUser from './CreateView.vue'
   import service from '../services/users/user_service'
   import tokensService from '../services/tokensService';
-  import Modes from '../../components/Modes.vue';
+  import auttService from '../services/auth_service'
+  import Modes from '../../components/Modes.vue';  
 
   import { useCurrentUserStore } from '../../stores/users/currentUser';
   const currentUser = useCurrentUserStore();
@@ -59,7 +60,7 @@
 
 <template>
   <header class="block centrenize-content-row">
-    HEADER
+    <button type="button" @click="auttService.apiSignOut(tokensService.auth_headers())">sign out</button>
   </header>
 
   <div v-if="dataReady" class="centrenize-content-row">
