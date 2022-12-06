@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref } from '@vue/reactivity';
 import { onBeforeMount } from 'vue';
-import service from '../../src/views/services/restaurants/restaurant_service'
 import ModeSwitch from './ModeSwitch.vue';
 
   onBeforeMount(async () => {
@@ -30,7 +29,7 @@ import ModeSwitch from './ModeSwitch.vue';
   })
 
   const getModesAllowabilities = async () => {
-    props.modes.forEach(async mode => { 
+    props.modes.forEach(async mode => {       
       await setModeAlowability(mode)
     })
   }

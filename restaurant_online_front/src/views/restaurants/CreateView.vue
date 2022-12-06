@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue';
-  import RestaurantForm from '../../components/restaurants/RestaurantForm.vue';
+  import RestaurantForm from '../../components/RestaurantForm.vue';
   import restaurant_service from '../services/restaurants/restaurant_service';
   import tokensService from '../services/tokensService';
   
