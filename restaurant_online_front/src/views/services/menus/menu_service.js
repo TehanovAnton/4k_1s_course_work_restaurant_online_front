@@ -2,6 +2,16 @@ import axios from 'axios';
 import { errorshandler, isSuccessful } from '../common_methods';
 import tokensService from '../../services/tokensService';
 
+const apiIndexMenus = async (authHeaders, restaurantId) => {
+  let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}/menus`,
+                                 { headers: authHeaders })
+                            .catch(errorshandler)
+
+  let isSuccessful = response && response.status === 200
+
+  return { response: response, isSuccessful: isSuccessful }
+}
+
 const apiGetMenu = async (authHeaders, restaurantId, menuId) => {
   let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}/menus/${menuId}`,
                                  { headers: authHeaders })
@@ -35,7 +45,7 @@ const apiUpdateMenu = async (authHeaders, menu) => {
 }
 
 const apiCreateMenu = async (authHeaders, menu) => {
-  let createUrl = `http://localhost:3000/restaurants/${menu.restaurant.id}/menus`
+  let createUrl = `http://localhost:3000/restaurants/${menu.restaurant_id}/menus`
   let data = { menu: menu }  
 
   let response = await axios.post(
@@ -69,8 +79,8 @@ const apiCanUpdateMenu = async (authHeaders, menu) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
-const apiCanCreateMenu = async (authHeaders) => {
-  let canUrl = `http://localhost:3000/restaurants/${menu.restaurant.id}/menus/can_create`
+const apiCanCreateMenu = async (authHeaders, restaurant) => {
+  let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/menus/can_create`
   
   let response = await axios.get(
     canUrl,
@@ -95,7 +105,7 @@ const can = async (action, public_actions, record) => {
   let response  
 
   if (action == 'create') {
-    response = await apiCanCreateMenu(tokensService.auth_headers())
+    response = await apiCanCreateMenu(tokensService.auth_headers(), record)
   } else if (action == 'update') {
     response = await apiCanUpdateMenu(tokensService.auth_headers(), record)
   } else if (action == 'destroy') {
@@ -119,6 +129,7 @@ const can = async (action, public_actions, record) => {
 }
 
 export default {
+  apiIndexMenus,
   apiShowMenu,
   apiGetMenu,
   apiUpdateMenu,

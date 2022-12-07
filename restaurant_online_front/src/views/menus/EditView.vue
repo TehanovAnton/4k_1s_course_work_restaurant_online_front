@@ -13,7 +13,6 @@
     } = await service.apiUpdateMenu(tokensService.auth_headers(), props.menu)
 
     if (isSuccessful) {      
-      // props.menu.value = response.data
       tokensService.setAuthTokens(response.headers)
       emits('data-change')
     }

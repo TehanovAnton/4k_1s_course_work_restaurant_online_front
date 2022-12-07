@@ -38,9 +38,9 @@ const router = createRouter({
     },
 
     {
-      path: '/restaurants/:restaurant_id/menus/:id',
-      name: 'restaurant_menu',  
-      component: () => import('../views/menus/ShowView.vue')
+      path: '/restaurants/:id/menus',
+      name: 'restaurant_menus',  
+      component: () => import('../views/menus/IndexView.vue')
     }
   ]
 })

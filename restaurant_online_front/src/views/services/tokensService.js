@@ -1,10 +1,15 @@
+const authHeaders = ['access-token', 'client', 'uid', 'expiry']
+
 const setAuthTokens = (headers) => {
-  if (headers['access-token'] !== '') {
-    sessionStorage.setItem('access-token', headers['access-token'])
-    sessionStorage.setItem('client', headers['client'])
-    sessionStorage.setItem('uid', headers['uid'])
-    sessionStorage.setItem('expiry', headers['expiry'])
-  }
+  authHeaders.forEach(headerName => {
+    setHeader(headers[headerName], headerName)
+  })
+}
+
+const setHeader = (header, headerName) => {
+  if (header != '') {
+    sessionStorage.setItem(headerName, header)
+  }  
 }
 
 const auth_headers = () => {
