@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { errorshandler, isSuccessful } from '../common_methods';
 import tokensService from '../../services/tokensService';
 
 const apiIndexRestaurants = async (authHeaders) => {
@@ -99,6 +100,10 @@ const can = async (action, public_actions, record) => {
     return true
   }
   
+  if (!!!response) {
+    debugger
+  }
+
   if (response.response.status == 401) {
     router.push({ name: 'sign_in' })
   }
@@ -110,14 +115,6 @@ const can = async (action, public_actions, record) => {
   }
 
   return false
-}
-
-const isSuccessful = (response) => {
-  return response && response.status === 200
-}
-
-const errorshandler = (error) => {            
-  console.log(error);
 }
 
 export default {

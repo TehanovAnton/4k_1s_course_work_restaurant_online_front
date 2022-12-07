@@ -9,6 +9,7 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/restaurants/IndexView.vue')
     },
+
     {
       path: '/sign_up',
       name: 'sign_up',
@@ -29,11 +30,17 @@ const router = createRouter({
         }
       }
     },
-    
+
     {
       path: '/users',
       name: 'users',  
       component: IndexView
+    },
+
+    {
+      path: '/restaurants/:id/menus',
+      name: 'restaurant_menus',  
+      component: () => import('../views/menus/IndexView.vue')
     }
   ]
 })
