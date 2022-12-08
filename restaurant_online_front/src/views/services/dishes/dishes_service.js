@@ -43,10 +43,11 @@ const apiUpdateDish = async (dish) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
-const apiCreateDish = async (dish) => {
-  let createUrl = `http://localhost:3000/menus/${dish.menu.id}/dishes`
+const apiCreateDish = async (dish) => {  
+  let createUrl = `http://localhost:3000/menus/${dish.menu_id}/dishes`
   let data = {
     name: dish.name,
+    menu_id: dish.menu_id
   }
     
   let response = await axios.post(
@@ -54,7 +55,7 @@ const apiCreateDish = async (dish) => {
     data,
     { headers: tokensService.auth_headers() }
   ).catch(errorshandler)
-
+  
   let isSuccessfulReq = isSuccessful(response)
   setHeadersIfSuccessful(response.headers, isSuccessfulReq)
 
@@ -62,8 +63,8 @@ const apiCreateDish = async (dish) => {
 }
 
 const apiDeletsDish = async (dish) => {
-  let deleteUrl = `http://localhost:3000/dishes/${dish.menu.id}`
-    
+  let deleteUrl = `http://localhost:3000/dishes/${dish.id}`
+  
   let response = await axios.delete(
     deleteUrl, 
     { headers: tokensService.auth_headers() }
