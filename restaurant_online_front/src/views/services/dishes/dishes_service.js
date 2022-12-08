@@ -90,7 +90,7 @@ const apiCanUpdateDish = async (dish) => {
 }
 
 const apiCanDestroyDish = async (dish) => {
-  let canDeleteUrl = `http://localhost:3000/dishes/${dish.menu.id}/can_delete`
+  let canDeleteUrl = `http://localhost:3000/dishes/${dish.menu.id}/can_destroy`
     
   let response = await axios.get(
     canDeleteUrl, 
