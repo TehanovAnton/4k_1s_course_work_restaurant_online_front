@@ -9,6 +9,7 @@
   })
 
   const modeActivity = computed(() => props.mode == props.currentMode)
+
 </script>
 
 <template>

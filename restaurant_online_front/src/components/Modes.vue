@@ -5,6 +5,7 @@ import ModeSwitch from './ModeSwitch.vue';
 
   onBeforeMount(async () => {
     await getModesAllowabilities()
+    
     dataReady.value = true
   })
 
@@ -35,7 +36,8 @@ import ModeSwitch from './ModeSwitch.vue';
   }
 
   const setModeAlowability = async (mode) => {
-    let modeProperties = props.modesProperties[mode]    
+    let modeProperties = props.modesProperties[mode]
+
     props.modesProperties[mode].allowed = await props.service.can(modeProperties.action, ['index', 'show'], props.record)
   }
   
