@@ -42,15 +42,16 @@
          @set-mode="setMode"/>
 
   <div v-if="currentMode == 'show'">
-    {{ dish.name }}
+    <div class="centrenize-content-column">
+      {{ dish.name }}
+
+    <button v-if="modeAlowability('delete')"
+                type="button"
+                @click="destroyDish">destroy</button>
+    </div>
   </div>
 
   <div v-if="currentMode == 'edit'">
     <EditDish :dish="dish" @data-change="showDataChange" />
-  </div>
-  
-  <div v-if="currentMode == 'create'">
-    <CreateDish :restaurant-id="restaurant.id"
-                @data-change="refreshData" />
   </div>
 </template>

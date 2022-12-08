@@ -62,17 +62,20 @@
   <div v-if="dataReady">
     <div class="menu block centrenize-content-column">
 
-      <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-             :current-mode="currentMode"  :service="service"                  :record="menu"
-             @set-mode="setMode"/>
-
+      <div class="centrenize-content-row">
+        Menu - {{ menu.name }}
+        <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
+                :current-mode="currentMode"  :service="service"                  :record="menu"
+                @set-mode="setMode"/>
+      </div>
+    
       <div v-if="currentMode == 'index'" v-for="dish in dishes">
         <ShowDish :dish="dish" @data-change="refreshData"/>
       </div>
 
-      <!-- <div v-if="(currentMode == 'create' && modeAlowability('create'))">
-        <CreateDish @data-change="refreshData" :dish="dish" />
-      </div> -->
+      <div v-if="(currentMode == 'create' && modeAlowability('create'))">
+        <CreateDish @data-change="refreshData" :menu="menu" />
+      </div>
 
     </div>  
     
