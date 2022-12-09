@@ -21,6 +21,9 @@
   }
 </script>
 
-<template>  
-  <RestaurantForm :restaurant="restaurant" action-name="update" @form-submit="updatRestaurant"/>
+<template>
+  <div class="block">
+    Edit Restaurant:
+    <RestaurantForm :restaurant="restaurant" action-name="update" @form-submit="updatRestaurant"/>
+  </div>
 </template>

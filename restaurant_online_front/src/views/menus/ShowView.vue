@@ -6,6 +6,7 @@
   import service from '../services/menus/menu_service'
   import { ref } from 'vue';  
   import CreateView from './CreateView.vue';
+import router from '../../router/router';
   
   const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
@@ -37,6 +38,8 @@
       emits('data-change')
     }
   }
+
+  const menuDishesView = () => router.push({ name:'menu_dishes', params:{ menuId:props.menu.id } })
 </script>
 
 <template>
@@ -47,9 +50,10 @@
 
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
-        Name: {{ menu.name }}
+        Name: <a href="#" @click="menuDishesView">{{ menu.name }}</a>
 
-        <div class="centrenize-content-column">
+        <div class="block centrenize-content-column">
+          Dishes:
           <ShowDishView v-for="dish in menu.dishes" :dish="dish" />
         </div>
 

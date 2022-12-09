@@ -99,10 +99,6 @@ const can = async (action, public_actions, record) => {
    else if (public_actions.includes(action)) {
     return true
   }
-  
-  if (!!!response) {
-    debugger
-  }
 
   if (response.response.status == 401) {
     router.push({ name: 'sign_in' })

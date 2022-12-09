@@ -12,8 +12,8 @@ const apiIndexMenus = async (authHeaders, restaurantId) => {
   return { response: response, isSuccessful: isSuccessful }
 }
 
-const apiGetMenu = async (authHeaders, restaurantId, menuId) => {
-  let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}/menus/${menuId}`,
+const apiGetMenu = async (authHeaders, menuId) => {
+  let response = await axios.get(`http://localhost:3000/menus/${menuId}`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
   
@@ -21,7 +21,7 @@ const apiGetMenu = async (authHeaders, restaurantId, menuId) => {
 }
 
 const apiShowMenu = async (authHeaders, menu) => {
-  let response = await axios.get(`http://localhost:3000/restaurants/${restaurant.id}/menus/${menu.id}`,
+  let response = await axios.get(`http://localhost:3000/menus/${menu.id}`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
   
@@ -29,7 +29,7 @@ const apiShowMenu = async (authHeaders, menu) => {
 }
 
 const apiUpdateMenu = async (authHeaders, menu) => {
-  let updateUrl = `http://localhost:3000/restaurants/${menu.restaurant.id}/menus/${menu.id}`
+  let updateUrl = `http://localhost:3000/menus/${menu.id}`
   let data = {
     name: menu.name,
     email: menu.email
@@ -58,7 +58,7 @@ const apiCreateMenu = async (authHeaders, menu) => {
 }
 
 const apiDestroyMenu = async (authHeaders, menu) => {
-  let destroyUrl = `http://localhost:3000/restaurants/${menu.restaurant.id}/menus/${menu.id}`
+  let destroyUrl = `http://localhost:3000/menus/${menu.id}`
   
   let response = await axios.delete(
     destroyUrl,
@@ -69,7 +69,7 @@ const apiDestroyMenu = async (authHeaders, menu) => {
 }
 
 const apiCanUpdateMenu = async (authHeaders, menu) => {
-  let canUrl = `http://localhost:3000/restaurants/${menu.restaurant.id}/menus/${menu.id}/can_update`
+  let canUrl = `http://localhost:3000/menus/${menu.id}/can_update`
   
   let response = await axios.get(
     canUrl, 
@@ -91,7 +91,7 @@ const apiCanCreateMenu = async (authHeaders, restaurant) => {
 }
 
 const apiCanDestroyMenu = async (authHeaders, menu) => {
-  let canUrl = `http://localhost:3000/restaurants/${menu.restaurant.id}/menus/${menu.id}/can_destroy`
+  let canUrl = `http://localhost:3000/menus/${menu.id}/can_destroy`
   
   let response = await axios.get(
     canUrl,
@@ -117,6 +117,7 @@ const can = async (action, public_actions, record) => {
   
   if (response.response.status == 401) {
     router.push({ name: 'sign_in' })
+    return
   }
 
   tokensService.setAuthTokens(response.response.headers)

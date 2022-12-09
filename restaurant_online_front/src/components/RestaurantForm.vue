@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <form class="block">
+  <form>
     <div class="centrenize-content-column">
       <label for="r-name">Name: </label>
       <input id='r-name' v-model="restaurant.name"/>

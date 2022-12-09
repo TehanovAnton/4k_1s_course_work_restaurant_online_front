@@ -1,5 +1,6 @@
 import router from '../../router/router';
 import auth_service from '../services/auth_service'
+import tokensService from './tokensService';
 
 const isSuccessful = (response) => {
   return response && response.status === 200
@@ -14,7 +15,14 @@ const errorshandler = (error) => {
   }  
 }
 
+const setHeadersIfSuccessful = (headers, isSuccessful) => {
+  if (isSuccessful) {
+    tokensService.setAuthTokens(headers)
+  }
+}
+
 export {
   isSuccessful,
-  errorshandler
+  errorshandler,
+  setHeadersIfSuccessful
 }

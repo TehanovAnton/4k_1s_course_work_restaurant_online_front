@@ -4,6 +4,7 @@
   import tokensService from '../services/tokensService';
   import service from '../services/restaurants/restaurant_service'
   import { ref } from 'vue';
+import router from '../../router/router';
 
   const props = defineProps(['restaurant'])  
   const emits = defineEmits(['data-change'])
@@ -35,6 +36,8 @@
       emits('data-change')
     }
   }
+
+const restaurantMenus = () => router.push({ name:'restaurant_menus', params:{ id: props.restaurant.id } })
 </script>
 
 <template>
@@ -45,7 +48,12 @@
 
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
-        Name: {{ restaurant.name }}
+        
+        <div class="centrenize-content-row">
+          Name: {{ restaurant.name }}
+          <button type="button" @click="restaurantMenus">menus</button>
+        </div>
+
         <button v-if="modeAlowability('delete')"
                 type="button"
                 @click="destroyRestaurant()">destroy</button>

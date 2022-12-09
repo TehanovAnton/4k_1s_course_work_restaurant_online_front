@@ -14,9 +14,7 @@
   onBeforeMount(async () => {
     await getMenus()
     dataReady.value = true
-  })
-
-  const emits = defineEmits(['menusMode'])
+  })  
 
   const menus = ref([])
   const activeMenu = ref()
@@ -66,11 +64,15 @@
   <div v-if="dataReady" class="centrenize-content-row">
     <div class="menu block centrenize-content-column">
 
-      <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
+      <!-- For this view it recives menu, in separate should fetch by id -->
+      <div class="centrenize-content-row">
+        Menus:
+
+        <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
              :current-mode="currentMode"  :service="service"                  :record="restaurant"
              @set-mode="setMode"/>
+      </div>
 
-      <!-- For this view it recives menu, in separate should fetch by id -->
       <div v-if="currentMode == 'index'" v-for="menu in menus">
         <ShowMenu :menu="menu" @data-change="refreshData"/>
       </div>

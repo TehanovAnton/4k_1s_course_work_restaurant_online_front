@@ -1,22 +1,24 @@
 <script setup>
   import { onBeforeMount, ref } from 'vue';  
   import { useRouter } from 'vue-router';
-  import ShowRestaurant from './ShowView.vue'
-  import service from '../services/restaurants/restaurant_service'
+  import ShowDish from './ShowView.vue'
+  import service from '../services/dishes/dishes_service'
   import tokensService from '../services/tokensService';
   import auttService from '../services/auth_service'
-  import CreateRestaurant from './CreateView.vue';
+  import CreateDish from './CreateView.vue';
   import Modes from '../../components/Modes.vue';
 
+  import { useRoute } from 'vue-router'
+  const route = useRoute()
+
   onBeforeMount(async () => {
-    await getRestaurants()
+    await getDishes()
     dataReady.value = true
   })
 
-  const emits = defineEmits(['restaurantsMode'])
-
-  const restaurants = ref([])
-  const activeRestaurant = ref()
+  const dishes = ref([])
+  const activeDish = ref()
+  const menu = ref({})
   const router = useRouter()
   const dataReady = ref(false)
   
@@ -28,26 +30,26 @@
     create:{ action:'create', allowed:false, visible:true }
   })
   const currentMode = ref('index')
-  const modesClass = ref("restaurans-class")
+  const modesClass = ref("dishes-class")
   const setMode = (modeName) => currentMode.value = modeName
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
   const modeVisibility = (mode) => modesProperties.value[mode].visible
 
 
 
-  const getRestaurants = async () => {
-    let { response, isSuccessful } = await service.apiIndexRestaurants(tokensService.auth_headers())
+  const getDishes = async () => {    
+    let dishId = route.params['menuId']
+    let { response, isSuccessful } = await service.apiIndexDishes(dishId)    
 
     if (isSuccessful) {      
-      restaurants.value = response.data
-      activeRestaurant.value = restaurants.value[0]
-
-      tokensService.setAuthTokens(response.headers)
+      dishes.value = response.data  
+      activeDish.value = dishes.value[0]
+      menu.value = dishes.value[0].menu
     }
   }
 
   const refreshData = async () => {
-    await getRestaurants()
+    await getDishes()
     setMode('index')
   }
 </script>
@@ -57,22 +59,25 @@
     <button type="button" @click="auttService.apiSignOut(tokensService.auth_headers())">sign out</button>
   </header>
 
-  <div v-if="dataReady" class="centrenize-content-row">
+  <div v-if="dataReady">
     <div class="menu block centrenize-content-column">
-      <div class="centrenize-content-row">
-        Restaurants:
-        <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-              :current-mode="currentMode"  :service="service"
-              @set-mode="setMode"/>
-      </div>
 
-      <!-- For this view it recives restaurant, in separate should fetch by id -->
-      <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">
-        <ShowRestaurant :restaurant="restaurant" @data-change="refreshData"/>
+      <div class="centrenize-content-row">
+        Menu - {{ menu.name }}
+        <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
+                :current-mode="currentMode"  :service="service"                  :record="menu"
+                @set-mode="setMode"/>
+      </div>
+    
+      <div v-if="currentMode == 'index'" class="block">
+        Dishes:
+        <div v-for="dish in dishes">
+          <ShowDish :dish="dish" @data-change="refreshData"/>
+        </div>
       </div>
 
       <div v-if="(currentMode == 'create' && modeAlowability('create'))">
-        <CreateRestaurant @data-change="refreshData" />
+        <CreateDish @data-change="refreshData" :menu="menu" />
       </div>
 
     </div>  
@@ -119,7 +124,7 @@
     flex-direction: row;                
   }
 
-  .menu {
+  .dish {
     flex: 1;
 
     margin: 1.5px;
