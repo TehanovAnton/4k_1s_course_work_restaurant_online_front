@@ -69,9 +69,9 @@
                 @set-mode="setMode"/>
       </div>
     
-      <div class="block">
+      <div v-if="currentMode == 'index'" class="block">
         Dishes:
-        <div v-if="currentMode == 'index'" v-for="dish in dishes">
+        <div v-for="dish in dishes">
           <ShowDish :dish="dish" @data-change="refreshData"/>
         </div>
       </div>
