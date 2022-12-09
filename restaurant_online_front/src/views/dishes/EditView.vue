@@ -14,6 +14,9 @@
   }
 </script>
 
-<template>  
-  <DishForm :dish="dish" action-name="update" @form-submit="updatMenu"/>
+<template>
+  <div class="block">
+    Edit Dish:
+    <DishForm :dish="dish" action-name="update" @form-submit="updatMenu"/>
+  </div>  
 </template>

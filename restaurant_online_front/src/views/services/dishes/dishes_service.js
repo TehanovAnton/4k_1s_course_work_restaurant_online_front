@@ -77,7 +77,7 @@ const apiDeletsDish = async (dish) => {
 }
 
 const apiCanUpdateDish = async (dish) => {
-  let canUpdateUrl = `http://localhost:3000/dishes/${dish.menu.id}/can_update`
+  let canUpdateUrl = `http://localhost:3000/dishes/${dish.id}/can_update`
     
   let response = await axios.get(
     canUpdateUrl, 
@@ -91,7 +91,7 @@ const apiCanUpdateDish = async (dish) => {
 }
 
 const apiCanDestroyDish = async (dish) => {
-  let canDeleteUrl = `http://localhost:3000/dishes/${dish.menu.id}/can_destroy`
+  let canDeleteUrl = `http://localhost:3000/dishes/${dish.id}/can_destroy`
     
   let response = await axios.get(
     canDeleteUrl, 

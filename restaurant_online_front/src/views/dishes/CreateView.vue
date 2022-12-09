@@ -18,6 +18,9 @@
 </script>
 
 <template>
-  <DishForm action-name="create" :dish="dish"
+  <div class="block">
+    Add Dish:
+    <DishForm action-name="create" :dish="dish"
             @form-submit="createDish" />
+  </div>
 </template>

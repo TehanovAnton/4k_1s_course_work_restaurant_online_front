@@ -69,8 +69,11 @@
                 @set-mode="setMode"/>
       </div>
     
-      <div v-if="currentMode == 'index'" v-for="dish in dishes">
-        <ShowDish :dish="dish" @data-change="refreshData"/>
+      <div class="block">
+        Dishes:
+        <div v-if="currentMode == 'index'" v-for="dish in dishes">
+          <ShowDish :dish="dish" @data-change="refreshData"/>
+        </div>
       </div>
 
       <div v-if="(currentMode == 'create' && modeAlowability('create'))">
