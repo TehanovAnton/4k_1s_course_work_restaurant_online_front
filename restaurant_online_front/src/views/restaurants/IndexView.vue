@@ -59,10 +59,12 @@
 
   <div v-if="dataReady" class="centrenize-content-row">
     <div class="menu block centrenize-content-column">
-
-      <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-             :current-mode="currentMode"  :service="service"
-             @set-mode="setMode"/>
+      <div class="centrenize-content-row">
+        Restaurants:
+        <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
+              :current-mode="currentMode"  :service="service"
+              @set-mode="setMode"/>
+      </div>
 
       <!-- For this view it recives restaurant, in separate should fetch by id -->
       <div v-if="currentMode == 'index'" v-for="restaurant in restaurants">

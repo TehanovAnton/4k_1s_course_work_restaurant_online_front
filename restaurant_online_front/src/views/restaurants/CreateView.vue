@@ -21,5 +21,8 @@
 </script>
 
 <template>  
-  <RestaurantForm :restaurant="newRestaurant" action-name="create" @form-submit="createRestaurant"/>
+  <div class="block">
+    Create Restaurant:
+    <RestaurantForm :restaurant="newRestaurant" action-name="create" @form-submit="createRestaurant"/>
+  </div>
 </template>
