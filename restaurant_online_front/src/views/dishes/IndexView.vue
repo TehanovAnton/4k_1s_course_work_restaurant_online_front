@@ -55,10 +55,6 @@
 </script>
 
 <template>
-  <header class="block centrenize-content-row">
-    <button type="button" @click="auttService.apiSignOut(tokensService.auth_headers())">sign out</button>
-  </header>
-
   <div v-if="dataReady">
     <div class="menu block centrenize-content-column">
 
