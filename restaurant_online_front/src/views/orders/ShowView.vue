@@ -1,7 +1,9 @@
 <script setup>
   import service from '../services/orders/order_service'
   import ShowDishView from '../dishes/ShowView.vue'; 
+  import EditOrderView from '../orders/EditOrderView.vue';
   import { onBeforeMount, ref } from 'vue';
+  import { computed } from '@vue/reactivity';
   import Modes from '../../components/Modes.vue';
 
   import { useRoute } from 'vue-router';
@@ -19,7 +21,7 @@
     }
 
     dataReady.value = true
-    order = props.order
+    order.value = props.order
   })
 
   const props = defineProps(['order'])
@@ -37,6 +39,14 @@
   const setMode = (modeName) => currentMode.value = modeName  
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
 
+  const dishes = computed(() => {
+    if (order.value){
+      return order.value.orders_dishes.map(od => od.dish)
+    }
+
+    return []
+  })
+
   const destroyOrder = async () => {
     // let { 
     //   response, 
@@ -48,6 +58,11 @@
     //   emits('data-change')
     // }
   }
+
+  const showDataChange = () => {    
+    setMode('show')
+    emits('data-change')
+  }
 </script>
 
 <template>
@@ -58,11 +73,12 @@
 
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
-        Name: <a href="#" >{{ order.name }}</a>
-
         <div class="block centrenize-content-column">
           Dishes:
-          <ShowDishView v-for="dish in order.dishes" :dish="dish" />
+          
+          <div v-for="dish in dishes">
+            {{ dish.name }}
+          </div>
         </div>
 
         <button v-if="modeAlowability('delete')"
@@ -71,13 +87,13 @@
       </div>
     </div>
 
-    <!-- <div v-if="currentMode == 'edit'">
-      <EditMenu :menu="menu" @data-change="showDataChange" />
+    <div v-if="currentMode == 'edit'">
+      <EditOrderView :order="order" @data-change="showDataChange" />
     </div>
     
-    <div v-if="currentMode == 'create'">
-      <CreateView :restaurant-id="restaurant.id"
-                  @data-change="refreshData" />
+    <!-- <div v-if="currentMode == 'create'">
+      <CreateOrderView :order-id="order.id"
+                       @data-change="refreshData" />
     </div> -->
   </div>
 </template>

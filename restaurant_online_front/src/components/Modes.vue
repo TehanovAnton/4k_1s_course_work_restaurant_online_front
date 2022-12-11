@@ -47,10 +47,8 @@ import ModeSwitch from './ModeSwitch.vue';
 
 <template>  
   <div class="raw" v-if="dataReady">
-    {{ record }}
-
     <ModeSwitch v-for="mode in modes" 
-                :mode="mode"                      :modes-class="modeClassName" :current-mode="currentMode"
+                :mode="mode"                      :modes-class="modeClassName"    :current-mode="currentMode"
                 :allowed="modeAlowability(mode)"  :visible="modeVisibility(mode)"
                 @switch-mode="$emit('set-mode', mode)" />
   </div>
