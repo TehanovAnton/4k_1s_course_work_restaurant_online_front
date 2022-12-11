@@ -45,8 +45,10 @@ import ModeSwitch from './ModeSwitch.vue';
   const modeVisibility = (mode) => props.modesProperties[mode].visible
 </script>
 
-<template>
+<template>  
   <div class="raw" v-if="dataReady">
+    {{ record }}
+
     <ModeSwitch v-for="mode in modes" 
                 :mode="mode"                      :modes-class="modeClassName" :current-mode="currentMode"
                 :allowed="modeAlowability(mode)"  :visible="modeVisibility(mode)"
