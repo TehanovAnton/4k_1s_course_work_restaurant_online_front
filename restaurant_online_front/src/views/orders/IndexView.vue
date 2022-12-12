@@ -4,7 +4,7 @@
   import ShowOrder from './ShowView.vue'
   import service from '../services/orders/order_service'
   import tokensService from '../services/tokensService';
-  import CreateOrder from './CreateOrderView.vue';
+  import CreateOrder from './CreateView.vue';
   import Modes from '../../components/Modes.vue';
   
   const route = useRoute()

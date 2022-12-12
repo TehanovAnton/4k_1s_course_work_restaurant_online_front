@@ -1,7 +1,7 @@
 <script setup>
   import service from '../services/orders/order_service'
   import ShowDishView from '../dishes/ShowView.vue'; 
-  import EditOrderView from '../orders/EditOrderView.vue';
+  import EditOrderView from './EditView.vue';
   import { onBeforeMount, ref } from 'vue';
   import { computed } from '@vue/reactivity';
   import Modes from '../../components/Modes.vue';
