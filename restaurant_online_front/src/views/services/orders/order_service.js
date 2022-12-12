@@ -24,6 +24,22 @@ const apiGetOrder = async (orderId) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiCreateOrder = async (order) => {
+  let createUrl = `http://localhost:3000/users/${order.user_id}/orders`
+  let data = order
+    
+  let response = await axios.post(
+    createUrl,
+    data,
+    { headers: tokensService.auth_headers() }
+  ).catch(errorshandler)
+  
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const apiCanUpdateOrder = async (order) => {
   let canUpdateUrl = `http://localhost:3000/orders/${order.id}/can_update`
     
@@ -96,5 +112,6 @@ const can = async (action, public_actions, record) => {
 export default {
   apiGetOrder,
   apiIndexOrders,
+  apiCreateOrder,
   can
 }

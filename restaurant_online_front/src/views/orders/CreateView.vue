@@ -17,6 +17,7 @@
   const createOrder = async () => {
     let isSuccessful = await order_service.apiCreateOrder(order.value)
 
+    debugger
     if (isSuccessful) {      
       emits('data-change')
     }
