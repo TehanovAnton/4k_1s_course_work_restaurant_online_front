@@ -90,10 +90,5 @@
     <div v-if="currentMode == 'edit'">
       <EditOrderView :order="order" @data-change="showDataChange" />
     </div>
-    
-    <!-- <div v-if="currentMode == 'create'">
-      <CreateOrderView :order-id="order.id"
-                       @data-change="refreshData" />
-    </div> -->
   </div>
 </template>

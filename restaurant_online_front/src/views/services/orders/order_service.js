@@ -2,6 +2,16 @@ import axios from 'axios';
 import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../../services/common_methods';
 import tokensService from '../../services/tokensService';
 
+const apiIndexOrders = async (userId) => {
+  let response = await axios.get(`http://localhost:3000/users/${userId}/orders`,
+                                 { headers: tokensService.auth_headers() })
+                            .catch(errorshandler)
+
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+  
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
 
 const apiGetOrder = async (orderId) => {  
   let response = await axios.get(`http://localhost:3000/orders/${orderId}`,
@@ -42,8 +52,8 @@ const apiCanDestroyOrder = async (order) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiCanCreateOrder = async (menu) => {
-  let canCreateUrl = `http://localhost:3000/users/${menu.id}/orders/can_create`
+const apiCanCreateOrder = async (user) => {
+  let canCreateUrl = `http://localhost:3000/users/${user.id}/orders/can_create`
     
   let response = await axios.get(
     canCreateUrl, 
@@ -85,5 +95,6 @@ const can = async (action, public_actions, record) => {
 
 export default {
   apiGetOrder,
+  apiIndexOrders,
   can
 }
