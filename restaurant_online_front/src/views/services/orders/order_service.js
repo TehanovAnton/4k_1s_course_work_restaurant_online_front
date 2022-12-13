@@ -40,6 +40,22 @@ const apiCreateOrder = async (order) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiUpdateOrder = async (order) => {
+  let updateUrl = `http://localhost:3000/orders/${order.id}`
+  let data = order
+  
+  let response = await axios.put(
+    updateUrl,
+    data,
+    { headers: tokensService.auth_headers() }
+  ).catch(errorshandler)
+  
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const apiCanUpdateOrder = async (order) => {
   let canUpdateUrl = `http://localhost:3000/orders/${order.id}/can_update`
     
@@ -113,5 +129,6 @@ export default {
   apiGetOrder,
   apiIndexOrders,
   apiCreateOrder,
+  apiUpdateOrder,
   can
 }

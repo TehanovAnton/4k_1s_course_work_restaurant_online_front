@@ -13,6 +13,11 @@
       await getMenus()
       activeMenus.value = props.order.menus      
       await getDishes()
+      
+      props.order.orders_dishes_attributes = []
+      props.order.orders_dishes.forEach(order_dish => {
+        props.order.orders_dishes_attributes.push(orderDish(order_dish.dish))
+      })
 
       // await getDishes()
     }
@@ -72,7 +77,7 @@
   }
 
   const getMenuDishes = async (menuId) => {
-    let { response, isSuccessful } = await dishes_service.apiIndexDishes(menuId)
+    let { response, isSuccessful } = await dishes_service.apiIndexDishes(menuId, { view:false })
 
     if (isSuccessful) {      
       response.data.forEach(dish => {
@@ -82,7 +87,8 @@
   }
 
   const orderDish = (dish) => {
-    return { dish_id:dish.id }
+    if (!!dish)
+      return { dish_id:dish.id }
   }
 
   const selectedRestaurant = (restaurant) => {
@@ -95,7 +101,7 @@
 
 <template>
   <form v-if="dataReady">  
-    <div class="centrenize-content-column">
+    <div class="centrenize-content-row">
       <label for="restaurant-select">Chose restaurant</label>
       <select name="restaurant-select" v-model="order.restaurant_id"
               @change="getMenus">        

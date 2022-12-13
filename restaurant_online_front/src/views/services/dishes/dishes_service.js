@@ -3,10 +3,15 @@ import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../common_m
 import tokensService from '../../services/tokensService';
 
 
-const apiIndexDishes = async (menuId) => {  
-  let response = await axios.get(`http://localhost:3000/menus/${menuId}/dishes`,
-    { headers: tokensService.auth_headers() })
-  .catch(errorshandler)
+const apiIndexDishes = async (menuId, options) => {  
+  let getUrl = `http://localhost:3000/menus/${menuId}/dishes?`
+
+  if (!!options['view'])
+    getUrl += `view=${options['view']}`
+
+  let response = await axios.get(getUrl,
+                                 { headers: tokensService.auth_headers() })
+                            .catch(errorshandler)
 
   let isSuccessfulReq = isSuccessful(response)
   setHeadersIfSuccessful(response.headers, isSuccessfulReq)

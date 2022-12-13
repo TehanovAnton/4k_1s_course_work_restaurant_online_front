@@ -41,7 +41,7 @@
     const userId = route.params['userId']
     let { response, isSuccessful } = await service.apiIndexOrders(userId)    
     
-    if (isSuccessful) {      
+    if (isSuccessful) {
       orders.value = response.data
       activeOrder.value = orders.value[0]
       user.value = orders.value[0].user
@@ -51,6 +51,7 @@
   }
 
   const refreshData = async () => {
+    orders.value = []
     await getOrders()
     setMode('index')
   }

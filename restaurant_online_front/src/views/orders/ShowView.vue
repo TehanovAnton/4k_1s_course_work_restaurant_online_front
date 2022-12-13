@@ -25,6 +25,7 @@
   })
 
   const props = defineProps(['order'])
+  const emits = defineEmits(['data-change'])
   const order = ref({})
   const dataReady = ref(false)
 
@@ -40,7 +41,7 @@
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
 
   const dishes = computed(() => {
-    if (order.value){
+    if (order.value){      
       return order.value.orders_dishes.map(od => od.dish)
     }
 
