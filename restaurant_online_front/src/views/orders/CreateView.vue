@@ -17,7 +17,6 @@
   const createOrder = async () => {
     let isSuccessful = await order_service.apiCreateOrder(order.value)
 
-    debugger
     if (isSuccessful) {      
       emits('data-change')
     }
@@ -28,7 +27,7 @@
 <template>
   <div class="block">
     Add Order:
-    <OrderForm  action-name="create"        :order="order"
+    <OrderForm  action-name="create" :order="order"
                 @form-submit="createOrder" />
   </div>
 </template>

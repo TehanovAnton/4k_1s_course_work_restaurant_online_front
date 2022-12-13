@@ -9,6 +9,14 @@
   onBeforeMount(async () => {
     await getRestaurants()
 
+    if (props.actionName == 'update') {
+      await getMenus()
+      activeMenus.value = props.order.menus      
+      await getDishes()
+
+      // await getDishes()
+    }
+
     dataReady.value = true
   })
 
@@ -23,67 +31,90 @@
   const menus = ref([])
   const dishes = ref([])
   const activeRestaurant = ref({})
-  const activeMenu = ref({})
-  const activeDishes = ref([])
+  const activeMenus = ref([])
+  const activeDishes = ref([])    
+
+  // const names = ref([{name: 'anton', age: 21 }, {name: 'roman', age: 26 }, {name: 'andrew', age: 20 }])
+  // const chosenNames = ref([{name: 'andrew', age: 20 }])
 
   const getRestaurants = async () => {
+    menusReady.value = false
     let { response, isSuccessful } = await restaurant_service.apiIndexRestaurants(tokensService.auth_headers())
 
     if (isSuccessful) {      
       restaurants.value = response.data
+      activeRestaurant.value = restaurants.value[0]    
       tokensService.setAuthTokens(response.headers)
     }
   }
 
   const getMenus = async () => {
+    dishes.value = []
     let restaurantId = props.order.restaurant_id
-    let { response, isSuccessful } = await menu_service.apiIndexMenus(tokensService.auth_headers(), restaurantId)    
+    let { response, isSuccessful } = await menu_service.apiIndexMenus(tokensService.auth_headers(), restaurantId, { view:false })
     
     if (isSuccessful) {      
       tokensService.setAuthTokens(response.headers)      
 
       menus.value = response.data  
-      menusReady.value = true      
+      menusReady.value = true
     }
   }
 
-  const getDishes = async () => {    
-    let menuId = activeMenu.value.id
+  const getDishes = async () => {
+    dishes.value = []
+
+    activeMenus.value.forEach(async (menu) => {
+      await getMenuDishes(menu.id)
+    })
+
+    dishesReady.value = true
+  }
+
+  const getMenuDishes = async (menuId) => {
     let { response, isSuccessful } = await dishes_service.apiIndexDishes(menuId)
 
     if (isSuccessful) {      
-      dishes.value = response.data
-      dishesReady.value = true
+      response.data.forEach(dish => {
+        dishes.value.push(dish)
+      });      
     }
   }
 
   const orderDish = (dish) => {
     return { dish_id:dish.id }
   }
+
+  const selectedRestaurant = (restaurant) => {
+    if (restaurant.id == props.order.restaurant.id)
+      return true
+
+    return false
+  }
 </script>
 
 <template>
   <form v-if="dataReady">  
     <div class="centrenize-content-column">
-
       <label for="restaurant-select">Chose restaurant</label>
       <select name="restaurant-select" v-model="order.restaurant_id"
-              @change="getMenus">
-        <option v-for="restaurant in restaurants" :value="restaurant.id">{{ restaurant.name }}</option>
+              @change="getMenus">        
+        <option v-for="restaurant in restaurants"
+                v-bind:value="restaurant.id">
+                {{ restaurant.name }}
+        </option>
       </select>
 
       <label for="menu-select">Chose menu</label>
-      <select v-if="order.restaurant_id && menusReady" v-model="activeMenu"
-              @change="getDishes">
-        <option v-for="menu in menus" :value="menu">{{ menu.name }}</option>
+      <select v-if="order.restaurant_id && menusReady" v-model="activeMenus"
+              @change="getDishes" @select="getDishes" multiple>
+        <option v-for="menu in menus" v-bind:value="menu">{{ menu.name }}</option>
       </select>
 
       <label for="dishes-select">Chose dishes</label>
-      <select v-if="activeMenu && dishesReady" v-model="order.orders_dishes_attributes" multiple>
+      <select v-if="activeMenus && dishesReady" v-model="order.orders_dishes_attributes" multiple>
         <option v-for="dish in dishes" :value="orderDish(dish)">{{ dish.name }}</option>
       </select>
-
-      {{ order }}
     </div>
 
     <button type="button" @click="$emit('formSubmit')">{{ actionName }}</button>

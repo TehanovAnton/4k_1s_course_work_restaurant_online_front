@@ -23,7 +23,8 @@ import ModeSwitch from './ModeSwitch.vue';
   const dataReady = ref(false)
   const modeClassName = computed(() => {
     if (props.record) {
-      return `${props.record.name}-${props.modesClass}`
+      let pref = props.record.name ? props.record.name : props.record.id
+      return `${pref}-${props.modesClass}`
     } else {
       return `${props.modesClass}`
     }
