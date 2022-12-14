@@ -81,10 +81,13 @@
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
         <div class="block centrenize-content-column">
-          <p class="centrenize-content-column">
+          <p class="centrenize-content-column" v-for="reservation in order.reservations">
             <span>{{ order.restaurant.name }} {{ order.restaurant.address }}</span>
-            <span>{{ dtFormated(order.reservations[0].start_at) }}-{{ dtFormated(order.reservations[0].end_at) }}</span>
-            table - {{ order.reservations[0].table.number }}
+            
+            <div v-if="reservation.place_type == 'inside'" class="centrenize-content-column">
+              <span>{{ dtFormated(reservation.start_at) }}-{{ dtFormated(reservation.end_at) }}</span>
+              <span v-if="!!reservation.table">table - {{ reservation.table.number }}</span>
+            </div>
           </p>
           
           <div v-for="dish in dishes">

@@ -25,8 +25,6 @@
       props.order.reservations.forEach(r => { 
         props.order.reservations_attributes.push(r)
       })
-
-      // await getDishes()
     }
   
     dataReady.value = true
@@ -45,9 +43,6 @@
   const activeRestaurant = ref({})
   const activeMenus = ref([])
   const activeDishes = ref([])    
-
-  // const names = ref([{name: 'anton', age: 21 }, {name: 'roman', age: 26 }, {name: 'andrew', age: 20 }])
-  // const chosenNames = ref([{name: 'andrew', age: 20 }])
 
   const getRestaurants = async () => {
     menusReady.value = false
@@ -109,8 +104,6 @@
 <template>
   <form v-if="dataReady">  
     <div class="centrenize-content-row">
-      {{ order.reservations }}
-
       <label for="restaurant-select">Chose restaurant</label>
       <select name="restaurant-select" v-model="order.restaurant_id"
               @change="getMenus">        
@@ -131,9 +124,8 @@
         <option v-for="dish in dishes" :value="orderDish(dish)">{{ dish.name }}</option>
       </select>
 
-      Reservation: 
       <ReservationForm v-if="order.restaurant_id"
-                       :restaurant="order.restaurant" :order="order" />
+                      :restaurant="order.restaurant" :order="order" />
     </div>
 
     <button type="button" @click="$emit('formSubmit')">{{ actionName }}</button>
