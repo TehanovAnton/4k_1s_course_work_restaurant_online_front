@@ -5,6 +5,7 @@
   import { onBeforeMount, ref } from 'vue';
   import { computed } from '@vue/reactivity';
   import Modes from '../../components/Modes.vue';
+  import moment from 'moment-timezone'
 
   import { useRoute } from 'vue-router';
   const route = useRoute()
@@ -48,6 +49,11 @@
     return []
   })
 
+  const dtFormated = (dt) => {
+    let date = new Date(dt)
+    return moment(date).tz(moment.tz.guess()).utcOffset(0).format('YYYY-MM-DD HH:mm')
+  }
+
   const destroyOrder = async () => {
     // let { 
     //   response, 
@@ -75,7 +81,11 @@
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
         <div class="block centrenize-content-column">
-          Dishes:
+          <p class="centrenize-content-column">
+            <span>{{ order.restaurant.name }} {{ order.restaurant.address }}</span>
+            <span>{{ dtFormated(order.reservations[0].start_at) }}-{{ dtFormated(order.reservations[0].end_at) }}</span>
+            table - {{ order.reservations[0].table.number }}
+          </p>
           
           <div v-for="dish in dishes">
             {{ dish.name }}
