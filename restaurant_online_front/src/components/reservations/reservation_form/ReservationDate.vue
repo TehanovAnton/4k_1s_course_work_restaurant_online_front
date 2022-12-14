@@ -1,11 +1,11 @@
 <script setup>
   import { onBeforeMount, ref } from 'vue';
   import { computed } from '@vue/reactivity';
-  import moment from 'moment'
+  import moment from 'moment-timezone'
 
   onBeforeMount(() => {
     let date = new Date(props.reservation[props.dtName]).toISOString()
-    datetime.value = moment(date).format('YYYY-MM-DDTHH:mm')
+    datetime.value = moment(date).tz(moment.tz.guess()).utcOffset(0).format('YYYY-MM-DDTHH:mm')
   })
 
   const props = defineProps(['reservation', 'dtName'])

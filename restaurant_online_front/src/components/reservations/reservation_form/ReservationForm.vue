@@ -15,12 +15,10 @@
   <form>    
     <div >
       <div v-for="reservation in order.reservations">      
-      {{ reservation.start_at }}, {{ reservation.end_at }}
-      
 
       <div class="centrenize-content-column">
         <ReservationTableSelect :reservation="reservation" :restaurant_tables="restaurant.tables" />
-        
+
         <ReservationDate :reservation="reservation" dtName="start_at"
                        @datetime-submit="setDatetime"/>
                        

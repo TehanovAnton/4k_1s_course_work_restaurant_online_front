@@ -10,6 +10,8 @@
   onBeforeMount(async () => {
     await getRestaurants()
 
+    props.order.reservations_attributes = []
+
     if (props.actionName == 'update') {
       await getMenus()
       activeMenus.value = props.order.menus      
@@ -20,9 +22,13 @@
         props.order.orders_dishes_attributes.push(orderDish(order_dish.dish))
       })
 
+      props.order.reservations.forEach(r => { 
+        props.order.reservations_attributes.push(r)
+      })
+
       // await getDishes()
     }
-
+  
     dataReady.value = true
   })
 
@@ -103,6 +109,8 @@
 <template>
   <form v-if="dataReady">  
     <div class="centrenize-content-row">
+      {{ order.reservations }}
+
       <label for="restaurant-select">Chose restaurant</label>
       <select name="restaurant-select" v-model="order.restaurant_id"
               @change="getMenus">        
