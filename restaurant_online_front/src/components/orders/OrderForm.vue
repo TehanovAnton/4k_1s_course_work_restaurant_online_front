@@ -2,6 +2,7 @@
   import { onBeforeMount, ref } from 'vue';
   import service from '../../views/services/orders/order_service';
   import restaurant_service from '../../views/services/restaurants/restaurant_service';
+  import ReservationForm from '../reservations/reservation_form/ReservationForm.vue'
   import menu_service from '../../views/services/menus/menu_service';
   import dishes_service from '../../views/services/dishes/dishes_service';
   import tokensService from '../../views/services/tokensService';
@@ -121,6 +122,10 @@
       <select v-if="activeMenus && dishesReady" v-model="order.orders_dishes_attributes" multiple>
         <option v-for="dish in dishes" :value="orderDish(dish)">{{ dish.name }}</option>
       </select>
+
+      Reservation: 
+      <ReservationForm v-if="order.restaurant_id"
+                       :restaurant="order.restaurant" :order="order" />
     </div>
 
     <button type="button" @click="$emit('formSubmit')">{{ actionName }}</button>
