@@ -5,18 +5,28 @@
 
   const props = defineProps(['order', 'restaurant'])
   const table = ref({})
+
+  const setDatetime = (reservation, dtValue, dtName) => {
+    reservation[dtName] = dtValue
+  }
 </script>
 
 <template>
-  <form>
-    <p>{{ restaurant.tables }}</p>#####
-    <!-- <p>{{ order.reservations }}</p> -->
-    
-    <div>
-      <div v-for="reservation in order.reservations">
-      <ReservationTableSelect :reservation="reservation" :restaurant_tables="restaurant.tables" />
+  <form>    
+    <div >
+      <div v-for="reservation in order.reservations">      
+      {{ reservation.start_at }}, {{ reservation.end_at }}
       
-      <ReservationDate :reservationDate="reservation.start_at" />
+
+      <div class="centrenize-content-column">
+        <ReservationTableSelect :reservation="reservation" :restaurant_tables="restaurant.tables" />
+        
+        <ReservationDate :reservation="reservation" dtName="start_at"
+                       @datetime-submit="setDatetime"/>
+                       
+        <ReservationDate :reservation="reservation" dtName="end_at"
+                        @datetime-submit="setDatetime"/>
+      </div>
     </div>        
     </div>
   </form>
