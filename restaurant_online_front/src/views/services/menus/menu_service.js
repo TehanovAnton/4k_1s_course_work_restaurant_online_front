@@ -2,8 +2,13 @@ import axios from 'axios';
 import { errorshandler, isSuccessful } from '../common_methods';
 import tokensService from '../../services/tokensService';
 
-const apiIndexMenus = async (authHeaders, restaurantId) => {
-  let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}/menus`,
+const apiIndexMenus = async (authHeaders, restaurantId, options) => {
+  let getUrl = `http://localhost:3000/restaurants/${restaurantId}/menus?`
+
+  if (!!options['view'])
+    getUrl += `view=${options['view']}`
+  
+  let response = await axios.get(getUrl,
                                  { headers: authHeaders })
                             .catch(errorshandler)
 

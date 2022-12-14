@@ -23,7 +23,8 @@ import ModeSwitch from './ModeSwitch.vue';
   const dataReady = ref(false)
   const modeClassName = computed(() => {
     if (props.record) {
-      return `${props.record.name}-${props.modesClass}`
+      let pref = props.record.name ? props.record.name : props.record.id
+      return `${pref}-${props.modesClass}`
     } else {
       return `${props.modesClass}`
     }
@@ -45,10 +46,10 @@ import ModeSwitch from './ModeSwitch.vue';
   const modeVisibility = (mode) => props.modesProperties[mode].visible
 </script>
 
-<template>
+<template>  
   <div class="raw" v-if="dataReady">
     <ModeSwitch v-for="mode in modes" 
-                :mode="mode"                      :modes-class="modeClassName" :current-mode="currentMode"
+                :mode="mode"                      :modes-class="modeClassName"    :current-mode="currentMode"
                 :allowed="modeAlowability(mode)"  :visible="modeVisibility(mode)"
                 @switch-mode="$emit('set-mode', mode)" />
   </div>

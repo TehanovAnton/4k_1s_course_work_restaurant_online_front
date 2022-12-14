@@ -1,26 +1,9 @@
 import axios from 'axios';
-import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../common_methods';
+import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../../services/common_methods';
 import tokensService from '../../services/tokensService';
 
-
-const apiIndexDishes = async (menuId, options) => {  
-  let getUrl = `http://localhost:3000/menus/${menuId}/dishes?`
-
-  if (!!options['view'])
-    getUrl += `view=${options['view']}`
-
-  let response = await axios.get(getUrl,
-                                 { headers: tokensService.auth_headers() })
-                            .catch(errorshandler)
-
-  let isSuccessfulReq = isSuccessful(response)
-  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
-
-  return { response: response, isSuccessful: isSuccessfulReq }
-}
-
-const apiShowDish = async (dish) => {
-  let response = await axios.get(`http://localhost:3000/dishes/${dish.id}`,
+const apiIndexOrders = async (userId) => {
+  let response = await axios.get(`http://localhost:3000/users/${userId}/orders`,
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
 
@@ -30,33 +13,23 @@ const apiShowDish = async (dish) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiUpdateDish = async (dish) => {
-  let updateUrl = `http://localhost:3000/dishes/${dish.id}`
-  let data = {
-    name: dish.name,
-  }
-    
-  let response = await axios.put(
-    updateUrl, 
-    data,
-    { headers: tokensService.auth_headers() }
-  ).catch(errorshandler)
+const apiGetOrder = async (orderId) => {  
+  let response = await axios.get(`http://localhost:3000/orders/${orderId}`,
+                                 { headers: tokensService.auth_headers() })
+                            .catch(errorshandler)
 
   let isSuccessfulReq = isSuccessful(response)
   setHeadersIfSuccessful(response.headers, isSuccessfulReq)
-
-  return { response: response, isSuccessful: isSuccessful(response) }
+  
+  return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiCreateDish = async (dish) => {  
-  let createUrl = `http://localhost:3000/menus/${dish.menu_id}/dishes`
-  let data = {
-    name: dish.name,
-    menu_id: dish.menu_id
-  }
+const apiCreateOrder = async (order) => {
+  let createUrl = `http://localhost:3000/users/${order.user_id}/orders`
+  let data = order
     
   let response = await axios.post(
-    createUrl, 
+    createUrl,
     data,
     { headers: tokensService.auth_headers() }
   ).catch(errorshandler)
@@ -67,22 +40,24 @@ const apiCreateDish = async (dish) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiDeletsDish = async (dish) => {
-  let deleteUrl = `http://localhost:3000/dishes/${dish.id}`
+const apiUpdateOrder = async (order) => {
+  let updateUrl = `http://localhost:3000/orders/${order.id}`
+  let data = order
   
-  let response = await axios.delete(
-    deleteUrl, 
+  let response = await axios.put(
+    updateUrl,
+    data,
     { headers: tokensService.auth_headers() }
   ).catch(errorshandler)
-
+  
   let isSuccessfulReq = isSuccessful(response)
   setHeadersIfSuccessful(response.headers, isSuccessfulReq)
 
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiCanUpdateDish = async (dish) => {
-  let canUpdateUrl = `http://localhost:3000/dishes/${dish.id}/can_update`
+const apiCanUpdateOrder = async (order) => {
+  let canUpdateUrl = `http://localhost:3000/orders/${order.id}/can_update`
     
   let response = await axios.get(
     canUpdateUrl, 
@@ -95,8 +70,8 @@ const apiCanUpdateDish = async (dish) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiCanDestroyDish = async (dish) => {
-  let canDeleteUrl = `http://localhost:3000/dishes/${dish.id}/can_destroy`
+const apiCanDestroyOrder = async (order) => {
+  let canDeleteUrl = `http://localhost:3000/orders/${order.id}/can_destroy`
     
   let response = await axios.get(
     canDeleteUrl, 
@@ -109,8 +84,8 @@ const apiCanDestroyDish = async (dish) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiCanCreateDish = async (menu) => {
-  let canCreateUrl = `http://localhost:3000/menus/${menu.id}/dishes/can_create`
+const apiCanCreateOrder = async (user) => {
+  let canCreateUrl = `http://localhost:3000/users/${user.id}/orders/can_create`
     
   let response = await axios.get(
     canCreateUrl, 
@@ -123,15 +98,16 @@ const apiCanCreateDish = async (menu) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const can = async (action, public_actions, record) => {
-  let response  
 
+const can = async (action, public_actions, record) => {
+  let response
+  
   if (action == 'create') {
-    response = await apiCanCreateDish(record)
+    response = await apiCanCreateOrder(record)
   } else if (action == 'update') {
-    response = await apiCanUpdateDish(record)
+    response = await apiCanUpdateOrder(record)
   } else if (action == 'destroy') {
-    response = await apiCanDestroyDish(record)
+    response = await apiCanDestroyOrder(record)
   }
    else if (public_actions.includes(action)) {
     return true
@@ -150,9 +126,9 @@ const can = async (action, public_actions, record) => {
 }
 
 export default {
-  apiIndexDishes,
-  apiCreateDish,
-  apiUpdateDish,
-  apiDeletsDish,
+  apiGetOrder,
+  apiIndexOrders,
+  apiCreateOrder,
+  apiUpdateOrder,
   can
 }

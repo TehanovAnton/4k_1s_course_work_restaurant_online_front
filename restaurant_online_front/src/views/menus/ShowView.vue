@@ -6,7 +6,7 @@
   import service from '../services/menus/menu_service'
   import { ref } from 'vue';  
   import CreateView from './CreateView.vue';
-import router from '../../router/router';
+  import router from '../../router/router';
   
   const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
