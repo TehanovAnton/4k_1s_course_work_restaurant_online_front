@@ -57,6 +57,17 @@ const apiUpdateOrder = async (order) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiDestroyOrder = async (orderId) => {  
+  let response = await axios.delete(`http://localhost:3000/orders/${orderId}`,
+                                 { headers: tokensService.auth_headers() })
+                            .catch(errorshandler)
+
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+  
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const apiCanUpdateOrder = async (order) => {
   let canUpdateUrl = `http://localhost:3000/orders/${order.id}/can_update`
     
@@ -131,5 +142,6 @@ export default {
   apiIndexOrders,
   apiCreateOrder,
   apiUpdateOrder,
+  apiDestroyOrder,
   can
 }

@@ -1,11 +1,11 @@
 <script setup>
   import service from '../services/orders/order_service'
-  import ShowDishView from '../dishes/ShowView.vue'; 
   import EditOrderView from './EditView.vue';
   import { onBeforeMount, ref } from 'vue';
   import { computed } from '@vue/reactivity';
   import Modes from '../../components/Modes.vue';
   import moment from 'moment-timezone'
+  import tokensService from '../services/tokensService';
 
   import { useRoute } from 'vue-router';
   const route = useRoute()
@@ -55,15 +55,15 @@
   }
 
   const destroyOrder = async () => {
-    // let { 
-    //   response, 
-    //   isSuccessful
-    // } = await service.apiDestroyMenu(tokensService.auth_headers(), order)
+    let { 
+      response, 
+      isSuccessful
+    } = await service.apiDestroyOrder(order.value.id)
 
-    // if (isSuccessful) {      
-    //   tokensService.setAuthTokens(response.headers)
-    //   emits('data-change')
-    // }
+    if (isSuccessful) {      
+      tokensService.setAuthTokens(response.headers)
+      emits('data-change')
+    }
   }
 
   const showDataChange = () => {    
