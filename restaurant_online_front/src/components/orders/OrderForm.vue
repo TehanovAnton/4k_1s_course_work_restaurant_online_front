@@ -50,7 +50,8 @@
 
     if (isSuccessful) {      
       restaurants.value = response.data
-      activeRestaurant.value = restaurants.value[0]    
+      activeRestaurant.value = restaurants.value[0]
+      props.order.restaurant = activeRestaurant.value
       tokensService.setAuthTokens(response.headers)
     }
   }
@@ -123,9 +124,9 @@
       <select v-if="activeMenus && dishesReady" v-model="order.orders_dishes_attributes" multiple>
         <option v-for="dish in dishes" :value="orderDish(dish)">{{ dish.name }}</option>
       </select>
-
-      <ReservationForm v-if="order.restaurant_id"
-                      :restaurant="order.restaurant" :order="order" />
+      
+      <ReservationForm v-if="!!order.restaurant"
+                       :restaurant="order.restaurant" :order="order" :action-name="actionName"/>
     </div>
 
     <button type="button" @click="$emit('formSubmit')">{{ actionName }}</button>

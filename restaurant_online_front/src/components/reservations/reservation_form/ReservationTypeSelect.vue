@@ -7,6 +7,7 @@
 
   const props = defineProps(['reservation'])
   const emits = defineEmits(['reservation-type-submit'])
+  
   const reservationTypes = ref(['inside', 'outside'])
   const type = ref('')
 </script>

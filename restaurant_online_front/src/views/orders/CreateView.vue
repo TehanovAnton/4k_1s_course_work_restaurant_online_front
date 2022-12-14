@@ -10,7 +10,7 @@
     user_id: currentUser.user.id,
     restaurant_id:'',
     orders_dishes_attributes:[], 
-    reservations_attributes:[{ place_type:'outside' }]
+    reservations_attributes:[]
   })
   const emits = defineEmits(['data-change'])
 
