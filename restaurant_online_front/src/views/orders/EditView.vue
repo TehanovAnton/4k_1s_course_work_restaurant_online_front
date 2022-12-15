@@ -20,5 +20,4 @@
     <OrderForm :order="order" action-name="update"
                @form-submit="updatMenu" />
   </div>
-  rest:{{ order.restaurant }}
 </template>

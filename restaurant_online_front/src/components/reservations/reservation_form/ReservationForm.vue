@@ -46,7 +46,6 @@
                               @reservation-type-submit="setReservationType"/>
 
       <div v-if="newReservation.place_type == 'inside'" class="centrenize-content-column">
-        {{ order.reservations_attributes }}
         <ReservationTableSelect :reservation="newReservation" :restaurant_tables="restaurant.tables" />
 
         <ReservationDate :reservation="newReservation" dtName="start_at"
