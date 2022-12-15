@@ -34,7 +34,7 @@
   const currentMode = ref('show')
   const modesProperties = ref({
     show:{ action:'show', allowed:true, visible:true },
-    edit:{ action:'update', allowed:false, visible:true },
+    edit:{ action:'update', allowed:false, visible:props.order.aasm_state == 'active' },
     delete:{ action:'destroy', allowed:false, visible:false } 
   })
   const modesClass = ref('order-class')
@@ -61,7 +61,17 @@
     } = await service.apiDestroyOrder(order.value.id)
 
     if (isSuccessful) {      
-      tokensService.setAuthTokens(response.headers)
+      emits('data-change')
+    }
+  }
+
+  const cancelOrder = async () => {
+    let { 
+      response, 
+      isSuccessful
+    } = await service.apiCancelOrder(order.value.id)
+
+    if (isSuccessful) {      
       emits('data-change')
     }
   }
@@ -80,9 +90,9 @@
 
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
-        <div class="block centrenize-content-column">
+        <div class="block centrenize-content-column">          
           <p class="centrenize-content-column" v-for="reservation in order.reservations">
-            <span>{{ order.restaurant.name }} {{ order.restaurant.address }}</span>
+            <span>{{ order.restaurant.name }}-{{ order.restaurant.address }}-{{ order.aasm_state }}</span>
             
             <div v-if="reservation.place_type == 'inside'" class="centrenize-content-column">
               <span>{{ dtFormated(reservation.start_at) }}-{{ dtFormated(reservation.end_at) }}</span>
@@ -95,13 +105,23 @@
           </div>
         </div>
 
-        <button v-if="modeAlowability('delete')"
-                type="button"
-                @click="destroyOrder">destroy</button>
+        <div class="block centrenize-content-row">
+          <button v-if="modeAlowability('delete')"
+                  type="button"
+                  @click="destroyOrder">
+            destroy
+          </button>
+
+          <button v-if="modeAlowability('delete') && order.aasm_state == 'active'"
+                  type="button"
+                  @click="cancelOrder">
+            cancel
+          </button>
+        </div>
       </div>
     </div>
 
-    <div v-if="currentMode == 'edit'">
+    <div v-if="currentMode == 'edit' && order.aasm_state == 'active'">
       <EditOrderView :order="order" @data-change="showDataChange" />
     </div>
   </div>
