@@ -69,6 +69,7 @@ const apiDestroyOrder = async (orderId) => {
 
 const apiCancelOrder = async (orderId) => {  
   let response = await axios.put(`http://localhost:3000/orders/${orderId}/cancel`,
+                                 {},
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
 

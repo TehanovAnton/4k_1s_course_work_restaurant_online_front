@@ -2,11 +2,13 @@
   import service from '../services/orders/order_service'
   import EditOrderView from './EditView.vue';
   import ShowRatingView from '../ratings/ShowView.vue';
+  import RatingForm from '../../components/ratings/RatingForm.vue';
   import { onBeforeMount, ref } from 'vue';
   import { computed } from '@vue/reactivity';
   import Modes from '../../components/Modes.vue';
   import moment from 'moment-timezone'
-  import tokensService from '../services/tokensService';
+  import tokensService from '../services/tokensService'
+  import rating_service from '../services/ratings/rating_service';
 
   import { useRoute } from 'vue-router';
   const route = useRoute()
@@ -24,6 +26,10 @@
 
     dataReady.value = true
     order.value = props.order
+
+    if (!!order.value.rating) {
+      rating.value = order.value.rating
+    }
   })
 
   const props = defineProps(['order'])
@@ -31,18 +37,18 @@
   const order = ref({})
   const dataReady = ref(false)
 
-  const modes = ref(['show', 'edit', 'delete'])
+  const modes = ref(['show', 'edit', 'delete', 'create_rating'])
   const currentMode = ref('show')
   const modesProperties = ref({
     show:{ action:'show', allowed:true, visible:true },
     edit:{ action:'update', allowed:false, visible:props.order.aasm_state == 'active' },
+    create_rating:{ action:'create_rating', allowed:true, visible:['canceled', 'completed'].includes(props.order.aasm_state) },
     delete:{ action:'destroy', allowed:false, visible:false } 
   })
   const modesClass = ref('order-class')
   const setMode = (modeName) => currentMode.value = modeName  
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
-
-  const rating = ref({ id: 2, evaluation: 5, text: 'good job' })
+  const rating = ref({ evaluation: '', text: '' })
 
   const dishes = computed(() => {
     if (order.value){      
@@ -68,7 +74,7 @@
     }
   }
 
-  const cancelOrder = async () => {
+  const cancelOrder = async () => {    
     let { 
       response, 
       isSuccessful
@@ -76,6 +82,14 @@
 
     if (isSuccessful) {      
       emits('data-change')
+    }
+  }
+
+  const postRating = async () => {    
+    let { response, isSuccessful } = await rating_service.apiPostRating(order.value.id, rating.value)
+
+    if (isSuccessful) {
+      showDataChange()
     }
   }
 
@@ -128,6 +142,12 @@
           </button>          
         </div>
       </div>
+    </div>
+
+    <div v-if="currentMode == 'create_rating' && !isActive">
+      <RatingForm :rating="rating" action-name="post rating"
+                  @rating-submit="postRating"
+      />
     </div>
 
     <div v-if="currentMode == 'edit' && isActive">
