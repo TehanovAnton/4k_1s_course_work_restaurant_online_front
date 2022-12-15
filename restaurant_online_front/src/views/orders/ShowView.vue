@@ -1,6 +1,7 @@
 <script setup>
   import service from '../services/orders/order_service'
   import EditOrderView from './EditView.vue';
+  import ShowRatingView from '../ratings/ShowView.vue';
   import { onBeforeMount, ref } from 'vue';
   import { computed } from '@vue/reactivity';
   import Modes from '../../components/Modes.vue';
@@ -41,6 +42,8 @@
   const setMode = (modeName) => currentMode.value = modeName  
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
 
+  const rating = ref({ id: 2, evaluation: 5, text: 'good job' })
+
   const dishes = computed(() => {
     if (order.value){      
       return order.value.orders_dishes.map(od => od.dish)
@@ -80,6 +83,8 @@
     setMode('show')
     emits('data-change')
   }
+
+  const isActive = computed(() => order.value.aasm_state == 'active')
 </script>
 
 <template>
@@ -97,6 +102,10 @@
             <div v-if="reservation.place_type == 'inside'" class="centrenize-content-column">
               <span>{{ dtFormated(reservation.start_at) }}-{{ dtFormated(reservation.end_at) }}</span>
               <span v-if="!!reservation.table">table - {{ reservation.table.number }}</span>
+            </div>
+
+            <div v-if="!isActive">
+              <ShowRatingView :rating="rating" />
             </div>
           </p>
           
@@ -116,12 +125,12 @@
                   type="button"
                   @click="cancelOrder">
             cancel
-          </button>
+          </button>          
         </div>
       </div>
     </div>
 
-    <div v-if="currentMode == 'edit' && order.aasm_state == 'active'">
+    <div v-if="currentMode == 'edit' && isActive">
       <EditOrderView :order="order" @data-change="showDataChange" />
     </div>
   </div>
