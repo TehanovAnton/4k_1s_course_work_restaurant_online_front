@@ -50,7 +50,7 @@
 
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
-        Name: <a href="#" @click="menuDishesView">{{ menu.name }}</a>
+        <span>Name: <a href="#" @click="menuDishesView">{{ menu.name }}</a></span>
 
         <div class="block centrenize-content-column">
           Dishes:

@@ -1,14 +1,18 @@
 <script setup>
-  import { ref } from 'vue';
-import MenuForm from '../../components/menus/MenuForm.vue';
+  import { onBeforeMount, ref } from 'vue';
+  import MenuForm from '../../components/menus/MenuForm.vue';
   import menu_service from '../services/menus/menu_service';
   import tokensService from '../services/tokensService';
 
+  onBeforeMount(() => {
+    menu.value.restaurant_id = props.restaurant.id
+  })
+
   const props = defineProps(['restaurant'])
-  const menu = ref({ name:'', restaurant_id: props.restaurant.id })
+  const menu = ref({ name:'', restaurant_id: '' })
   const emits = defineEmits(['data-change'])
 
-  const createMenu = async () => {
+  const createMenu = async () => {    
     let { 
       response, 
       isSuccessful

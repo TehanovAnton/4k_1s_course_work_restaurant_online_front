@@ -3,6 +3,7 @@
   import { useRouter } from 'vue-router';
   import ShowDish from './ShowView.vue'
   import service from '../services/dishes/dishes_service'
+  import menu_service from '../services/menus/menu_service';
   import tokensService from '../services/tokensService';
   import auttService from '../services/auth_service'
   import CreateDish from './CreateView.vue';
@@ -13,6 +14,8 @@
 
   onBeforeMount(async () => {
     await getDishes()
+    await getMenu()
+
     dataReady.value = true
   })
 
@@ -38,13 +41,24 @@
 
 
   const getDishes = async () => {    
-    let dishId = route.params['menuId']
-    let { response, isSuccessful } = await service.apiIndexDishes(dishId)    
+    let menuId = route.params['menuId']
+    let { response, isSuccessful } = await service.apiIndexDishes(menuId, { view:'with_menus' })
 
-    if (isSuccessful) {      
+    if (isSuccessful) {     
       dishes.value = response.data  
       activeDish.value = dishes.value[0]
-      menu.value = dishes.value[0].menu
+
+      if (dishes.value.length > 0)
+        menu.value = dishes.value[0].menu
+    }
+  }
+
+  const getMenu = async () => {
+    let menuId = route.params['menuId']
+    let { response, isSuccessful } = await menu_service.apiGetMenu(tokensService.auth_headers(), menuId)
+
+    if (isSuccessful) {     
+      menu.value = response.data  
     }
   }
 
@@ -56,28 +70,29 @@
 
 <template>
   <div v-if="dataReady">
-    <div class="menu block centrenize-content-column">
-
-      <div class="centrenize-content-row">
+    <div class="menu block centrenize-content-column">    
+      <div class="menu centrenize-content-row">
         Menu - {{ menu.name }}
         <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-                :current-mode="currentMode"  :service="service"                  :record="menu"
+                :current-mode="currentMode" :service="service"                  :record="menu"
                 @set-mode="setMode"/>
       </div>
-    
-      <div v-if="currentMode == 'index'" class="block">
+
+      <div v-if="currentMode == 'index' && dishes.length > 0" class="block">
         Dishes:
         <div v-for="dish in dishes">
           <ShowDish :dish="dish" @data-change="refreshData"/>
         </div>
-      </div>
-
-      <div v-if="(currentMode == 'create' && modeAlowability('create'))">
+      </div>   
+      
+      <div v-if="currentMode == 'create' && modeAlowability('create') && !!menu">
         <CreateDish @data-change="refreshData" :menu="menu" />
       </div>
+    </div>      
+  </div>
 
-    </div>  
-    
+  <div v-if="dataReady && dishes.length == 0">
+    No Dishes
   </div>
 
   <footer class="block centrenize-content-row">
