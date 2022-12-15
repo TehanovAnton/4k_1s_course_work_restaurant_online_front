@@ -3,6 +3,7 @@
   import { useRoute, useRouter } from 'vue-router';
   import ShowOrder from './ShowView.vue'
   import service from '../services/orders/order_service'
+  import user_service from '../services/users/user_service';
   import tokensService from '../services/tokensService';
   import CreateOrder from './CreateView.vue';
   import Modes from '../../components/Modes.vue';
@@ -10,6 +11,7 @@
   const route = useRoute()
 
   onBeforeMount(async () => {
+    await getUser()
     await getOrders()
     dataReady.value = true
   })
@@ -38,15 +40,25 @@
 
 
   const getOrders = async () => {
-    const userId = route.params['userId']
-    let { response, isSuccessful } = await service.apiIndexOrders(userId)    
+    let { response, isSuccessful } = await service.apiIndexOrders(user.value.id)    
     
     if (isSuccessful) {
       orders.value = response.data
-      activeOrder.value = orders.value[0]
-      user.value = orders.value[0].user
+
+      if (orders.value.length > 0) {
+        activeOrder.value = orders.value[0]
+      }
 
       tokensService.setAuthTokens(response.headers)
+    }
+  }
+
+  const getUser = async () => {
+    const userId = route.params['userId']
+    let { response, isSuccessful } = await user_service.apiShowUser(tokensService.auth_headers(), userId) 
+    
+    if (isSuccessful) {
+      user.value = response.data
     }
   }
 
@@ -66,7 +78,6 @@
                :current-mode="currentMode"  :record="user"                          :service="service"
               @set-mode="setMode"/>
       </div>
-      home
       <!-- For this view it recives order, in separate should fetch by id -->
       <div v-if="currentMode == 'index'" v-for="order in orders">
         <ShowOrder :order="order" @data-change="refreshData"/>

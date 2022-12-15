@@ -17,6 +17,7 @@
 <template>
   <div class="block">
     Edit Order:
-    <OrderForm :order="order" action-name="update" @form-submit="updatMenu"/>
-  </div>  
+    <OrderForm :order="order" action-name="update"
+               @form-submit="updatMenu" />
+  </div>
 </template>

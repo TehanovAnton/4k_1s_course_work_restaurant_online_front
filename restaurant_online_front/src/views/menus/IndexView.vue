@@ -3,6 +3,7 @@
   import { useRouter } from 'vue-router';
   import ShowMenu from './ShowView.vue'
   import service from '../services/menus/menu_service'
+  import restaurant_service from '../services/restaurants/restaurant_service';
   import tokensService from '../services/tokensService';
   import auttService from '../services/auth_service'
   import CreateMenu from './CreateView.vue';
@@ -12,6 +13,7 @@
   const route = useRoute()
 
   onBeforeMount(async () => {
+    await getRestaurant()
     await getMenus()
     dataReady.value = true
   })  
@@ -33,18 +35,26 @@
   const modesClass = ref("menus-class")
   const setMode = (modeName) => currentMode.value = modeName
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
-  const modeVisibility = (mode) => modesProperties.value[mode].visible
 
-
-
-  const getMenus = async () => {    
+  const getRestaurant = async () => {
     let restaurantId = route.params['id']
-    let { response, isSuccessful } = await service.apiIndexMenus(tokensService.auth_headers(), restaurantId)    
+    let {
+      response,
+      isSuccessful
+    } = await restaurant_service.apiGetRestaurant(tokensService.auth_headers(), restaurantId)
+    
+    if (isSuccessful) {      
+      restaurant.value = response.data
+      tokensService.setAuthTokens(response.headers)
+    }
+  }
+
+  const getMenus = async () => {        
+    let { response, isSuccessful } = await service.apiIndexMenus(tokensService.auth_headers(), restaurant.value.id, { view:'with_dishes' })
 
     if (isSuccessful) {      
       menus.value = response.data  
       activeMenu.value = menus.value[0]
-      restaurant.value = menus.value[0].restaurant
 
       tokensService.setAuthTokens(response.headers)
     }

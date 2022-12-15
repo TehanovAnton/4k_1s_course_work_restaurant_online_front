@@ -12,6 +12,16 @@ const apiIndexRestaurants = async (authHeaders) => {
   return { response: response, isSuccessful: isSuccessful }
 }
 
+const apiGetRestaurant = async (authHeaders, restaurantId) => {  
+  let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}`,
+                                 { headers: authHeaders })
+                            .catch(errorshandler)
+
+  let isSuccessful = response && response.status === 200
+
+  return { response: response, isSuccessful: isSuccessful }
+}
+
 const apiUpdateRestaurants = async (authHeaders, restaurant) => {
   let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
   let data = {
@@ -115,6 +125,7 @@ const can = async (action, public_actions, record) => {
 
 export default {
   apiIndexRestaurants,
+  apiGetRestaurant,
   apiUpdateRestaurants,
   apiCreateRestaurants,
   apiDestroyRestaurants,

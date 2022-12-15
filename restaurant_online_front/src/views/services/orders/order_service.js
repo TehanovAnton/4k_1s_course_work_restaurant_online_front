@@ -27,7 +27,7 @@ const apiGetOrder = async (orderId) => {
 const apiCreateOrder = async (order) => {
   let createUrl = `http://localhost:3000/users/${order.user_id}/orders`
   let data = order
-    
+
   let response = await axios.post(
     createUrl,
     data,
@@ -43,7 +43,7 @@ const apiCreateOrder = async (order) => {
 const apiUpdateOrder = async (order) => {
   let updateUrl = `http://localhost:3000/orders/${order.id}`
   let data = order
-  
+
   let response = await axios.put(
     updateUrl,
     data,
@@ -53,6 +53,17 @@ const apiUpdateOrder = async (order) => {
   let isSuccessfulReq = isSuccessful(response)
   setHeadersIfSuccessful(response.headers, isSuccessfulReq)
 
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
+const apiDestroyOrder = async (orderId) => {  
+  let response = await axios.delete(`http://localhost:3000/orders/${orderId}`,
+                                 { headers: tokensService.auth_headers() })
+                            .catch(errorshandler)
+
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+  
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
@@ -130,5 +141,6 @@ export default {
   apiIndexOrders,
   apiCreateOrder,
   apiUpdateOrder,
+  apiDestroyOrder,
   can
 }

@@ -1,10 +1,11 @@
 <script setup>
   import service from '../services/orders/order_service'
-  import ShowDishView from '../dishes/ShowView.vue'; 
   import EditOrderView from './EditView.vue';
   import { onBeforeMount, ref } from 'vue';
   import { computed } from '@vue/reactivity';
   import Modes from '../../components/Modes.vue';
+  import moment from 'moment-timezone'
+  import tokensService from '../services/tokensService';
 
   import { useRoute } from 'vue-router';
   const route = useRoute()
@@ -48,16 +49,21 @@
     return []
   })
 
-  const destroyOrder = async () => {
-    // let { 
-    //   response, 
-    //   isSuccessful
-    // } = await service.apiDestroyMenu(tokensService.auth_headers(), order)
+  const dtFormated = (dt) => {
+    let date = new Date(dt)
+    return moment(date).tz(moment.tz.guess()).utcOffset(0).format('YYYY-MM-DD HH:mm')
+  }
 
-    // if (isSuccessful) {      
-    //   tokensService.setAuthTokens(response.headers)
-    //   emits('data-change')
-    // }
+  const destroyOrder = async () => {
+    let { 
+      response, 
+      isSuccessful
+    } = await service.apiDestroyOrder(order.value.id)
+
+    if (isSuccessful) {      
+      tokensService.setAuthTokens(response.headers)
+      emits('data-change')
+    }
   }
 
   const showDataChange = () => {    
@@ -75,7 +81,14 @@
     <div v-if="currentMode == 'show'">
       <div class="centrenize-content-column">
         <div class="block centrenize-content-column">
-          Dishes:
+          <p class="centrenize-content-column" v-for="reservation in order.reservations">
+            <span>{{ order.restaurant.name }} {{ order.restaurant.address }}</span>
+            
+            <div v-if="reservation.place_type == 'inside'" class="centrenize-content-column">
+              <span>{{ dtFormated(reservation.start_at) }}-{{ dtFormated(reservation.end_at) }}</span>
+              <span v-if="!!reservation.table">table - {{ reservation.table.number }}</span>
+            </div>
+          </p>
           
           <div v-for="dish in dishes">
             {{ dish.name }}

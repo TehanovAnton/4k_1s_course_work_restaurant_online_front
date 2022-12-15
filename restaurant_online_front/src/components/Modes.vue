@@ -3,7 +3,7 @@ import { computed, ref } from '@vue/reactivity';
 import { onBeforeMount } from 'vue';
 import ModeSwitch from './ModeSwitch.vue';
 
-  onBeforeMount(async () => {
+  onBeforeMount(async () => {    
     await getModesAllowabilities()
     
     dataReady.value = true
@@ -46,7 +46,7 @@ import ModeSwitch from './ModeSwitch.vue';
   const modeVisibility = (mode) => props.modesProperties[mode].visible
 </script>
 
-<template>  
+<template>
   <div class="raw" v-if="dataReady">
     <ModeSwitch v-for="mode in modes" 
                 :mode="mode"                      :modes-class="modeClassName"    :current-mode="currentMode"

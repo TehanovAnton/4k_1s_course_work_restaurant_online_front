@@ -2,12 +2,15 @@
   import { onBeforeMount, ref } from 'vue';
   import service from '../../views/services/orders/order_service';
   import restaurant_service from '../../views/services/restaurants/restaurant_service';
+  import ReservationForm from '../reservations/reservation_form/ReservationForm.vue'
   import menu_service from '../../views/services/menus/menu_service';
   import dishes_service from '../../views/services/dishes/dishes_service';
   import tokensService from '../../views/services/tokensService';
 
   onBeforeMount(async () => {
     await getRestaurants()
+
+    props.order.reservations_attributes = []
 
     if (props.actionName == 'update') {
       await getMenus()
@@ -19,9 +22,11 @@
         props.order.orders_dishes_attributes.push(orderDish(order_dish.dish))
       })
 
-      // await getDishes()
+      props.order.reservations.forEach(r => { 
+        props.order.reservations_attributes.push(r)
+      })
     }
-
+  
     dataReady.value = true
   })
 
@@ -39,16 +44,14 @@
   const activeMenus = ref([])
   const activeDishes = ref([])    
 
-  // const names = ref([{name: 'anton', age: 21 }, {name: 'roman', age: 26 }, {name: 'andrew', age: 20 }])
-  // const chosenNames = ref([{name: 'andrew', age: 20 }])
-
   const getRestaurants = async () => {
     menusReady.value = false
     let { response, isSuccessful } = await restaurant_service.apiIndexRestaurants(tokensService.auth_headers())
 
     if (isSuccessful) {      
       restaurants.value = response.data
-      activeRestaurant.value = restaurants.value[0]    
+      activeRestaurant.value = restaurants.value[0]
+      props.order.restaurant = activeRestaurant.value
       tokensService.setAuthTokens(response.headers)
     }
   }
@@ -121,6 +124,9 @@
       <select v-if="activeMenus && dishesReady" v-model="order.orders_dishes_attributes" multiple>
         <option v-for="dish in dishes" :value="orderDish(dish)">{{ dish.name }}</option>
       </select>
+      
+      <ReservationForm v-if="!!order.restaurant"
+                       :restaurant="order.restaurant" :order="order" :action-name="actionName"/>
     </div>
 
     <button type="button" @click="$emit('formSubmit')">{{ actionName }}</button>
