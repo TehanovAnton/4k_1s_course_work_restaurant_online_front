@@ -39,7 +39,7 @@ import ModeSwitch from './ModeSwitch.vue';
   const setModeAlowability = async (mode) => {
     let modeProperties = props.modesProperties[mode]
 
-    props.modesProperties[mode].allowed = await props.service.can(modeProperties.action, ['index', 'show'], props.record)
+    props.modesProperties[mode].allowed = await props.service.can(modeProperties.action, ['index', 'show', 'create_rating'], props.record)
   }
   
   const modeAlowability = (mode) => props.modesProperties[mode].allowed

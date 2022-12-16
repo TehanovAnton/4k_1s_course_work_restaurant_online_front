@@ -67,6 +67,18 @@ const apiDestroyOrder = async (orderId) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiCancelOrder = async (orderId) => {  
+  let response = await axios.put(`http://localhost:3000/orders/${orderId}/cancel`,
+                                 {},
+                                 { headers: tokensService.auth_headers() })
+                            .catch(errorshandler)
+
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+  
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const apiCanUpdateOrder = async (order) => {
   let canUpdateUrl = `http://localhost:3000/orders/${order.id}/can_update`
     
@@ -142,5 +154,6 @@ export default {
   apiCreateOrder,
   apiUpdateOrder,
   apiDestroyOrder,
+  apiCancelOrder,
   can
 }
