@@ -93,6 +93,14 @@
     }
   }
 
+  const destroyRating = async () => {
+    let { response, isSuccessful } = await rating_service.apiDestroyRating(order.value.id)
+
+    if (isSuccessful) {
+      showDataChange()
+    }
+  }
+
   const showDataChange = () => {    
     setMode('show')
     emits('data-change')
@@ -146,7 +154,7 @@
 
     <div v-if="currentMode == 'create_rating' && !isActive">
       <RatingForm :rating="rating" action-name="post rating"
-                  @rating-submit="postRating"
+                  @rating-submit="postRating" @rating-delete-submit="destroyRating"
       />
     </div>
 

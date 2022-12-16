@@ -1,6 +1,6 @@
 <script setup>
   const props = defineProps(['rating', 'actionName'])
-  const emits = defineEmits(['rating-submit'])
+  const emits = defineEmits(['rating-submit', 'rating-delete-submit'])
 </script>
 
 <template>
@@ -9,5 +9,6 @@
     <input type="text" v-model="rating.text" />
 
     <button type="button" @click="$emit('rating-submit')">post rating</button>
+    <button type="button" @click="$emit('rating-delete-submit')">delete rating</button>
   </form>
 </template>

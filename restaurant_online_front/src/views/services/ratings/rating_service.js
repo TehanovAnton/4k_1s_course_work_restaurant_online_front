@@ -18,6 +18,21 @@ const apiPostRating = async (orderId, rating) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiDestroyRating = async (orderId) => {
+  let destroyUrl = `http://localhost:3000/orders/${orderId}/destroy_rating`
+
+  let response = await axios.delete(
+    destroyUrl,
+    { headers: tokensService.auth_headers() }
+  ).catch(errorshandler)
+  
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 export default {
-  apiPostRating
+  apiPostRating,
+  apiDestroyRating
 }
