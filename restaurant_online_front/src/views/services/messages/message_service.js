@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../../services/common_methods';
+import { errorshandler, isSuccessful, setHeadersIfSuccessful, responseHandler } from '../../services/common_methods';
 import tokensService from '../../services/tokensService';
 
 const apiGetOrderMessges = async (orderId) => {
@@ -30,13 +30,6 @@ const apiDeleteOrderMessge = async (orderId, messageId) => {
   ).catch(errorshandler)
 
   return responseHandler(response)
-}
-
-const responseHandler = (response) => {
-  let isSuccessfulReq = isSuccessful(response)
-  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
-
-  return { response: response, isSuccessful: isSuccessfulReq }
 }
 
 export default {

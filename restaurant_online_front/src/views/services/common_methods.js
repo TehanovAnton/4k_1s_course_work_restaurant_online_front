@@ -21,8 +21,17 @@ const setHeadersIfSuccessful = (headers, isSuccessful) => {
   }
 }
 
+const responseHandler = (response) => {
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
+
 export {
   isSuccessful,
   errorshandler,
-  setHeadersIfSuccessful
+  setHeadersIfSuccessful,
+  responseHandler
 }
