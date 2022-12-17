@@ -127,12 +127,11 @@ const can = async (action, public_actions, record) => {
   
   if (action == 'create') {
     response = await apiCanCreateOrder(record)
-  } else if (action == 'update') {
+  } else if (['update', 'message'].includes(action)) {
     response = await apiCanUpdateOrder(record)
   } else if (action == 'destroy') {
     response = await apiCanDestroyOrder(record)
-  }
-   else if (public_actions.includes(action)) {
+  } else if (public_actions.includes(action)) {
     return true
   }
   
