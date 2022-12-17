@@ -13,7 +13,8 @@
   const currentUser = useCurrentUserStore()
 
   const dataReady = ref(false)
-  const message = ref("")
+  const message = ref({ text:"", restaurant_id: props.order.restaurant.id, user_id: currentUser.user.id })
+  const text = ref('')
   const messages = ref({})
   const _messages = ref([
       {
@@ -51,8 +52,10 @@
       }    
   ])
 
+  const isMine = (message) => message.user.id == currentUser.user.id
+
   const messageClass = (message) => {
-    if (message.user.id == currentUser.user.id) {
+    if (isMine(message)) {
       return 'message my-message'
     }
 
@@ -69,20 +72,48 @@
       messages.value = response.data
     }
   }
+
+  const postMessage = async (e) => {
+    if (e.key == 'Enter') {
+      e.preventDefault()
+
+      let {
+        response,
+        isSuccessful
+      } = await message_service.apiPostOrderMessges(props.order.id, message.value)
+
+      if (isSuccessful) {
+        await getOrderMessages()
+      }
+    }
+  }
 </script>
 
 <template>
   "Messages "
   <div v-if="dataReady" class="block chat">
     <div class="messages-box">
-      <p v-for="message in messages" :class="messageClass(message)">
-        {{ `${message.user.name}: ${message.text}` }}          
+      <p v-for="message in messages">
+        <span v-if="!isMine(message)" :class="messageClass(message)">
+          {{ `${message.user.name}: ${message.text}` }}
+        </span>
+
+        <span v-if="isMine(message)" :class="messageClass(message)">
+          {{ `${message.text}` }}
+        </span>
       </p>
     </div>
 
     <div class="input-box">
-      <input class="chat-input" type="text" :value="message"
-             @input="postMessage"/>
+      <form>
+        TXT:{{ message.text }}
+        <input class="chat-input" type="text" v-model="message.text"
+              @keypress="postMessage"/>
+
+        <!-- <input type="text" v-model="message.text"
+               @keypress="postMessage" /> -->
+      </form>
+        
     </div>
   </div>
 </template>
