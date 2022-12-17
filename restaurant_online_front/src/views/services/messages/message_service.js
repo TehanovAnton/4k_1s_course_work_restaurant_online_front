@@ -20,6 +20,18 @@ const apiPostOrderMessges = async (orderId, message) => {
   return responseHandler(response)
 }
 
+const apiDeleteOrderMessge = async (orderId, messageId) => {
+  let data = { message_id:messageId }
+  let response = await axios.delete(`http://localhost:3000/orders/${orderId}/delete_message`,
+    {
+      headers: tokensService.auth_headers(),
+      data: data
+    }
+  ).catch(errorshandler)
+
+  return responseHandler(response)
+}
+
 const responseHandler = (response) => {
   let isSuccessfulReq = isSuccessful(response)
   setHeadersIfSuccessful(response.headers, isSuccessfulReq)
@@ -29,5 +41,6 @@ const responseHandler = (response) => {
 
 export default {
   apiGetOrderMessges,
+  apiDeleteOrderMessge,
   apiPostOrderMessges
 }

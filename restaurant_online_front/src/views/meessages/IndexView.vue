@@ -14,7 +14,7 @@
 
   const dataReady = ref(false)
   const message = ref({ text:"", restaurant_id: props.order.restaurant.id, user_id: currentUser.user.id })
-  const text = ref('')
+  const displayDelete = ref(false)
   const messages = ref({})
   const _messages = ref([
       {
@@ -88,6 +88,25 @@
       }
     }
   }
+
+  const deleteMessage = async (messageId) => {
+    let {
+      response,
+      isSuccessful
+    } = await message_service.apiDeleteOrderMessge(props.order.id, messageId)
+
+    if (isSuccessful) {
+      await getOrderMessages()
+    }
+  }
+
+  const showDelete = (message) => {
+      message.displayDelete = true
+  }
+
+  const hideDelete = (message) => {
+      message.displayDelete = false
+  }
 </script>
 
 <template>
@@ -99,9 +118,17 @@
           {{ `${message.user.name}: ${message.text}` }}
         </span>
 
-        <span v-if="isMine(message)" :class="messageClass(message)">
-          {{ `${message.text}` }}
-        </span>
+        <div v-if="isMine(message)"
+             :class="messageClass(message)"
+             @mouseover="showDelete(message)" @mouseleave="hideDelete(message)">
+          <span>{{ `${message.text}` }}</span>
+
+          <button v-if="message.displayDelete"
+                  type="button"
+                  @click="deleteMessage(message.id)">
+            delete
+          </button>
+        </div>
       </p>
     </div>
 
