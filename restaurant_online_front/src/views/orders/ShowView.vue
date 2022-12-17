@@ -9,6 +9,7 @@
   import moment from 'moment-timezone'
   import tokensService from '../services/tokensService'
   import rating_service from '../services/ratings/rating_service';
+  import IndexMessages from '../meessages/IndexView.vue'
 
   import { useRoute } from 'vue-router';
   const route = useRoute()
@@ -37,10 +38,11 @@
   const order = ref({})
   const dataReady = ref(false)
 
-  const modes = ref(['show', 'edit', 'delete', 'create_rating'])
+  const modes = ref(['show', 'edit', 'delete', 'create_rating', 'message'])
   const currentMode = ref('show')
   const modesProperties = ref({
     show:{ action:'show', allowed:true, visible:true },
+    message:{ action:'message', allowed:true, visible:true },
     edit:{ action:'update', allowed:false, visible:props.order.aasm_state == 'active' },
     create_rating:{ action:'create_rating', allowed:true, visible:['canceled', 'completed'].includes(props.order.aasm_state) },
     delete:{ action:'destroy', allowed:false, visible:false } 
@@ -107,6 +109,7 @@
   }
 
   const isActive = computed(() => order.value.aasm_state == 'active')
+  const isNotActive = computed(() => order.value.aasm_state !== 'active')
 </script>
 
 <template>
@@ -160,6 +163,10 @@
 
     <div v-if="currentMode == 'edit' && isActive">
       <EditOrderView :order="order" @data-change="showDataChange" />
+    </div>
+
+    <div v-if="currentMode == 'message' && isNotActive">
+      <IndexMessages :order="order" />
     </div>
   </div>
 </template>
