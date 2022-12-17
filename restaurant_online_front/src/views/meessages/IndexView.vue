@@ -84,6 +84,7 @@
 
       if (isSuccessful) {
         await getOrderMessages()
+        message.value.text = ''
       }
     }
   }
@@ -106,12 +107,8 @@
 
     <div class="input-box">
       <form>
-        TXT:{{ message.text }}
         <input class="chat-input" type="text" v-model="message.text"
               @keypress="postMessage"/>
-
-        <!-- <input type="text" v-model="message.text"
-               @keypress="postMessage" /> -->
       </form>
         
     </div>
@@ -129,6 +126,7 @@
 
   .messages-box {
     flex: 2;
+    overflow-y: scroll;
   }
 
   .message {
