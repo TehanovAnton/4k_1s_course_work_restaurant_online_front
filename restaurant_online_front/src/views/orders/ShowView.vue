@@ -38,11 +38,13 @@
   const order = ref({})
   const dataReady = ref(false)
 
+  const isNotActive = computed(() => order.value.aasm_state !== 'active')
+
   const modes = ref(['show', 'edit', 'delete', 'create_rating', 'message'])
   const currentMode = ref('show')
   const modesProperties = ref({
     show:{ action:'show', allowed:true, visible:true },
-    message:{ action:'message', allowed:true, visible:true },
+    message:{ action:'message', allowed:true, visible:isNotActive },
     edit:{ action:'update', allowed:false, visible:props.order.aasm_state == 'active' },
     create_rating:{ action:'create_rating', allowed:true, visible:['canceled', 'completed'].includes(props.order.aasm_state) },
     delete:{ action:'destroy', allowed:false, visible:false } 
@@ -108,8 +110,7 @@
     emits('data-change')
   }
 
-  const isActive = computed(() => order.value.aasm_state == 'active')
-  const isNotActive = computed(() => order.value.aasm_state !== 'active')
+  const isActive = computed(() => order.value.aasm_state == 'active')  
 </script>
 
 <template>
