@@ -4,6 +4,26 @@
   import { useCurrentUserStore } from '../../stores/users/currentUser';
 
   onBeforeMount(async () => {
+    const socket = new WebSocket('ws://localhost:3000/cable')
+
+    socket.onopen = (event) => {  
+      const identifier = { channel:"ChatChannel", room: "chat_channel" }
+      const subscribedMsg = { "command":"subscribe", identifier: JSON.stringify(identifier) }
+      debugger
+      socket.send(JSON.stringify(subscribedMsg))
+    }
+
+    socket.onmessage = (event) => {
+      let e = JSON.parse(event.data)
+      let identifier = JSON.parse(e.identifier)
+
+      console.log(e)
+
+      if (identifier && identifier.channel == 'ChatChannel' && !!e.message) {
+        debugger
+      }
+    }
+
     await getOrderMessages()
 
     dataReady.value = true
