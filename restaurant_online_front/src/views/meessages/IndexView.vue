@@ -7,23 +7,31 @@
     const socket = new WebSocket('ws://localhost:3000/cable')
 
     socket.onopen = (event) => {  
-      const identifier = { channel:"ChatChannel", room: "chat_channel" }
-      const subscribedMsg = { "command":"subscribe", identifier: JSON.stringify(identifier) }
-      debugger
+      const identifier = { 
+        channel:"ChatChannel", 
+        room: "chat_chan  nel", 
+      }
+
+      const subscribedMsg = { 
+        command:"subscribe", 
+        identifier: JSON.stringify(identifier)
+      }
+      
       socket.send(JSON.stringify(subscribedMsg))
     }
 
     socket.onmessage = (event) => {
-      let e = JSON.parse(event.data)
-      let identifier = JSON.parse(e.identifier)
+      let data = JSON.parse(event.data)
 
-      console.log(e)
+      if (data.type == 'ping') {
+        return
+      }
 
-      if (identifier && identifier.channel == 'ChatChannel' && !!e.message) {
-        debugger
+      if (data.message) {
+        messages.value = JSON.parse(data.message.order_messages)
       }
     }
-
+    
     await getOrderMessages()
 
     dataReady.value = true
