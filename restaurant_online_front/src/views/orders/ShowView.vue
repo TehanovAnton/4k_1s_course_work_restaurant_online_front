@@ -9,7 +9,7 @@
   import moment from 'moment-timezone'
   import tokensService from '../services/tokensService'
   import rating_service from '../services/ratings/rating_service';
-  import IndexMessages from '../meessages/IndexView.vue'
+  import IndexMessages from '../meessages/OrderMessagesIndexView.vue'
 
   import { useRoute } from 'vue-router';
   const route = useRoute()

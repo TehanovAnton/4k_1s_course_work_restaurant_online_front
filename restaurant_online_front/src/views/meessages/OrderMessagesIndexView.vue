@@ -4,6 +4,34 @@
   import { useCurrentUserStore } from '../../stores/users/currentUser';
 
   onBeforeMount(async () => {
+    const socket = new WebSocket('ws://localhost:3000/cable')
+
+    socket.onopen = (event) => {  
+      const identifier = { 
+        channel:"ChatChannel", 
+        room: "chat_channel", 
+      }
+
+      const subscribedMsg = { 
+        command:"subscribe", 
+        identifier: JSON.stringify(identifier)
+      }
+      
+      socket.send(JSON.stringify(subscribedMsg))
+    }
+
+    socket.onmessage = (event) => {
+      let data = JSON.parse(event.data)
+
+      if (data.type == 'ping') {
+        return
+      }
+
+      if (data.message) {
+        messages.value = JSON.parse(data.message.order_messages)
+      }
+    }
+    
     await getOrderMessages()
 
     dataReady.value = true
@@ -14,43 +42,8 @@
 
   const dataReady = ref(false)
   const message = ref({ text:"", restaurant_id: props.order.restaurant.id, user_id: currentUser.user.id })
-  const displayDelete = ref(false)
+  // const displayDelete = ref(false)
   const messages = ref({})
-  const _messages = ref([
-      {
-          "id": 5,
-          "created_at": "2022-12-16 08:25:09 UTC",
-          "text": "well done 1",
-          "user": {
-              "id": 5,
-              "email": "clone2@gmail.com",
-              "name": "clone2",
-              "type": "Customer"
-          }
-      },
-      {
-          "id": 5,
-          "created_at": "2022-12-16 08:25:09 UTC",
-          "text": "well done 1",
-          "user": {
-              "id": 1,
-              "email": "clone2@gmail.com",
-              "name": "clone2",
-              "type": "Customer"
-          }
-      },
-      {
-          "id": 6,
-          "created_at": "2022-12-16 08:39:27 UTC",
-          "text": "well done 2",
-          "user": {
-              "id": 5,
-              "email": "clone2@gmail.com",
-              "name": "clone2",
-              "type": "Customer"
-          }
-      }    
-  ])
 
   const isMine = (message) => message.user.id == currentUser.user.id
 

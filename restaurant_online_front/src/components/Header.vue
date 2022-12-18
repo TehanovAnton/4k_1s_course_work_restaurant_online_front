@@ -14,6 +14,7 @@
 
 <template>
   <header class="block centrenize-content-row">
+    {{ `${currentUser.user.name}-${currentUser.user.email}` }}
     <button type="button" @click="homeView">Home</button>
     <button type="button" @click="ordersView">Orders</button>
     <button type="button" @click="usersIndex">Profile</button>

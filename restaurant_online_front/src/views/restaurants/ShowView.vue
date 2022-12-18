@@ -4,14 +4,16 @@
   import tokensService from '../services/tokensService';
   import service from '../services/restaurants/restaurant_service'
   import { ref } from 'vue';
-import router from '../../router/router';
+  import router from '../../router/router';
+  import IndexMessages from '../meessages/RestaurantMessagesIndexView.vue'
 
   const props = defineProps(['restaurant'])  
   const emits = defineEmits(['data-change'])
 // 
-  const modes = ref(['show', 'edit', 'delete'])
+  const modes = ref(['show', 'edit', 'delete', 'message'])
   const modesProperties = ref({
     show:{ action:'show', allowed:true, visible:true },
+    message:{ action:'message', allowed:true, visible:true },
     edit:{ action:'update', allowed:false, visible:true },
     delete:{ action:'destroy', allowed:false, visible:false } 
   })
@@ -35,9 +37,9 @@ import router from '../../router/router';
       tokensService.setAuthTokens(response.headers)
       emits('data-change')
     }
-  }
+  }  
 
-const restaurantMenus = () => router.push({ name:'restaurant_menus', params:{ id: props.restaurant.id } })
+  const restaurantMenus = () => router.push({ name:'restaurant_menus', params:{ id: props.restaurant.id } })
 </script>
 
 <template>
@@ -63,5 +65,9 @@ const restaurantMenus = () => router.push({ name:'restaurant_menus', params:{ id
     <div v-if="currentMode == 'edit'">
       <EditRestaurant :restaurant="restaurant" @data-change="showDataChange" />
     </div>  
+
+    <div v-if="currentMode == 'message'">
+      <IndexMessages :restaurant="restaurant" />
+    </div>
   </div>
 </template>
