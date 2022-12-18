@@ -4,35 +4,33 @@
   import { useCurrentUserStore } from '../../stores/users/currentUser';
 
   onBeforeMount(async () => {
-    // const socket = new WebSocket('ws://localhost:3000/cable')
+    const socket = new WebSocket('ws://localhost:3000/cable')
 
-    // socket.onopen = (event) => {  
-    //   const identifier = { 
-    //     channel:"RestChatChannel", 
-    //     room: "rest_chat_channel", 
-    //   }
+    socket.onopen = (event) => {  
+      const identifier = { 
+        channel:"RestChatChannel", 
+        room: "rest_chat_channel", 
+      }
 
-    //   const subscribedMsg = { 
-    //     command:"subscribe", 
-    //     identifier: JSON.stringify(identifier)
-    //   }
+      const subscribedMsg = { 
+        command:"subscribe", 
+        identifier: JSON.stringify(identifier)
+      }
       
-    //   debugger
-    //   socket.send(JSON.stringify(subscribedMsg))
-    // }
+      socket.send(JSON.stringify(subscribedMsg))
+    }
 
-    // socket.onmessage = (event) => {
-    //   let data = JSON.parse(event.data)
+    socket.onmessage = (event) => {
+      let data = JSON.parse(event.data)
 
-    //   if (data.type == 'ping') {
-    //     return
-    //   }
+      if (data.type == 'ping') {
+        return
+      }
 
-    //   if (data.message) {
-    //     debugger
-    //     messages.value = JSON.parse(data.message.restaurant_messages)
-    //   }
-    // }
+      if (data.message) {
+        messages.value = JSON.parse(data.message.messages)
+      }
+    }
     
     await getRestaurantMessages()
 
