@@ -32,8 +32,42 @@ const apiDeleteOrderMessge = async (orderId, messageId) => {
   return responseHandler(response)
 }
 
+const apiGetRestaurantMessges = async (restaurantId) => {
+  let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}/restaurant_messages`,
+    { headers: tokensService.auth_headers() })
+  .catch(errorshandler)  
+
+  return responseHandler(response)
+}
+
+const apiPostRestaurantMessges = async (restaurantId, message) => {
+  let data = message  
+  let response = await axios.post(`http://localhost:3000/restaurants/${restaurantId}/post_message`,
+    data,
+    { headers: tokensService.auth_headers() })
+  .catch(errorshandler)
+
+  return responseHandler(response)
+}
+
+const apiDeleteRestaurantMessage = async (restaurantId, messageId) => {
+  let data = { message_id:messageId }
+  let response = await axios.delete(`http://localhost:3000/restaurants/${restaurantId}/delete_message`,
+    {
+      headers: tokensService.auth_headers(),
+      data: data
+    }
+  ).catch(errorshandler)
+
+  return responseHandler(response)
+}
+
+
 export default {
   apiGetOrderMessges,
   apiDeleteOrderMessge,
-  apiPostOrderMessges
+  apiPostOrderMessges,
+  apiGetRestaurantMessges,
+  apiPostRestaurantMessges,
+  apiDeleteRestaurantMessage
 }

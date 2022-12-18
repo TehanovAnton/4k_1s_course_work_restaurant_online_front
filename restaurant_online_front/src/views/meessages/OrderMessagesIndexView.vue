@@ -9,7 +9,7 @@
     socket.onopen = (event) => {  
       const identifier = { 
         channel:"ChatChannel", 
-        room: "chat_chan  nel", 
+        room: "chat_channel", 
       }
 
       const subscribedMsg = { 
@@ -42,43 +42,8 @@
 
   const dataReady = ref(false)
   const message = ref({ text:"", restaurant_id: props.order.restaurant.id, user_id: currentUser.user.id })
-  const displayDelete = ref(false)
+  // const displayDelete = ref(false)
   const messages = ref({})
-  const _messages = ref([
-      {
-          "id": 5,
-          "created_at": "2022-12-16 08:25:09 UTC",
-          "text": "well done 1",
-          "user": {
-              "id": 5,
-              "email": "clone2@gmail.com",
-              "name": "clone2",
-              "type": "Customer"
-          }
-      },
-      {
-          "id": 5,
-          "created_at": "2022-12-16 08:25:09 UTC",
-          "text": "well done 1",
-          "user": {
-              "id": 1,
-              "email": "clone2@gmail.com",
-              "name": "clone2",
-              "type": "Customer"
-          }
-      },
-      {
-          "id": 6,
-          "created_at": "2022-12-16 08:39:27 UTC",
-          "text": "well done 2",
-          "user": {
-              "id": 5,
-              "email": "clone2@gmail.com",
-              "name": "clone2",
-              "type": "Customer"
-          }
-      }    
-  ])
 
   const isMine = (message) => message.user.id == currentUser.user.id
 
