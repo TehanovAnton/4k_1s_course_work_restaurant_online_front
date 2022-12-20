@@ -82,8 +82,8 @@
   const getMenuDishes = async (menuId) => {
     let { response, isSuccessful } = await dishes_service.apiIndexDishes(menuId, { view:false })
 
-    if (isSuccessful) {      
-      response.data.forEach(dish => {
+    if (isSuccessful) {            
+      response.data.forEach(dish => {        
         dishes.value.push(dish)
       });      
     }
