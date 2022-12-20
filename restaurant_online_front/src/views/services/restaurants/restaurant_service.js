@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { errorshandler, isSuccessful } from '../common_methods';
+import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../common_methods';
 import tokensService from '../../services/tokensService';
 
 const apiIndexRestaurants = async (authHeaders) => {
@@ -96,6 +96,21 @@ const apiCanDestroyRestaurant = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const apiRestaurantSearch = async (matchExpression) => {
+  let searchUrl = `http://localhost:3000/restaurants/search`
+  let data = { match_expression: matchExpression }
+    
+  let response = await axios.get(
+    searchUrl, 
+    { headers: tokensService.auth_headers(), params: data }
+  ).catch(errorshandler)
+
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const can = async (action, public_actions, record) => {
   let response
 
@@ -109,6 +124,9 @@ const can = async (action, public_actions, record) => {
    else if (public_actions.includes(action)) {
     return true
   }
+
+  if (!!!response)
+    debugger
 
   if (response.response.status == 401) {
     router.push({ name: 'sign_in' })
@@ -132,5 +150,6 @@ export default {
   apiCanCreateRestaurants,
   apiCanUpdateRestaurant,
   apiCanDestroyRestaurant,
+  apiRestaurantSearch,
   can
 }

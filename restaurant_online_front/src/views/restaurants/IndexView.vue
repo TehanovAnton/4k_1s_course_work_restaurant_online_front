@@ -2,6 +2,7 @@
   import { onBeforeMount, ref } from 'vue';  
   import { useRouter } from 'vue-router';
   import ShowRestaurant from './ShowView.vue'
+  import Search from '../../components/restaurants/Search.vue';
   import service from '../services/restaurants/restaurant_service'
   import tokensService from '../services/tokensService';
   import Header from '../../components/Header.vue';  
@@ -50,6 +51,10 @@
     await getRestaurants()
     setMode('index')
   }
+
+  const setSearchRestaurants = (searchResult) => {    
+    restaurants.value = searchResult
+  }
 </script>
 
 <template>
@@ -57,6 +62,8 @@
     <div class="menu block centrenize-content-column">
       <div class="centrenize-content-row">
         Restaurants:
+        <Search @search-result="setSearchRestaurants"/>
+
         <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
               :current-mode="currentMode"  :service="service"
               @set-mode="setMode"/>
