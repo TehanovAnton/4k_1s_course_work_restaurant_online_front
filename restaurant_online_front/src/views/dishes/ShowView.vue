@@ -11,7 +11,7 @@
 
   const editDishModeArgs = computed(() => {
     return {
-      canUpdateUrl: `http://localhost:3000/dishes/${props.dish.menu.id}/can_update`,
+      canUpdateUrl: `http://localhost:3000/dishes/${props.dish.id}/can_update`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -20,7 +20,7 @@
 
   const destroyDishModeArgs = computed(() => {
     return {
-      canDestroyUrl: `http://localhost:3000/dishes/${props.dish.menu.id}/can_desrtoy`,
+      canDestroyUrl: `http://localhost:3000/dishes/${props.dish.id}/can_destroy`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
