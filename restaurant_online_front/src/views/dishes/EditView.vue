@@ -1,12 +1,21 @@
 <script setup>
   import DishForm from '../../components/dishes/DishForm.vue';
-  import service from '../services/dishes/dishes_service'
+  import dishApi from '../services/api/model_api'
+  import tokensService from '../services/tokensService';
 
   const props = defineProps(['dish'])
   const emits = defineEmits(['data-change'])
 
   const updatMenu = async () => {
-    let isSuccessful = await service.apiUpdateDish(props.dish)
+    let args = {
+      updateUrl: `http://localhost:3000/dishes/${props.dish.id}`,
+      data: props.dish,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+
+    let isSuccessful = await dishApi.apiUpdateModel(args)
 
     if (isSuccessful) {      
       emits('data-change')

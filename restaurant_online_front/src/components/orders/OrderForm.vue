@@ -1,10 +1,10 @@
 <script setup>
   import { onBeforeMount, ref } from 'vue';
-  import service from '../../views/services/orders/order_service';
   import restaurant_service from '../../views/services/restaurants/restaurant_service';
   import ReservationForm from '../reservations/reservation_form/ReservationForm.vue'
   import menu_service from '../../views/services/menus/menu_service';
-  import dishes_service from '../../views/services/dishes/dishes_service';
+  import dishesService from '../../views/services/dishes/DishesService';  
+  import dishApi from '../../views/services/api/model_api';
   import tokensService from '../../views/services/tokensService';
 
   onBeforeMount(async () => {
@@ -80,7 +80,16 @@
   }
 
   const getMenuDishes = async (menuId) => {
-    let { response, isSuccessful } = await dishes_service.apiIndexDishes(menuId, { view:false })
+    let url = dishesService.urlOptionsEditor(`http://localhost:3000/menus/${menuId}/dishes?`, 
+                                             { view: false })
+    let args = { 
+      getUrl: url,
+      requestOptions: { 
+        headers: tokensService.auth_headers()
+      }
+    }
+
+    let { response, isSuccessful } = await dishApi.apiIndexModels(args)
 
     if (isSuccessful) {            
       response.data.forEach(dish => {        

@@ -1,8 +1,9 @@
 <script setup>
-  import { onBeforeMount, ref } from 'vue';  
+  import { onBeforeMount, ref, computed } from 'vue';  
   import { useRouter } from 'vue-router';
   import ShowDish from './ShowView.vue'
-  import service from '../services/dishes/dishes_service'
+  import dishesService from '../services/dishes/DishesService'
+  import dishApi from '../services/api/model_api'
   import menu_service from '../services/menus/menu_service';
   import tokensService from '../services/tokensService';
   import auttService from '../services/auth_service'
@@ -24,13 +25,24 @@
   const menu = ref({})
   const router = useRouter()
   const dataReady = ref(false)
+
+  const createDishModeArgs = computed(() => {
+    return {
+      canCreateUrl: `http://localhost:3000/menus/${menu.value.id}/dishes/can_create`,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+  })
   
 
 
   const modes = ref(['index', 'create'])
   const modesProperties = ref({
     index:{ action:'index', allowed:false, visible:true },
-    create:{ action:'create', allowed:false, visible:true }
+    create:{ action:'create', allowed:false, visible:true,
+      args: createDishModeArgs
+    }
   })
   const currentMode = ref('index')
   const modesClass = ref("dishes-class")
@@ -42,7 +54,16 @@
 
   const getDishes = async () => {    
     let menuId = route.params['menuId']
-    let { response, isSuccessful } = await service.apiIndexDishes(menuId, { view:'with_menus' })
+    let url = dishesService.urlOptionsEditor(`http://localhost:3000/menus/${menuId}/dishes?`, 
+                                             { view: 'with_menus' })
+    let args = { 
+      getUrl: url,
+      requestOptions: { 
+        headers: tokensService.auth_headers()
+      }
+    }
+
+    let { response, isSuccessful } = await dishApi.apiIndexModels(args)
 
     if (isSuccessful) {     
       dishes.value = response.data  
@@ -74,7 +95,7 @@
       <div class="menu centrenize-content-row">
         Menu - {{ menu.name }}
         <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-                :current-mode="currentMode" :service="service"                  :record="menu"
+                :current-mode="currentMode" :service="dishesService"            :record="menu"
                 @set-mode="setMode"/>
       </div>
 
