@@ -57,16 +57,11 @@
            @set-mode="setMode">
 
       <div v-if="currentMode == 'show'">
-        <ShowDishView :dishes="menu.dishes" :menu="menu" :deleteModeAlowability="modeAlowability('delete')" />
+        <ShowDishView :menu="menu" :deleteModeAlowability="modeAlowability('delete')" />
       </div>
 
       <div v-if="currentMode == 'edit' && modeAlowability('edit')">
         <EditMenu :menu="menu" @data-change="showDataChange" />
-      </div>
-      
-      <div v-if="currentMode == 'create' && modeAlowability('create')">
-        <CreateView :restaurant-id="restaurant.id"
-                    @data-change="refreshData" />
       </div>
 
     </ModesWithContent>

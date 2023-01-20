@@ -9,8 +9,11 @@
   import CreateMenu from './CreateView.vue';
   import Modes from '../../components/Modes.vue';
 
+  import { useMenuIndexStore } from '../../stores/menus/MenuIndexStore';
   import { useRoute } from 'vue-router'
+
   const route = useRoute()
+  const menuStore = useMenuIndexStore()
 
   onBeforeMount(async () => {
     await getRestaurant()
@@ -52,6 +55,8 @@
     } = await restaurant_service.apiGetRestaurant(tokensService.auth_headers(), restaurantId)
     
     if (isSuccessful) {      
+      menuStore.setRestaurant(response.data)
+
       restaurant.value = response.data
       tokensService.setAuthTokens(response.headers)
     }
@@ -61,6 +66,7 @@
     let { response, isSuccessful } = await service.apiIndexMenus(tokensService.auth_headers(), restaurant.value.id, { view:'with_dishes' })
 
     if (isSuccessful) {      
+      menuStore.setMenu(response.data)
       menus.value = response.data  
       activeMenu.value = menus.value[0]
 

@@ -3,8 +3,12 @@ import ShowDish from '../../components/dishes/ShowDish.vue';
 import router from '../../router/router';
 import service from '../services/menus/menu_service'
 import tokensService from '../services/tokensService';
+import { computed } from '@vue/reactivity';
 
-const props = defineProps(['dishes','menu', 'deleteModeAlowability'])
+const props = defineProps(['menu', 'deleteModeAlowability'])
+const dishes = computed(() => {
+  return props.menu.dishes
+})
 
 const menuDishesView = () => router.push({ name:'menu_dishes', params:{ menuId:props.menu.id } })
 const destroyMenu = async () => {
@@ -22,7 +26,7 @@ const destroyMenu = async () => {
 
 <template>
   <div class="centrenize-content-column">
-    <span>Name: <a href="#" @click="menuDishesView">{{ menu.name }}</a></span>
+    <span>Name: {{ menu.name }}</span>
 
     <div class="block centrenize-content-column">
       Dishes:
