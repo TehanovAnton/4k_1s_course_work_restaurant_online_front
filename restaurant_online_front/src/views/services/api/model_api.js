@@ -31,7 +31,6 @@ const apiDeletModel = async (args) => {
   let response = await axios.delete(args['deleteUrl'], 
                                     args['requestOptions']
   ).catch(errorshandler)
-
   return apiResponseHandelr(response)
 }
 

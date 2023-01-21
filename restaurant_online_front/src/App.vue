@@ -18,6 +18,6 @@
 </script>
 
 <template>
-  <Header v-if="isNotAuthPage" />
+  <!-- <Header v-if="isNotAuthPage" /> -->
   <RouterView />
 </template>

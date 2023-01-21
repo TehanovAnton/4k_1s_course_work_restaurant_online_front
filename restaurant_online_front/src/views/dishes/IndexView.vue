@@ -34,8 +34,6 @@
       }
     }
   })
-  
-
 
   const modes = ref(['index', 'create'])
   const modesProperties = ref({

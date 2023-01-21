@@ -58,6 +58,12 @@ const router = createRouter({
       path: '/orders/:id',
       name: 'order',
       component: () => import('../views/orders/ShowView.vue')
+    },
+
+    {
+      path: '/rests/preview',
+      name: 'order',
+      component: () => import('../components/lists/RestaurantsList.vue')
     }
   ]
 })

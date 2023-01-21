@@ -39,12 +39,9 @@ import modelApi from '../views/services/api/model_api';
 
   const setModeAlowability = async (mode) => {
     let modeProperties = props.modesProperties[mode]
-    // if (mode == 'create' &&props.record.id == 1)
-    // debugger
-    props.modesProperties[mode].allowed = await modelApi.can(
-      modeProperties.action, 
-      ['index', 'show', 'create_rating', 'message'], 
-      modeProperties.args
+    props.modesProperties[mode].allowed = await modelApi.can(modeProperties.action, 
+                                                             ['index', 'show', 'create_rating', 'message'], 
+                                                             modeProperties.args
     )
   }
   
