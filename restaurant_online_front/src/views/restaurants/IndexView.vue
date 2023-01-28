@@ -7,7 +7,7 @@
   import tokensService from '../services/tokensService';
   import Header from '../../components/Header.vue';  
   import CreateRestaurant from './CreateView.vue';
-  import Modes from '../../components/Modes.vue';
+  import Modes from '../../components/modes/Modes.vue';
 
   onBeforeMount(async () => {
     await getRestaurants()

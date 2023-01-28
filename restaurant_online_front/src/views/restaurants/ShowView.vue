@@ -1,5 +1,5 @@
 <script setup>
-  import Modes from '../../components/Modes.vue';
+  import Modes from '../../components/modes/Modes.vue';
   import EditRestaurant from './EditView.vue'
   import tokensService from '../services/tokensService';
   import service from '../services/restaurants/restaurant_service'

@@ -1,5 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue';
+import ModesSelect from '../modes/ModesSelect.vue';
+
+const restaurantsModes = ref(['index', 'create'])
+const restaurantsModesProperties = ref({
+  index:{ action:'index', allowed:false, visible:true },
+  create:{ action:'create', allowed:false, visible:true,
+    args: {}
+  }
+})
+const currentRestaturantMode = ref('index')
+const setRestaturantMode = (modeName) => currentRestaturantMode.value = modeName
 
 const restaurants = ref([
     {
@@ -220,10 +231,17 @@ const restaurants = ref([
     }
 ])
 const currentRestaurant = ref(restaurants.value[0])
+
 const menus = computed(() => {
   return currentRestaurant.value.menus
 })
 const currentMenu = ref(menus.value[0])
+const menuModes = ['index', 'create']
+const menusModesProperties = ref({
+  index:{ action:'index', allowed:true, visible:true },
+  create:{ action:'create', allowed:true, visible:true },
+})
+
 const dishes = computed(() => {
   return currentMenu.value.dishes
 })
@@ -259,31 +277,54 @@ const setCurrentMenu = (menu) => {
 
 <template>
   <div class="restaurants-list-content-container">
-    <ul class="restaurants-list block">
-      <li v-for="restaurant in restaurants" class="restaurant-li"
-          @click="setCurrentRestaurant(restaurant)">
-        <div v-bind:class="restaurantActivityStyle(restaurant)">
-          <p>Name: {{ restaurant.name }}</p>
-          <p>Address: {{ restaurant.address }}</p>
-          <p>Email: {{ restaurant.email }}</p>
-        </div>
-      </li>
-    </ul>
+    <div class="restaurants-list-container">
+      <ModesSelect :modes="restaurantsModes"
+                  :current-mode="currentRestaturantMode"
+                  :modes-properties="restaurantsModesProperties"
+                  :record="currentRestaurant"
+                  :with-slot="false"
+                  @set-mode="setRestaturantMode" />
 
+      <ul class="restaurants-list block">
+        <li v-for="restaurant in restaurants" class="restaurant-li"
+            @click="setCurrentRestaurant(restaurant)">
+          <div v-bind:class="restaurantActivityStyle(restaurant)">
+            <p>Name: {{ restaurant.name }}</p>
+            <p>Address: {{ restaurant.address }}</p>
+            <p>Email: {{ restaurant.email }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
     <div class="restaurant-content">
+
       <div class="menus-bar">
-        <div v-for="menu in menus" v-bind:class="menuActivityStyle(menu)"
-            @click="setCurrentMenu(menu)">
+        <div v-for="menu in menus" 
+              v-bind:class="menuActivityStyle(menu)"
+              @click="setCurrentMenu(menu)">
           {{ menu.name }}
-        </div>        
+        </div>
+
+        <div>
+          <!-- modes select -->
+          <ModesSelect :modes="menuModes"
+                        :current-mode="currentMenuMode"
+                        :modes-properties="menusModesProperties"
+                        :record="currentMenu"
+                        :with-slot="false"
+                        @set-mode="setMenuMode"/>
+        </div>
       </div>
 
+      <!-- v-if="currentMenuMode == 'index'" -->
       <div class="menu-dishes-container">
         <div v-for="dish in dishes"
-             class="border md-background md-padding">
+              class="border md-background md-padding">
           {{ dish.name }}
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -293,6 +334,11 @@ const setCurrentMenu = (menu) => {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+  }
+
+  .restaurants-list-container {
+    display: flex;
+    flex-direction: column;
   }
 
   .restaurants-list {

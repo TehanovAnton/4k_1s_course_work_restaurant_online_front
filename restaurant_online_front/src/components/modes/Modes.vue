@@ -2,7 +2,7 @@
 import { computed, ref } from '@vue/reactivity';
 import { onBeforeMount } from 'vue';
 import ModeSwitch from './ModeSwitch.vue';
-import modelApi from '../views/services/api/model_api';
+import modelApi from '../../views/services/api/model_api';
 
   onBeforeMount(async () => {    
     await getModesAllowabilities()
