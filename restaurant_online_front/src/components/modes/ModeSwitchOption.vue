@@ -3,7 +3,8 @@
 </script>
 
 <template>
-  <option v-if="(allowed && visible)">
+  <option v-if="(allowed && visible)"
+          v-bind:value="mode">
     {{ mode }}
   </option>
 </template>

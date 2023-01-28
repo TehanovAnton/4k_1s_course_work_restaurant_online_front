@@ -22,6 +22,7 @@ import modelApi from '../../views/services/api/model_api';
   const emits = defineEmits(['set-mode'])
 
   const dataReady = ref(false)
+  const selectedMode = ref(props.currentMode)
   const getModesAllowabilities = async () => {
     props.modes.forEach(async mode => {       
       await setModeAlowability(mode)
@@ -37,14 +38,15 @@ import modelApi from '../../views/services/api/model_api';
     )
   }
   
-  const modeAlowability = (mode) => props.modesProperties[mode].allowed
+  const modeAlowability = (mode) => props.modesProperties[mode].allowed          
   const modeVisibility = (mode) => props.modesProperties[mode].visible
 </script>
 
 <template>
   <select class="raw"
           v-if="dataReady"
-          @change="$emit('set-mode')">
+          v-model="selectedMode"
+          @change="$emit('set-mode', selectedMode)">
     <ModeSwitchOption v-for="mode in modes" 
                       :mode="mode"
                       :allowed="modeAlowability(mode)"

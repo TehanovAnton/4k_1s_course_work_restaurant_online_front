@@ -10,7 +10,6 @@ onBeforeMount(async () => {
 })
 
 const getRestaurants = async () => {
-  debugger
   let { response, isSuccessful } = await restaurantService.apiIndexRestaurants(tokensService.auth_headers())
 
   if (isSuccessful) {      
@@ -23,15 +22,26 @@ const getRestaurants = async () => {
 
 const dataReady = ref(false)
 
+const createRestaurantModeArgs = computed(() => {
+  return {
+    canCreateUrl: `http://localhost:3000/restaurants/can_create`,
+    requestOptions: {
+      headers: tokensService.auth_headers()
+    }
+  }
+})
+
 const restaurantsModes = ref(['index', 'create'])
 const restaurantsModesProperties = ref({
   index:{ action:'index', allowed:false, visible:true },
   create:{ action:'create', allowed:false, visible:true,
-    args: {}
+    args: createRestaurantModeArgs
   }
 })
 const currentRestaturantMode = ref('index')
-const setRestaturantMode = (modeName) => currentRestaturantMode.value = modeName
+const setRestaturantMode = (modeName) => {
+  return currentRestaturantMode.value = modeName
+}
 
 const restaurants = ref([])
 const currentRestaurant = ref({})
@@ -103,7 +113,8 @@ const setCurrentMenu = (menu) => {
     
     <div class="restaurant-content">
 
-      <div class="menus-bar">
+      <div class="menus-bar"
+           v-if="currentRestaturantMode == 'index'">
         <div v-for="menu in menus" 
               v-bind:class="menuActivityStyle(menu)"
               @click="setCurrentMenu(menu)">
@@ -122,7 +133,8 @@ const setCurrentMenu = (menu) => {
       </div>
 
       <!-- v-if="currentMenuMode == 'index'" -->
-      <div class="menu-dishes-container">
+      <div class="menu-dishes-container"
+           v-if="currentRestaturantMode == 'index'">
         <div v-for="dish in dishes"
               class="border md-background md-padding">
           {{ dish.name }}
