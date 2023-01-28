@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, onBeforeMount } from 'vue';
 import ModesSelect from '../modes/ModesSelect.vue';
+import RestaurantForm from '../RestaurantForm.vue';
 import restaurantService from '../../views/services/restaurants/restaurant_service'
 import tokensService from '../../views/services/tokensService';
+import CreateView from '../../views/restaurants/CreateView.vue';
 
 onBeforeMount(async () => {
   await getRestaurants()
@@ -18,6 +20,11 @@ const getRestaurants = async () => {
 
     tokensService.setAuthTokens(response.headers)
   }
+}
+
+const refreshData = async () => {
+  await getRestaurants()
+  setRestaturantMode('index')
 }
 
 const dataReady = ref(false)
@@ -111,10 +118,9 @@ const setCurrentMenu = (menu) => {
       </ul>
     </div>
     
-    <div class="restaurant-content">
+    <div class="restaurant-content" v-if="currentRestaturantMode == 'index'">
 
-      <div class="menus-bar"
-           v-if="currentRestaturantMode == 'index'">
+      <div class="menus-bar">
         <div v-for="menu in menus" 
               v-bind:class="menuActivityStyle(menu)"
               @click="setCurrentMenu(menu)">
@@ -133,8 +139,7 @@ const setCurrentMenu = (menu) => {
       </div>
 
       <!-- v-if="currentMenuMode == 'index'" -->
-      <div class="menu-dishes-container"
-           v-if="currentRestaturantMode == 'index'">
+      <div class="menu-dishes-container">
         <div v-for="dish in dishes"
               class="border md-background md-padding">
           {{ dish.name }}
@@ -142,6 +147,11 @@ const setCurrentMenu = (menu) => {
       </div>
 
     </div>
+
+    <CreateView class="restaurant-content"
+                v-if="currentRestaturantMode == 'create'"
+                @data-change="refreshData"/>
+
   </div>
 </template>
 
