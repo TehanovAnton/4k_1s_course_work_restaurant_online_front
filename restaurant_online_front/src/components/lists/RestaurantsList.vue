@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onBeforeMount } from 'vue';
 import ModesSelect from '../modes/ModesSelect.vue';
-import RestaurantForm from '../RestaurantForm.vue';
+import EditRestaurant from '../../views/restaurants/EditView.vue';
 import restaurantService from '../../views/services/restaurants/restaurant_service'
 import tokensService from '../../views/services/tokensService';
 import CreateView from '../../views/restaurants/CreateView.vue';
@@ -27,6 +27,11 @@ const refreshData = async () => {
   setRestaturantMode('index')
 }
 
+const showRestaurantChange = async (restaurant) => {
+  await refreshData()
+  currentRestaurant.value = restaurant
+}
+
 const dataReady = ref(false)
 
 const createRestaurantModeArgs = computed(() => {
@@ -38,12 +43,24 @@ const createRestaurantModeArgs = computed(() => {
   }
 })
 
-const restaurantsModes = ref(['index', 'create'])
+const editRestaurantModeArgs = computed(() => {
+    return {
+      canUpdateUrl: `http://localhost:3000/restaurants/can_create`,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+  })
+
+const restaurantsModes = ref(['index', 'create', 'edit'])
 const restaurantsModesProperties = ref({
   index:{ action:'index', allowed:false, visible:true },
   create:{ action:'create', allowed:false, visible:true,
-    args: createRestaurantModeArgs
-  }
+    args: createRestaurantModeArgs.value
+  },
+  edit:{ action:'update', allowed:false, visible:true,
+    args: editRestaurantModeArgs.value
+  },
 })
 const currentRestaturantMode = ref('index')
 const setRestaturantMode = (modeName) => {
@@ -148,9 +165,16 @@ const setCurrentMenu = (menu) => {
 
     </div>
 
-    <CreateView class="restaurant-content"
-                v-if="currentRestaturantMode == 'create'"
-                @data-change="refreshData"/>
+    <div class="restaurant-content"
+         v-if="currentRestaturantMode == 'create'">
+      <CreateView @data-change="refreshData"/>
+    </div>
+
+    <div class="restaurant-content" 
+         v-if="currentRestaturantMode == 'edit'">
+      <EditRestaurant :restaurant="currentRestaurant"
+                      @data-change="showRestaurantChange(currentRestaurant)" />
+    </div>
 
   </div>
 </template>
