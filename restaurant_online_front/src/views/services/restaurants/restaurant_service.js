@@ -3,7 +3,7 @@ import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../common_m
 import tokensService from '../../services/tokensService';
 
 const apiIndexRestaurants = async (authHeaders) => {
-  let response = await axios.get('http://localhost:3000/restaurants',
+  let response = await axios.get('http://localhost:3000/restaurants?resataurant_view=normal',
                                  { headers: authHeaders })
                             .catch(errorshandler)
 

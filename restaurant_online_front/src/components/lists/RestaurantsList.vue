@@ -1,6 +1,27 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import ModesSelect from '../modes/ModesSelect.vue';
+import restaurantService from '../../views/services/restaurants/restaurant_service'
+import tokensService from '../../views/services/tokensService';
+
+onBeforeMount(async () => {
+  await getRestaurants()
+  dataReady.value = true
+})
+
+const getRestaurants = async () => {
+  debugger
+  let { response, isSuccessful } = await restaurantService.apiIndexRestaurants(tokensService.auth_headers())
+
+  if (isSuccessful) {      
+    restaurants.value = response.data
+    currentRestaurant.value = restaurants.value[0]
+
+    tokensService.setAuthTokens(response.headers)
+  }
+}
+
+const dataReady = ref(false)
 
 const restaurantsModes = ref(['index', 'create'])
 const restaurantsModesProperties = ref({
@@ -12,230 +33,13 @@ const restaurantsModesProperties = ref({
 const currentRestaturantMode = ref('index')
 const setRestaturantMode = (modeName) => currentRestaturantMode.value = modeName
 
-const restaurants = ref([
-    {
-        "id": 1,
-        "address": "st.Avenue-15",
-        "email": "avenue@gmail.com",
-        "menus": [
-            {
-                "id": 11,
-                "name": "Asian 1",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 6,
-                        "name": "coffee 1"
-                    },
-                    {
-                        "id": 7,
-                        "name": "poreage 2"
-                    }
-                ],
-            },
-            {
-                "id": 1,
-                "name": "Belarusuan 2",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 8,
-                        "name": "tea 3"
-                    },
-                    {
-                        "id": 9,
-                        "name": "buterbroad 4"
-                    }
-                ],
-            },
-            {
-                "id": 15,
-                "name": "Russian 3",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 10,
-                        "name": "latte 5"
-                    },
-                    {
-                        "id": 11,
-                        "name": "soup 6"
-                    }
-                ],
-            }
-        ],
-        "name": "Avenue",
-        "tables": []
-    },
-    {
-        "id": 2,
-        "address": "st.Avenue-15",
-        "email": "avenue@gmail.com",
-        "menus": [
-            {
-                "id": 11,
-                "name": "Italian 1",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 12,
-                        "name": "sweats"
-                    },
-                    {
-                        "id": 13,
-                        "name": "sushi 4"
-                    }
-                ],
-            },
-            {
-                "id": 1,
-                "name": "French 2",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 14,
-                        "name": "potatto"
-                    },
-                    {
-                        "id": 15,
-                        "name": "salat"
-                    }
-                ],
-            },
-            {
-                "id": 15,
-                "name": "German 3",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 16,
-                        "name": "pizza"
-                    },
-                    {
-                        "id": 17,
-                        "name": "buritto"
-                    }
-                ],
-            }
-        ],
-        "name": "Avenue",
-        "tables": []
-    },
-    {
-        "id": 3,
-        "address": "st.Avenue-15",
-        "email": "avenue@gmail.com",
-        "menus": [
-            {
-                "id": 11,
-                "name": "Chines 1",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 18,
-                        "name": "meat"
-                    },
-                    {
-                        "id": 19,
-                        "name": "chips"
-                    }
-                ],
-            },
-            {
-                "id": 1,
-                "name": "Jappanies 2",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 20,
-                        "name": "guliash"
-                    },
-                    {
-                        "id": 21,
-                        "name": "colbasa"
-                    }
-                ],
-            },
-            {
-                "id": 15,
-                "name": "Turkiesh 3",
-                "restaurant": {
-                    "id": 1,
-                    "address": "st.Avenue-15",
-                    "email": "avenue@gmail.com",
-                    "name": "Avenue",
-                    "tables": []
-                },
-                "dishes": [
-                    {
-                        "id": 22,
-                        "name": "hinkali"
-                    },
-                    {
-                        "id": 23,
-                        "name": "shahluk"
-                    }
-                ],
-            }
-        ],
-        "name": "Avenue",
-        "tables": []
-    }
-])
-const currentRestaurant = ref(restaurants.value[0])
+const restaurants = ref([])
+const currentRestaurant = ref({})
 
 const menus = computed(() => {
   return currentRestaurant.value.menus
 })
-const currentMenu = ref(menus.value[0])
+const currentMenu = ref({})
 const menuModes = ['index', 'create']
 const menusModesProperties = ref({
   index:{ action:'index', allowed:true, visible:true },
@@ -276,7 +80,7 @@ const setCurrentMenu = (menu) => {
 </script>
 
 <template>
-  <div class="restaurants-list-content-container">
+  <div class="restaurants-list-content-container" v-if="dataReady">
     <div class="restaurants-list-container">
       <ModesSelect :modes="restaurantsModes"
                   :current-mode="currentRestaturantMode"
