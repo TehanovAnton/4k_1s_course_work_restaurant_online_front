@@ -167,12 +167,14 @@ const setCurrentMenu = (menu) => {
 
     <div class="restaurant-content"
          v-if="currentRestaturantMode == 'create'">
-      <CreateView @data-change="refreshData"/>
+
+      <CreateView class="menu-dishes-container" @data-change="refreshData"/>
     </div>
 
     <div class="restaurant-content" 
          v-if="currentRestaturantMode == 'edit'">
-      <EditRestaurant :restaurant="currentRestaurant"
+      <EditRestaurant class="menu-dishes-container"
+                      :restaurant="currentRestaurant"
                       @data-change="showRestaurantChange(currentRestaurant)" />
     </div>
 
