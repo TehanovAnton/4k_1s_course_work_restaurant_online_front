@@ -123,16 +123,16 @@ const setCurrentMenu = (menu) => {
                   :with-slot="false"
                   @set-mode="setRestaturantMode" />
 
-      <ul class="restaurants-list block">
-        <li v-for="restaurant in restaurants" class="restaurant-li"
+      <div class="restaurants-list">
+        <div v-for="restaurant in restaurants" class="restaurant-li"
             @click="setCurrentRestaurant(restaurant)">
           <div v-bind:class="restaurantActivityStyle(restaurant)">
             <p>Name: {{ restaurant.name }}</p>
             <p>Address: {{ restaurant.address }}</p>
             <p>Email: {{ restaurant.email }}</p>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
     
     <div class="restaurant-content" v-if="currentRestaturantMode == 'index'">
@@ -155,7 +155,6 @@ const setCurrentMenu = (menu) => {
         </div>
       </div>
 
-      <!-- v-if="currentMenuMode == 'index'" -->
       <div class="menu-dishes-container">
         <div v-for="dish in dishes"
               class="border md-background md-padding">
