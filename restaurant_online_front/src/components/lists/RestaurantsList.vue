@@ -33,6 +33,7 @@ const showRestaurantChange = async (restaurant) => {
 }
 
 const dataReady = ref(false)
+// const counter = ref(0)
 
 const createRestaurantModeArgs = computed(() => {
   return {
@@ -42,7 +43,6 @@ const createRestaurantModeArgs = computed(() => {
     }
   }
 })
-
 const editRestaurantModeArgs = computed(() => {
     return {
       canUpdateUrl: `http://localhost:3000/restaurants/can_create`,
@@ -51,7 +51,6 @@ const editRestaurantModeArgs = computed(() => {
       }
     }
   })
-
 const restaurantsModes = ref(['index', 'create', 'edit'])
 const restaurantsModesProperties = ref({
   index:{ action:'index', allowed:false, visible:true },
@@ -64,39 +63,57 @@ const restaurantsModesProperties = ref({
 })
 const currentRestaturantMode = ref('index')
 const setRestaturantMode = (modeName) => {
-  return currentRestaturantMode.value = modeName
+  currentRestaturantMode.value = modeName
 }
-
 const restaurants = ref([])
 const currentRestaurant = ref({})
-
-const menus = computed(() => {
-  return currentRestaurant.value.menus
-})
-const currentMenu = ref({})
-const menuModes = ['index', 'create']
-const menusModesProperties = ref({
-  index:{ action:'index', allowed:true, visible:true },
-  create:{ action:'create', allowed:true, visible:true },
-})
-
-const dishes = computed(() => {
-  return currentMenu.value.dishes
-})
 const restaurantActivityStyle = (restaurant) => {
   let commonStyle = 'restaurant-pd border'
-
+  // debugger
   if (restaurant.id == currentRestaurant.value.id) {
+    // debugger
     return `current-restaurant-bg ${commonStyle}`
   }
 
   return `restaurant-bg ${commonStyle}`
 }
 const setCurrentRestaurant = (restaurant) => {
+  // counter.value += 1
   currentRestaurant.value = restaurant
   currentMenu.value = menus.value[0]
 }
 
+
+
+const createMenuModeArgs = computed(() => {
+    return {
+      canCreateUrl: `http://localhost:3000/restaurants/${currentRestaurant.value.id}/menus/can_create`,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+  })
+const menuModes = ['index', 'create']
+const menusModesProperties = ref({
+  index:{ action:'index', allowed:true, visible:true },
+  create:{ action:'create', allowed:true, visible:true,
+  args: createMenuModeArgs.value
+ },
+})
+const currentMenuMode = ref('index')
+const menus = computed(() => {
+  return currentRestaurant.value.menus
+})
+const setMenuMode = (modeName) => {
+  currentMenuMode.value = modeName;
+}
+const currentMenu = ref({})
+const setCurrentMenu = (menu) => {
+  currentMenu.value = menu
+}
+const dishes = computed(() => {
+  return currentMenu.value.dishes
+})
 const menuActivityStyle = (menu) => {
   let commonStyle = 'border menu-padding mb-element-flex'
 
@@ -107,15 +124,12 @@ const menuActivityStyle = (menu) => {
   return `menu-bg ${commonStyle}`
 }
 
-const setCurrentMenu = (menu) => {
-  currentMenu.value = menu
-}
-
 </script>
 
 <template>
   <div class="restaurants-list-content-container" v-if="dataReady">
     <div class="restaurants-list-container">
+      <!-- {{ counter }} -->
       <ModesSelect :modes="restaurantsModes"
                   :current-mode="currentRestaturantMode"
                   :modes-properties="restaurantsModesProperties"
@@ -124,13 +138,13 @@ const setCurrentMenu = (menu) => {
                   @set-mode="setRestaturantMode" />
 
       <div class="restaurants-list">
-        <div v-for="restaurant in restaurants" class="restaurant-li"
-            @click="setCurrentRestaurant(restaurant)">
-          <div v-bind:class="restaurantActivityStyle(restaurant)">
+        <div v-for="restaurant in restaurants"
+             v-bind:class="restaurantActivityStyle(restaurant)"
+             @click="setCurrentRestaurant(restaurant)">
+             {{ restaurantActivityStyle(restaurant) }}
             <p>Name: {{ restaurant.name }}</p>
             <p>Address: {{ restaurant.address }}</p>
             <p>Email: {{ restaurant.email }}</p>
-          </div>
         </div>
       </div>
     </div>
@@ -271,9 +285,5 @@ const setCurrentMenu = (menu) => {
 
   .border {
     border: 1px solid black;
-  }
-
-  .restaurant-li {
-    margin: 0px;
   }
 </style>
