@@ -5,6 +5,7 @@ import EditRestaurant from '../../views/restaurants/EditView.vue';
 import restaurantService from '../../views/services/restaurants/restaurant_service'
 import tokensService from '../../views/services/tokensService';
 import CreateView from '../../views/restaurants/CreateView.vue';
+import MenusIndexWithBar from '../../views/menus/IndexWithBar.vue';
 
 onBeforeMount(async () => {
   await getRestaurants()
@@ -33,7 +34,6 @@ const showRestaurantChange = async (restaurant) => {
 }
 
 const dataReady = ref(false)
-// const counter = ref(0)
 
 const createRestaurantModeArgs = computed(() => {
   return {
@@ -78,58 +78,17 @@ const restaurantActivityStyle = (restaurant) => {
   return `restaurant-bg ${commonStyle}`
 }
 const setCurrentRestaurant = (restaurant) => {
-  // counter.value += 1
   currentRestaurant.value = restaurant
-  currentMenu.value = menus.value[0]
 }
-
-
-
-const createMenuModeArgs = computed(() => {
-    return {
-      canCreateUrl: `http://localhost:3000/restaurants/${currentRestaurant.value.id}/menus/can_create`,
-      requestOptions: {
-        headers: tokensService.auth_headers()
-      }
-    }
-  })
-const menuModes = ['index', 'create']
-const menusModesProperties = ref({
-  index:{ action:'index', allowed:true, visible:true },
-  create:{ action:'create', allowed:true, visible:true,
-  args: createMenuModeArgs.value
- },
-})
-const currentMenuMode = ref('index')
 const menus = computed(() => {
   return currentRestaurant.value.menus
 })
-const setMenuMode = (modeName) => {
-  currentMenuMode.value = modeName;
-}
-const currentMenu = ref({})
-const setCurrentMenu = (menu) => {
-  currentMenu.value = menu
-}
-const dishes = computed(() => {
-  return currentMenu.value.dishes
-})
-const menuActivityStyle = (menu) => {
-  let commonStyle = 'border menu-padding mb-element-flex'
-
-  if (menu.id == currentMenu.value.id) {
-    return `current-menu-bg ${commonStyle}`
-  }
-
-  return `menu-bg ${commonStyle}`
-}
 
 </script>
 
 <template>
   <div class="restaurants-list-content-container" v-if="dataReady">
-    <div class="restaurants-list-container">
-      <!-- {{ counter }} -->
+    <div class="restaurants-list-container">      
       <ModesSelect :modes="restaurantsModes"
                   :current-mode="currentRestaturantMode"
                   :modes-properties="restaurantsModesProperties"
@@ -141,7 +100,6 @@ const menuActivityStyle = (menu) => {
         <div v-for="restaurant in restaurants"
              v-bind:class="restaurantActivityStyle(restaurant)"
              @click="setCurrentRestaurant(restaurant)">
-             {{ restaurantActivityStyle(restaurant) }}
             <p>Name: {{ restaurant.name }}</p>
             <p>Address: {{ restaurant.address }}</p>
             <p>Email: {{ restaurant.email }}</p>
@@ -150,32 +108,8 @@ const menuActivityStyle = (menu) => {
     </div>
     
     <div class="restaurant-content" v-if="currentRestaturantMode == 'index'">
-
-      <div class="menus-bar">
-        <div v-for="menu in menus" 
-              v-bind:class="menuActivityStyle(menu)"
-              @click="setCurrentMenu(menu)">
-          {{ menu.name }}
-        </div>
-
-        <div>
-          <!-- modes select -->
-          <ModesSelect :modes="menuModes"
-                        :current-mode="currentMenuMode"
-                        :modes-properties="menusModesProperties"
-                        :record="currentMenu"
-                        :with-slot="false"
-                        @set-mode="setMenuMode"/>
-        </div>
-      </div>
-
-      <div class="menu-dishes-container">
-        <div v-for="dish in dishes"
-              class="border md-background md-padding">
-          {{ dish.name }}
-        </div>
-      </div>
-
+      <MenusIndexWithBar :menus="menus"
+                         :restaurant="currentRestaurant" />
     </div>
 
     <div class="restaurant-content"
