@@ -114,7 +114,6 @@ const menus = computed(() => {
 
     <div class="restaurant-content"
          v-if="currentRestaturantMode == 'create'">
-
       <CreateView class="menu-dishes-container" @data-change="refreshData"/>
     </div>
 
