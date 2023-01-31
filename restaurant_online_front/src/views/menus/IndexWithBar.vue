@@ -9,7 +9,9 @@ const props = defineProps([
   'menus',
   'restaurant'
 ])
+const emits = defineEmits(['refreshMenus'])
 
+const currentMenu = ref({})
 const createMenuModeArgs = computed(() => {
   return {
     canCreateUrl: `http://localhost:3000/restaurants/${restaurant.id}/menus/can_create`,
@@ -27,7 +29,7 @@ const editMenuModeArgs = computed(() => {
   }
 })
 
-
+const savedCurrentMenu = ref(false)
 const restaurant = computed(() => props.restaurant)
 const menuModes = ['index', 'create', 'edit']
 const menusModesProperties = ref({
@@ -44,10 +46,16 @@ const setMenuMode = (modeName) => {
   currentMenuMode.value = modeName;
 }
 const menus = computed(() => {
-  currentMenu.value = props.menus[0]
+  if (!!savedCurrentMenu.value) {
+    debugger
+    currentMenu.value = savedCurrentMenu.value
+    savedCurrentMenu.value = false
+  } else {
+    currentMenu.value = props.menus[0]
+  }
+
   return props.menus
 })
-const currentMenu = ref({})
 const setCurrentMenu = (menu) => {
   currentMenu.value = menu
 }
@@ -60,9 +68,9 @@ const menuActivityStyle = (menu) => {
 
   return `menu-bg ${commonStyle}`
 }
-const showMenuChange = async (menu) => {
+const showMenuChange = async () => {
   await refreshRestaurantMenusData()
-  currentRestaurant.value = menu
+  setMenuMode('inedx')
 }
 const refreshRestaurantMenusData = async () => {  
   let url = `http://localhost:3000/restaurants/${restaurant.value.id}/menus?`
@@ -72,23 +80,18 @@ const refreshRestaurantMenusData = async () => {
       headers: tokensService.auth_headers()
     }
   }
-
   let { response, isSuccessful } = await modelApi.apiIndexModels(args)
 
-  if (isSuccessful) {     
-    menus.value = response.data  
-
-
-    if (dishes.value.length > 0)
-      menu.value = dishes.value[0].menu
+  if (isSuccessful) {
+    debugger
+    savedCurrentMenu.value = currentMenu.value
+    emits('refreshMenus', response.data)
   }
 }
-
+const modeAlowability = (mode) => menusModesProperties.value[mode].allowed
 const dishes = computed(() => {
   return currentMenu.value ? currentMenu.value.dishes : []
 })
-
-const propsCounter = computed(() => props.counter)
 </script>
 
 <template>
@@ -109,16 +112,16 @@ const propsCounter = computed(() => props.counter)
     </div>
   </div>
 
-  <div class="menu-dishes-container" v-if="currentMenuMode == 'index'">
+  <div class="menu-dishes-container"
+       v-if="currentMenuMode == 'index'">
     <div v-for="dish in dishes"
           class="border md-background md-padding">
       {{ dish.name }}
     </div>
   </div>
 
-  <div>
-    <div v-if="currentMode == 'edit' && modeAlowability('edit')">
-      <EditMenu :menu="currentMenu" @data-change="showMenuChange" />
-    </div>
+  <div class="menu-dishes-container"
+       v-if="currentMenuMode == 'edit' && modeAlowability('edit')">
+    <EditMenu :menu="currentMenu" @data-change="showMenuChange" />
   </div>
 </template>

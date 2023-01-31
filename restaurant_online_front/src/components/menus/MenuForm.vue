@@ -10,6 +10,6 @@
       <input id='m-name' v-model="menu.name"/>
     </div>
 
-    <button type="button" @click="$emit('formSubmit')">{{ actionName }}</button>
+    <button type="button" @click="$emit('formSubmit', menu)">{{ actionName }}</button>
   </form>
 </template>

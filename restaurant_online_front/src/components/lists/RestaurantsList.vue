@@ -83,6 +83,9 @@ const setCurrentRestaurant = (restaurant) => {
 const menus = computed(() => {
   return currentRestaurant.value.menus
 })
+const setMenus = (fetchedMenus) => {
+  currentRestaurant.value.menus = fetchedMenus
+}
 
 </script>
 
@@ -109,7 +112,8 @@ const menus = computed(() => {
     
     <div class="restaurant-content" v-if="currentRestaturantMode == 'index'">
       <MenusIndexWithBar :menus="menus"
-                         :restaurant="currentRestaurant" />
+                         :restaurant="currentRestaurant"
+                         @refresh-menus="setMenus" />
     </div>
 
     <div class="restaurant-content"
