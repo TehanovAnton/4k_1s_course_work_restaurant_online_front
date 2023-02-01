@@ -46,14 +46,7 @@ const setMenuMode = (modeName) => {
   currentMenuMode.value = modeName;
 }
 const menus = computed(() => {
-  if (!!savedCurrentMenu.value) {
-    debugger
-    currentMenu.value = savedCurrentMenu.value
-    savedCurrentMenu.value = false
-  } else {
-    currentMenu.value = props.menus[0]
-  }
-
+  currentMenu.value = props.menus[0]
   return props.menus
 })
 const setCurrentMenu = (menu) => {
@@ -67,26 +60,6 @@ const menuActivityStyle = (menu) => {
   }
 
   return `menu-bg ${commonStyle}`
-}
-const showMenuChange = async () => {
-  await refreshRestaurantMenusData()
-  setMenuMode('inedx')
-}
-const refreshRestaurantMenusData = async () => {  
-  let url = `http://localhost:3000/restaurants/${restaurant.value.id}/menus?`
-  let args = { 
-    getUrl: url,
-    requestOptions: { 
-      headers: tokensService.auth_headers()
-    }
-  }
-  let { response, isSuccessful } = await modelApi.apiIndexModels(args)
-
-  if (isSuccessful) {
-    debugger
-    savedCurrentMenu.value = currentMenu.value
-    emits('refreshMenus', response.data)
-  }
 }
 const modeAlowability = (mode) => menusModesProperties.value[mode].allowed
 const dishes = computed(() => {
@@ -122,6 +95,6 @@ const dishes = computed(() => {
 
   <div class="menu-dishes-container"
        v-if="currentMenuMode == 'edit' && modeAlowability('edit')">
-    <EditMenu :menu="currentMenu" @data-change="showMenuChange" />
+    <EditMenu :menu="currentMenu" @data-change="setMenuMode('index')" />
   </div>
 </template>

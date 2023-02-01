@@ -7,25 +7,33 @@
   const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
 
+  const fieldsForUpdate = ['name']
   const updatedMenu = computed(() => {
-    debugger
-    return {
-      name: props.menu.name
-    }
+    let menuProto = {}
+    fieldsForUpdate.forEach(field => menuProto[field] = props.menu[field])
+
+    return menuProto
   })
 
   const updatMenu = async (menu) => {
-    debugger
     let { 
       response, 
       isSuccessful
     } = await service.apiUpdateMenu(tokensService.auth_headers(), menu)
 
-    if (isSuccessful) {      
+    if (isSuccessful) {   
       tokensService.setAuthTokens(response.headers)
+      setUpdatedFields(menu)
       emits('data-change')
     }
   }  
+
+  const setUpdatedFields = (menu) => {
+    let exceptFields = ['id']
+    Object.keys(menu)
+    .filter(field => !exceptFields.includes(field))
+    .forEach(field => { props.menu[field] = menu[field] })
+  }
 </script>
 
 <template>
