@@ -3,7 +3,9 @@ import { ref, computed } from 'vue';
 import ModesSelect from '../../components/modes/ModesSelect.vue';
 import tokensService from '../services/tokensService';
 import EditMenu from './EditView.vue';
-import modelApi from '../services/api/model_api';
+import CreateMenu from './CreateView.vue';
+import menuApi from '../services/api/model_api';
+import { useCurrentMenuIdStore } from './IndexWithBarStore'
 
 const props = defineProps([
   'menus',
@@ -11,10 +13,11 @@ const props = defineProps([
 ])
 const emits = defineEmits(['refreshMenus'])
 
+const currentMenuIdStore = useCurrentMenuIdStore()
 const currentMenu = ref({})
 const createMenuModeArgs = computed(() => {
   return {
-    canCreateUrl: `http://localhost:3000/restaurants/${restaurant.id}/menus/can_create`,
+    canCreateUrl: `http://localhost:3000/restaurants/${props.restaurant.id}/menus/can_create`,
     requestOptions: {
       headers: tokensService.auth_headers()
     }
@@ -29,7 +32,6 @@ const editMenuModeArgs = computed(() => {
   }
 })
 
-const savedCurrentMenu = ref(false)
 const restaurant = computed(() => props.restaurant)
 const menuModes = ['index', 'create', 'edit']
 const menusModesProperties = ref({
@@ -46,7 +48,8 @@ const setMenuMode = (modeName) => {
   currentMenuMode.value = modeName;
 }
 const menus = computed(() => {
-  currentMenu.value = props.menus[0]
+  let menuFromStore = props.menus.find((menu) => menu.id == currentMenuIdStore.getCurrentMenuId)
+  currentMenu.value = menuFromStore || props.menus[0]
   return props.menus
 })
 const setCurrentMenu = (menu) => {
@@ -65,6 +68,24 @@ const modeAlowability = (mode) => menusModesProperties.value[mode].allowed
 const dishes = computed(() => {
   return currentMenu.value ? currentMenu.value.dishes : []
 })
+
+const refreshMenus = async (newMenuId) => {
+  let url = menuApi.urlOptionsEditor(`http://localhost:3000/restaurants/${props.restaurant.id}/menus?`, 
+                                     { view: 'with_dishes' })
+  let args = { 
+    getUrl: url,
+    requestOptions: { 
+      headers: tokensService.auth_headers()
+    }
+  }
+
+  let { response, isSuccessful } = await menuApi.apiIndexModels(args)
+
+  if (isSuccessful) {      
+    currentMenuIdStore.setCurrentMenuId(currentMenu.value.id)
+    emits('refreshMenus', response.data)
+  }
+}
 </script>
 
 <template>
@@ -96,5 +117,9 @@ const dishes = computed(() => {
   <div class="menu-dishes-container"
        v-if="currentMenuMode == 'edit' && modeAlowability('edit')">
     <EditMenu :menu="currentMenu" @data-change="setMenuMode('index')" />
+  </div>
+
+  <div v-if="(currentMenuMode == 'create' && modeAlowability('create'))">
+    <CreateMenu @data-change="refreshMenus" :restaurant="restaurant" />
   </div>
 </template>

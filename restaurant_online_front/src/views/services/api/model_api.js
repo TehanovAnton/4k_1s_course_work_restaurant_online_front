@@ -89,10 +89,18 @@ const apiResponseHandelr = (response) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const urlOptionsEditor = (url, options) => {
+  if (!!options['view'])
+    url += `view=${options['view']}`
+
+  return url
+}
+
 export default {
   apiIndexModels,
   apiCreateModel,
   apiUpdateModel,
   apiDeletModel,
-  can
+  can,
+  urlOptionsEditor
 }
