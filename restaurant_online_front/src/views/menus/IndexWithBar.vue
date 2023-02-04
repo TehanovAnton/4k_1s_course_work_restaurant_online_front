@@ -4,6 +4,7 @@ import ModesSelect from '../../components/modes/ModesSelect.vue';
 import tokensService from '../services/tokensService';
 import EditMenu from './EditView.vue';
 import CreateMenu from './CreateView.vue';
+import DeleteModelVue from '../../components/DeleteModel.vue'
 import menuApi from '../services/api/model_api';
 import { useCurrentMenuIdStore } from './IndexWithBarStore'
 
@@ -31,9 +32,18 @@ const editMenuModeArgs = computed(() => {
     }
   }
 })
+const destroyMenuArgs = computed(() => {
+  return {
+    canDestroyUrl: `http://localhost:3000/menus/${currentMenu.value.id}/can_destroy`,
+    requestOptions: {
+      headers: tokensService.auth_headers()
+    }
+  }
+})
+
 
 const restaurant = computed(() => props.restaurant)
-const menuModes = ['index', 'create', 'edit']
+const menuModes = ['index', 'create', 'edit', 'delete']
 const menusModesProperties = ref({
   index:{ action:'index', allowed:true, visible:true },
   create:{ action:'create', allowed:true, visible:true,
@@ -42,6 +52,9 @@ const menusModesProperties = ref({
   edit:{ action:'update', allowed:false, visible:true,
     args: editMenuModeArgs.value
   },
+  delete:{ action:'destroy', allowed:false, visible: true,
+    args: destroyMenuArgs.value
+  }
 })
 const currentMenuMode = ref('index')
 const setMenuMode = (modeName) => {
@@ -86,6 +99,11 @@ const refreshMenus = async (newMenuId) => {
     emits('refreshMenus', response.data)
   }
 }
+
+const resetIndex = async () => {
+  setCurrentMenu(menus[0])
+  setMenuMode('index')
+}
 </script>
 
 <template>
@@ -119,7 +137,13 @@ const refreshMenus = async (newMenuId) => {
     <EditMenu :menu="currentMenu" @data-change="setMenuMode('index')" />
   </div>
 
-  <div v-if="(currentMenuMode == 'create' && modeAlowability('create'))">
+  <div v-if="currentMenuMode == 'create' && modeAlowability('create')">
     <CreateMenu @data-change="refreshMenus" :restaurant="restaurant" />
+  </div>
+
+  <div v-if="currentMenuMode == 'delete' && modeAlowability('delete')">
+    <DeleteModelVue :record="currentMenu"
+                    :destroy-url="`http://localhost:3000/menus/${currentMenu.id}`"
+                    @deleted-sucessfully="resetIndex" />
   </div>
 </template>
