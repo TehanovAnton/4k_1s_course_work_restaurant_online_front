@@ -1,57 +1,40 @@
 <script setup>
-  import service from '../services/dishes/dishes_service';
-  import EditDish from '../dishes/EditView.vue'
-  import CreateDish from '../dishes/CreateView.vue'
-  import Modes from '../../components/Modes.vue';
-  import { ref } from 'vue';
+import ShowDish from '../../components/dishes/ShowDish.vue';
+import router from '../../router/router';
+import service from '../services/menus/menu_service'
+import tokensService from '../services/tokensService';
+import { computed } from '@vue/reactivity';
 
-  const props = defineProps(['dish'])
-  const emits = defineEmits(['data-change'])
-// 
-  const modes = ref(['show', 'edit', 'delete'])
-  const modesProperties = ref({
-    show:{ action:'show', allowed:true, visible:true },
-    edit:{ action:'update', allowed:false, visible:true },
-    delete:{ action:'destroy', allowed:false, visible:false } 
-  })
-  const currentMode = ref('show')
-  const modesClass = ref('dish-class')
-  const setMode = (modeName) => currentMode.value = modeName  
-  const modeAlowability = (mode) => modesProperties.value[mode].allowed
-//
-  const showDataChange = () => {    
-    setMode('show')
+const props = defineProps(['menu', 'deleteModeAlowability'])
+const dishes = computed(() => {
+  return props.menu.dishes
+})
+
+const menuDishesView = () => router.push({ name:'menu_dishes', params:{ menuId:props.menu.id } })
+const destroyMenu = async () => {
+  let { 
+    response, 
+    isSuccessful
+  } = await service.apiDestroyMenu(tokensService.auth_headers(), props.menu)
+
+  if (isSuccessful) {      
+    tokensService.setAuthTokens(response.headers)
     emits('data-change')
   }
-
-  const destroyDish = async () => {
-    let { 
-      response, 
-      isSuccessful
-    } = await service.apiDeletsDish(props.dish)
-
-    if (isSuccessful) {      
-      emits('data-change')      
-    }
-  }
+}
 </script>
 
 <template>
-  <Modes :modes="modes"               :modes-properties="modesProperties" :modes-class="modesClass"
-         :current-mode="currentMode"  :record="dish"                      :service="service"
-         @set-mode="setMode"/>
+  <div class="centrenize-content-column">
+    <span>Name: {{ menu.name }}</span>
 
-  <div v-if="currentMode == 'show'">
-    <div class="centrenize-content-column">
-      {{ dish.name }}
-
-    <button v-if="modeAlowability('delete')"
-                type="button"
-                @click="destroyDish">destroy</button>
+    <div class="block centrenize-content-column">
+      Dishes:
+      <ShowDish v-for="dish in dishes" :dish="dish" />
     </div>
-  </div>
 
-  <div v-if="currentMode == 'edit'">
-    <EditDish :dish="dish" @data-change="showDataChange" />
+    <button v-if="deleteModeAlowability"
+            type="button"
+            @click="destroyMenu()">destroy</button>
   </div>
 </template>

@@ -1,21 +1,45 @@
 <script setup>
-  import Modes from '../../components/Modes.vue';
+  import Modes from '../../components/modes/Modes.vue';
   import EditRestaurant from './EditView.vue'
   import tokensService from '../services/tokensService';
   import service from '../services/restaurants/restaurant_service'
-  import { ref } from 'vue';
+  import restaurantApi from '../services/api/model_api'
+  import { ref, computed } from 'vue';
   import router from '../../router/router';
   import IndexMessages from '../meessages/RestaurantMessagesIndexView.vue'
 
   const props = defineProps(['restaurant'])  
   const emits = defineEmits(['data-change'])
+
+  const editRestaurantModeArgs = computed(() => {
+    return {
+      canUpdateUrl: `http://localhost:3000/restaurants/can_create`,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+  })
+
+  const deleteRestaurantModeArgs = computed(() => {
+    return {
+      canDestroyUrl: `http://localhost:3000/restaurants/can_create`,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+  })
+
 // 
   const modes = ref(['show', 'edit', 'delete', 'message'])
   const modesProperties = ref({
     show:{ action:'show', allowed:true, visible:true },
     message:{ action:'message', allowed:true, visible:true },
-    edit:{ action:'update', allowed:false, visible:true },
-    delete:{ action:'destroy', allowed:false, visible:false } 
+    edit:{ action:'update', allowed:false, visible:true,
+      args: editRestaurantModeArgs
+    },
+    delete:{ action:'destroy', allowed:false, visible:false,
+      args: deleteRestaurantModeArgs
+    } 
   })
   const currentMode = ref('show')
   const modesClass = ref('restaurant-class')
@@ -28,10 +52,11 @@
   }
 
   const destroyRestaurant = async () => {
-    let { 
-      response, 
-      isSuccessful
-    } = await service.apiDestroyRestaurants(tokensService.auth_headers(), props.restaurant)
+    let args = {
+      deleteUrl: `http://localhost:3000/restaurants/${props.restaurant.id}`,
+      requestOptions: { headers: tokensService.auth_headers() },
+    }
+    let { response, isSuccessful } = await restaurantApi.apiDeletModel(args)
 
     if (isSuccessful) {      
       tokensService.setAuthTokens(response.headers)

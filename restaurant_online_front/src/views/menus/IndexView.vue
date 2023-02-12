@@ -1,5 +1,5 @@
 <script setup>
-  import { onBeforeMount, ref } from 'vue';  
+  import { onBeforeMount, ref, computed } from 'vue';  
   import { useRouter } from 'vue-router';
   import ShowMenu from './ShowView.vue'
   import service from '../services/menus/menu_service'
@@ -8,8 +8,8 @@
   import auttService from '../services/auth_service'
   import CreateMenu from './CreateView.vue';
   import Modes from '../../components/Modes.vue';
-
   import { useRoute } from 'vue-router'
+
   const route = useRoute()
 
   onBeforeMount(async () => {
@@ -21,15 +21,23 @@
   const menus = ref([])
   const activeMenu = ref()
   const restaurant = ref({})
-  const router = useRouter()
   const dataReady = ref(false)
-  
 
+  const createMenuModeArgs = computed(() => {
+    return {
+      canCreateUrl: `http://localhost:3000/restaurants/${restaurant.value.id}/menus/can_create`,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+  })
 
   const modes = ref(['index', 'create'])
   const modesProperties = ref({
     index:{ action:'index', allowed:false, visible:true },
-    create:{ action:'create', allowed:false, visible:true }
+    create:{ action:'create', allowed:false, visible:true,
+      args: createMenuModeArgs
+    }
   })
   const currentMode = ref('index')
   const modesClass = ref("menus-class")

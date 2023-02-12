@@ -1,5 +1,5 @@
 <script setup>
-  import { onBeforeMount, ref } from 'vue';  
+  import { onBeforeMount, ref, computed } from 'vue';  
   import { useRouter } from 'vue-router';
   import ShowRestaurant from './ShowView.vue'
   import Search from '../../components/restaurants/Search.vue';
@@ -7,7 +7,7 @@
   import tokensService from '../services/tokensService';
   import Header from '../../components/Header.vue';  
   import CreateRestaurant from './CreateView.vue';
-  import Modes from '../../components/Modes.vue';
+  import Modes from '../../components/modes/Modes.vue';
 
   onBeforeMount(async () => {
     await getRestaurants()
@@ -22,11 +22,22 @@
   const dataReady = ref(false)
   
 
+  const createRestaurantModeArgs = computed(() => {
+    return {
+      canCreateUrl: `http://localhost:3000/restaurants/can_create`,
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }
+    }
+  })
+
 
   const modes = ref(['index', 'create'])
   const modesProperties = ref({
     index:{ action:'index', allowed:false, visible:true },
-    create:{ action:'create', allowed:false, visible:true }
+    create:{ action:'create', allowed:false, visible:true,
+      args: createRestaurantModeArgs
+    }
   })
   const currentMode = ref('index')
   const modesClass = ref("restaurans-class")
@@ -112,7 +123,7 @@
     display: flex;        
     justify-content: space-around;
 
-    flex-direction: column;    
+    flex-direction: column;  
   }
 
   .centrenize-content-row {

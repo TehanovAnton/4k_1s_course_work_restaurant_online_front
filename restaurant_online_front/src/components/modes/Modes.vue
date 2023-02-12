@@ -2,6 +2,7 @@
 import { computed, ref } from '@vue/reactivity';
 import { onBeforeMount } from 'vue';
 import ModeSwitch from './ModeSwitch.vue';
+import modelApi from '../../views/services/api/model_api';
 
   onBeforeMount(async () => {    
     await getModesAllowabilities()
@@ -38,8 +39,10 @@ import ModeSwitch from './ModeSwitch.vue';
 
   const setModeAlowability = async (mode) => {
     let modeProperties = props.modesProperties[mode]
-
-    props.modesProperties[mode].allowed = await props.service.can(modeProperties.action, ['index', 'show', 'create_rating', 'message'], props.record)
+    props.modesProperties[mode].allowed = await modelApi.can(modeProperties.action, 
+                                                             ['index', 'show', 'create_rating', 'message'], 
+                                                             modeProperties.args
+    )
   }
   
   const modeAlowability = (mode) => props.modesProperties[mode].allowed

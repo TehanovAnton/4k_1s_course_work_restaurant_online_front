@@ -10,7 +10,7 @@
   const currentUserStore = useCurrentUserStore()
 
   const customer = ref({
-      email: 'tehanovanton@gmail.com',
+      email: 'anton@gmail.com',
       password: 'ewqqwe',
   })
   const errors = ref([])
