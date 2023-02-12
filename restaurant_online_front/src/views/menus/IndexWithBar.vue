@@ -1,12 +1,14 @@
 <script setup>
 import { ref, computed } from 'vue';
-import ModesSelect from '../../components/modes/ModesSelect.vue';
+import ModesSelect from '../../components/modes/ModeSelectWithStor.vue';
 import tokensService from '../services/tokensService';
 import EditMenu from './EditView.vue';
 import CreateMenu from './CreateView.vue';
 import DeleteModelVue from '../../components/DeleteModel.vue'
 import menuApi from '../services/api/model_api';
 import { useCurrentMenuIdStore } from './IndexWithBarStore'
+import { useCurrentMenuModeStore } from './CurrentMenuModeStore';
+import { useSelectedModeStore } from './SelectedModeStore';
 
 const props = defineProps([
   'menus',
@@ -15,6 +17,9 @@ const props = defineProps([
 const emits = defineEmits(['refreshMenus'])
 
 const currentMenuIdStore = useCurrentMenuIdStore()
+const currentMenuModeStore = useCurrentMenuModeStore()
+const selectedModeStore = useSelectedModeStore()
+
 const currentMenu = ref({})
 const createMenuModeArgs = computed(() => {
   return {
@@ -56,10 +61,9 @@ const menusModesProperties = ref({
     args: destroyMenuArgs.value
   }
 })
-const currentMenuMode = ref('index')
-const setMenuMode = (modeName) => {
-  currentMenuMode.value = modeName;
-}
+const currentMenuMode = computed(() => {
+  return currentMenuModeStore.getCurrentMenuMode.value
+})
 const menus = computed(() => {
   let menuFromStore = props.menus.find((menu) => menu.id == currentMenuIdStore.getCurrentMenuId)
   currentMenu.value = menuFromStore || props.menus[0]
@@ -102,8 +106,19 @@ const refreshMenus = async () => {
 
 const resetIndex = async () => {
   await refreshMenus()
-  setMenuMode('index')
+  syncModes('index')
+  setCurrentMenu(menus[0])
 }
+
+const setMode = () => {
+  currentMenuModeStore.setCurrentMenuMode(selectedModeStore.selectedMode, true)
+}
+
+const syncModes = (mode) => {
+  currentMenuModeStore.setCurrentMenuMode('index')
+  selectedModeStore.setSelectedMenuMode('index')
+}
+
 </script>
 
 <template>
@@ -117,10 +132,12 @@ const resetIndex = async () => {
     <div>
       <ModesSelect :modes="menuModes"
                    :current-mode="currentMenuMode"
+                   :mode-store="currentMenuModeStore"
+                   :selected-mode-store="selectedModeStore"
                    :modes-properties="menusModesProperties"
                    :record="currentMenu"
                    :with-slot="false"
-                   @set-mode="setMenuMode"/>
+                   @set-mode="setMode"/>
     </div>
   </div>
 
@@ -134,7 +151,7 @@ const resetIndex = async () => {
 
   <div class="menu-dishes-container"
        v-if="currentMenuMode == 'edit' && modeAlowability('edit')">
-    <EditMenu :menu="currentMenu" @data-change="setMenuMode('index')" />
+    <EditMenu :menu="currentMenu" @data-change="syncModes('index')" />
   </div>
 
   <div v-if="currentMenuMode == 'create' && modeAlowability('create')">

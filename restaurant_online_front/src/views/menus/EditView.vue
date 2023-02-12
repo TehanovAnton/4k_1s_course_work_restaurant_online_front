@@ -9,7 +9,7 @@
 
   const fieldsForUpdate = ['name']
   const updatedMenu = computed(() => {
-    let menuProto = {}
+    let menuProto = { id: props.menu['id'] }
     fieldsForUpdate.forEach(field => menuProto[field] = props.menu[field])
 
     return menuProto
