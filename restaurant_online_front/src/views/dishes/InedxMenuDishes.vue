@@ -1,9 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue';
-import tokensService from '../services/tokensService';
-import { useCurrentDishIdStore } from './stores/CurrentDishStore'
+
+  import { ref, computed } from 'vue';
+  import tokensService from '../services/tokensService';
+  import CreateDish from './CreateView.vue';
+  import dishApi from '../services/api/model_api';
+  import { useCurrentDishIdStore } from './stores/CurrentDishStore'
 
   const props = defineProps(['dishes', 'menu'])
+  const emits = defineEmits(['refreshDishes'])
 
   const currentDishIdStore = useCurrentDishIdStore()
 
@@ -18,6 +22,7 @@ import { useCurrentDishIdStore } from './stores/CurrentDishStore'
 
     return props.dishes
   })  
+  const menu = computed(() => props.menu)
   
   const createModeArgs = computed(() => {
     return {
@@ -64,6 +69,23 @@ import { useCurrentDishIdStore } from './stores/CurrentDishStore'
   })
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
 
+  const refreshDishes = async () => {
+    let url = `http://localhost:3000/menus/${menu.value.id}/dishes`
+    let args = { 
+      getUrl: url,
+      requestOptions: { 
+        headers: tokensService.auth_headers()
+      }
+    }
+
+    let { response, isSuccessful } = await dishApi.apiIndexModels(args)
+
+    if (isSuccessful) {      
+      currentDishIdStore.setCurrentDishId(currentDish.value.id)
+      emits('refreshDishes', response.data)
+    }
+  }
+
 </script>
 
 <template>
@@ -77,7 +99,7 @@ import { useCurrentDishIdStore } from './stores/CurrentDishStore'
   </div>
 
   <div v-if="currentMode == 'create' && modeAlowability('create')">
-    CREATE SOME DISH
+    <CreateDish @data-change="refreshDishes" :menu="menu" />
   </div>
 
   <div v-if="currentMode == 'delete' && modeAlowability('delete')">

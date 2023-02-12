@@ -159,7 +159,8 @@ const syncModes = (mode) => {
   <div class="menu-dishes-container"
        v-if="currentMenuMode == 'index'">
     <IndexDishes :dishes="dishes"
-                 :menu="currentMenu"/>
+                 :menu="currentMenu"
+                 @refresh-dishes="refreshDishes"/>
   </div>
 
   <div class="menu-dishes-container"
