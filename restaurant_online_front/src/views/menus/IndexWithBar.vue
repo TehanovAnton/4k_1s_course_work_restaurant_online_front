@@ -82,7 +82,7 @@ const dishes = computed(() => {
   return currentMenu.value ? currentMenu.value.dishes : []
 })
 
-const refreshMenus = async (newMenuId) => {
+const refreshMenus = async () => {
   let url = menuApi.urlOptionsEditor(`http://localhost:3000/restaurants/${props.restaurant.id}/menus?`, 
                                      { view: 'with_dishes' })
   let args = { 
@@ -101,7 +101,7 @@ const refreshMenus = async (newMenuId) => {
 }
 
 const resetIndex = async () => {
-  setCurrentMenu(menus[0])
+  await refreshMenus()
   setMenuMode('index')
 }
 </script>

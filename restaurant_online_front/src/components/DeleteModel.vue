@@ -11,7 +11,7 @@ const destroyUrl = computed(() => {
 })
 
 const destroyModel = async () => {
-  debugger
+
   let args = { 
     deleteUrl: destroyUrl.value,
     requestOptions: { 

@@ -5,7 +5,6 @@ export const useCurrentMenuIdStore = defineStore('currentMenuId', () => {
   const currentMenuId = ref(false)
 
   const setCurrentMenuId = (menuId) => {
-    debugger
     currentMenuId.value = menuId
   }
 
