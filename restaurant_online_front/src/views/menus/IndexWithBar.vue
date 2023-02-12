@@ -5,6 +5,9 @@ import tokensService from '../services/tokensService';
 import EditMenu from './EditView.vue';
 import CreateMenu from './CreateView.vue';
 import DeleteModelVue from '../../components/DeleteModel.vue'
+
+import IndexDishes from '../dishes/InedxMenuDishes.vue'
+
 import menuApi from '../services/api/model_api';
 import { useCurrentMenuIdStore } from './CurrentMenuIdStore'
 import { useCurrentMenuModeStore } from './CurrentMenuModeStore';
@@ -61,7 +64,13 @@ const menusModesProperties = ref({
     args: destroyMenuArgs.value
   }
 })
-const currentMenuMode = computed(() => currentMenuModeStore.getCurrentMenuMode.value)
+const currentMenuMode = computed(() => {
+  if (menus.value.length == 0) {
+    return 'create'
+  }
+
+  return currentMenuModeStore.getCurrentMenuMode.value
+})
 
 const menus = computed(() => {
   let menuFromStore = props.menus.find((menu) => {
@@ -149,10 +158,8 @@ const syncModes = (mode) => {
 
   <div class="menu-dishes-container"
        v-if="currentMenuMode == 'index'">
-    <div v-for="dish in dishes"
-          class="border md-background md-padding">
-      {{ dish.name }}
-    </div>
+    <IndexDishes :dishes="dishes"
+                 :menu="currentMenu"/>
   </div>
 
   <div class="menu-dishes-container"
