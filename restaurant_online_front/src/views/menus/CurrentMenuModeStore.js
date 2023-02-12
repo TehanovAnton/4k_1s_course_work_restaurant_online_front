@@ -4,6 +4,7 @@ import { computed, ref } from "vue"
 
 export const useCurrentMenuModeStore = defineStore('CurrentMenuMode', () => {
   const defaultMenuMode = 'index'
+  const modes = ['index', 'create', 'edit', 'delete']
   const preferFromSelect = ref(false)
   const currentMenuMode = ref(defaultMenuMode)
 
@@ -16,5 +17,10 @@ export const useCurrentMenuModeStore = defineStore('CurrentMenuMode', () => {
     return currentMenuMode ? currentMenuMode : defaultMenuMode
   })
 
-  return { setCurrentMenuMode, getCurrentMenuMode, preferFromSelect }
+  return { 
+    setCurrentMenuMode, 
+    getCurrentMenuMode, 
+    preferFromSelect,
+    modes
+  }
 })

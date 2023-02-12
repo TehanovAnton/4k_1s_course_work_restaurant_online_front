@@ -6,7 +6,7 @@ import EditMenu from './EditView.vue';
 import CreateMenu from './CreateView.vue';
 import DeleteModelVue from '../../components/DeleteModel.vue'
 import menuApi from '../services/api/model_api';
-import { useCurrentMenuIdStore } from './IndexWithBarStore'
+import { useCurrentMenuIdStore } from './CurrentMenuIdStore'
 import { useCurrentMenuModeStore } from './CurrentMenuModeStore';
 import { useSelectedModeStore } from './SelectedModeStore';
 
@@ -46,9 +46,9 @@ const destroyMenuArgs = computed(() => {
   }
 })
 
-
 const restaurant = computed(() => props.restaurant)
-const menuModes = ['index', 'create', 'edit', 'delete']
+const menuModes = computed(() => currentMenuModeStore.modes)
+
 const menusModesProperties = ref({
   index:{ action:'index', allowed:true, visible:true },
   create:{ action:'create', allowed:true, visible:true,
@@ -61,17 +61,22 @@ const menusModesProperties = ref({
     args: destroyMenuArgs.value
   }
 })
-const currentMenuMode = computed(() => {
-  return currentMenuModeStore.getCurrentMenuMode.value
-})
+const currentMenuMode = computed(() => currentMenuModeStore.getCurrentMenuMode.value)
+
 const menus = computed(() => {
-  let menuFromStore = props.menus.find((menu) => menu.id == currentMenuIdStore.getCurrentMenuId)
+  let menuFromStore = props.menus.find((menu) => {
+    return menu.id == currentMenuIdStore.getCurrentMenuId
+  })
+
   currentMenu.value = menuFromStore || props.menus[0]
+
   return props.menus
 })
+
 const setCurrentMenu = (menu) => {
   currentMenu.value = menu
 }
+
 const menuActivityStyle = (menu) => {
   let commonStyle = 'border menu-padding mb-element-flex'
 
@@ -81,7 +86,9 @@ const menuActivityStyle = (menu) => {
 
   return `menu-bg ${commonStyle}`
 }
+
 const modeAlowability = (mode) => menusModesProperties.value[mode].allowed
+
 const dishes = computed(() => {
   return currentMenu.value ? currentMenu.value.dishes : []
 })
@@ -118,7 +125,6 @@ const syncModes = (mode) => {
   currentMenuModeStore.setCurrentMenuMode('index')
   selectedModeStore.setSelectedMenuMode('index')
 }
-
 </script>
 
 <template>
