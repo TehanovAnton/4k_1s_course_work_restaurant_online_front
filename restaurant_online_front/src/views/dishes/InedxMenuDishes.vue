@@ -12,9 +12,12 @@
   const currentDishIdStore = useCurrentDishIdStore()
 
   const currentDish = ref({})
+  
+  const setCurrentDish = (dish) => {
+    currentDish.value = dish
+  }
 
   const dishes = computed(() => {
-    debugger
     let dishFromStore = props.dishes.find((dish) => {
       return dish.id == currentDishIdStore.getCurrentDishId
     })
@@ -91,11 +94,22 @@
     }
   }
 
+  const dishActivityStyle = (dish) => {
+    let commonStyle = 'border dish-padding d-element-flex'
+
+    if (currentDish.value && dish.id == currentDish.value.id) {
+      return `current-dish-bg ${commonStyle}`
+    }
+
+    return `dish-bg ${commonStyle}`
+  }
+
 </script>
 
 <template>  
   <div v-for="dish in dishes"
-        class="border md-background md-padding">
+       v-bind:class="dishActivityStyle(dish)"
+       @click="setCurrentDish(dish)">
     {{ dish.name }}
   </div>
 
@@ -113,3 +127,32 @@
   {{ currentMode }}
   {{ currentDish }}
 </template>
+
+<style>
+  .border {
+    border: 1px solid black;
+  }
+
+  .dish-padding {
+    padding: 3px;
+  }
+
+  .d-element-flex {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .current-dish-bg {
+    background-color:blueviolet;
+  }
+  
+  .dish-bg {
+    background-color: rgb(191, 160, 221);
+  }
+</style>
