@@ -3,10 +3,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // {
+    //   path: '/home',
+    //   name: 'home',
+    //   component: () => import('../views/restaurants/IndexView.vue')
+    // },
+
     {
-      path: '/home',
+      path: '/rests/preview',
       name: 'home',
-      component: () => import('../views/restaurants/IndexView.vue')
+      component: () => import('../components/lists/RestaurantsList.vue')
     },
 
     {

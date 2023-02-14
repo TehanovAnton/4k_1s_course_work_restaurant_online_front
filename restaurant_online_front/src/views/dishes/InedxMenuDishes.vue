@@ -7,13 +7,14 @@
   import { useCurrentDishIdStore } from './stores/CurrentDishStore'
 
   const props = defineProps(['dishes', 'menu'])
-  const emits = defineEmits(['refreshDishes'])
+  const emits = defineEmits(['refresh-data'])
 
   const currentDishIdStore = useCurrentDishIdStore()
 
   const currentDish = ref({})
 
   const dishes = computed(() => {
+    debugger
     let dishFromStore = props.dishes.find((dish) => {
       return dish.id == currentDishIdStore.getCurrentDishId
     })
@@ -77,18 +78,22 @@
         headers: tokensService.auth_headers()
       }
     }
-
+    
     let { response, isSuccessful } = await dishApi.apiIndexModels(args)
 
+    debugger
     if (isSuccessful) {      
-      currentDishIdStore.setCurrentDishId(currentDish.value.id)
-      emits('refreshDishes', response.data)
+      if (currentDish.value) {
+        currentDishIdStore.setCurrentDishId(currentDish.value.id)
+      }
+
+      emits('refresh-data', response.data)
     }
   }
 
 </script>
 
-<template>
+<template>  
   <div v-for="dish in dishes"
         class="border md-background md-padding">
     {{ dish.name }}
@@ -99,9 +104,12 @@
   </div>
 
   <div v-if="currentMode == 'create' && modeAlowability('create')">
-    <CreateDish @data-change="refreshDishes" :menu="menu" />
+    <CreateDish @data-change="refreshDishes()" :menu="menu" />
   </div>
 
   <div v-if="currentMode == 'delete' && modeAlowability('delete')">
   </div>
+
+  {{ currentMode }}
+  {{ currentDish }}
 </template>

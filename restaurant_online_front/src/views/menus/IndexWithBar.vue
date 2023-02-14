@@ -134,6 +134,12 @@ const syncModes = (mode) => {
   currentMenuModeStore.setCurrentMenuMode('index')
   selectedModeStore.setSelectedMenuMode('index')
 }
+
+const refreshDishes = (dishes) => {
+  debugger
+  currentMenu.value.dishes = dishes
+}
+
 </script>
 
 <template>
@@ -160,7 +166,7 @@ const syncModes = (mode) => {
        v-if="currentMenuMode == 'index'">
     <IndexDishes :dishes="dishes"
                  :menu="currentMenu"
-                 @refresh-dishes="refreshDishes"/>
+                 @refresh-data="refreshDishes"/>
   </div>
 
   <div class="menu-dishes-container"
