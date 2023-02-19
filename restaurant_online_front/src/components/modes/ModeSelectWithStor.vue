@@ -40,10 +40,6 @@ import modelApi from '../../views/services/api/model_api';
     )
   }
 
-  const emitChange = () => {
-    emits('set-mode',)
-  }
-
   const selectedMode = ref('index')
   
   const modeAlowability = (mode) => props.modesProperties[mode].allowed          

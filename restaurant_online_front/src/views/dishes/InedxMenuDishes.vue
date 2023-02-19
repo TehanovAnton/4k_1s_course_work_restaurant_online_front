@@ -1,19 +1,21 @@
 <script setup>
-
   import { ref, computed } from 'vue';
   import tokensService from '../services/tokensService';
   import CreateDish from './CreateView.vue';
   import dishApi from '../services/api/model_api';
   import { useCurrentDishIdStore } from './stores/CurrentDishStore'
   import { useCurrentDishModeStore } from './stores/CurrentDishModeStore';
-import EditView from './EditView.vue';
-import DeleteModel from '../../components/DeleteModel.vue';
+  import { useSelectedModeStore } from './stores/SelectedDishModeStore';
+  import EditView from './EditView.vue';
+  import DeleteModel from '../../components/DeleteModel.vue';
+  import ModesSelect from '../../components/modes/ModeSelectWithStor.vue';
 
   const props = defineProps(['dishes', 'menu'])
   const emits = defineEmits(['refresh-data'])
 
   const currentDishIdStore = useCurrentDishIdStore()
   const currentDishModeStore = useCurrentDishModeStore()
+  const selectedModeStore = useSelectedModeStore()
 
   const currentDish = ref({})
   
@@ -62,13 +64,18 @@ import DeleteModel from '../../components/DeleteModel.vue';
       return 'create'&& modeAlowability('edit')
     }
 
-    return currentDishModeStore.getCurrentDishMode.value
+    return currentDishModeStore.getCurrentMode.value
   })
 
   const setMode = (modeName) => {
-    currentDishModeStore.setCurrentDishMode(modeName)
+    currentDishModeStore.setCurrentMode(modeName)
   }
 
+  const setSelectedMode = () => {
+    currentDishModeStore.setCurrentMode(selectedModeStore.selectedMode)
+  }
+  
+  const modes = computed(() => currentDishModeStore.modes) 
   const modesProperties = ref({
     index:{ action:'index', allowed:true, visible:true },
     create:{ action:'create', allowed:true, visible:true,
@@ -122,6 +129,17 @@ import DeleteModel from '../../components/DeleteModel.vue';
        v-bind:class="dishActivityStyle(dish)"
        @click="setCurrentDish(dish)">
     {{ dish.name }}
+
+    <div>
+      <ModesSelect :modes="modes"
+                   :current-mode="currentMode"
+                   :mode-store="currentDishModeStore"
+                   :selected-mode-store="selectedModeStore"
+                   :modes-properties="modesProperties"
+                   :record="dish"
+                   :with-slot="false"
+                   @set-mode="setSelectedMode"/>
+    </div>
   </div>
 
   <div class="menu-dishes-container"
