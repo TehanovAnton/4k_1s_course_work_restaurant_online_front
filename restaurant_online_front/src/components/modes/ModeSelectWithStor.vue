@@ -1,8 +1,8 @@
 <script setup>
-import { computed, ref } from '@vue/reactivity';
-import { onBeforeMount } from 'vue';
-import ModeSwitchOption from './ModeSwitchOption.vue';
-import modelApi from '../../views/services/api/model_api';
+  import { ref } from '@vue/reactivity';
+  import { onBeforeMount } from 'vue';
+  import ModeSwitchOption from './ModeSwitchOption.vue';
+  import modelApi from '../../views/services/api/model_api';
 
 
   onBeforeMount(async () => {    
@@ -16,8 +16,6 @@ import modelApi from '../../views/services/api/model_api';
     'selectedModeStore',
     'modes',
     'modesProperties',
-    'currentMode',
-    'service',
     'withSlot'
   ])
 
@@ -31,7 +29,7 @@ import modelApi from '../../views/services/api/model_api';
   }
 
   const setModeAlowability = async (mode) => {
-    let modeProperties = props.modesProperties[mode]    
+    let modeProperties = props.modesProperties[mode]
     props.modesProperties[mode].allowed = await modelApi.can(
       modeProperties.action, 
       ['index', 'show', 'create_rating', 'message'], 
@@ -39,8 +37,6 @@ import modelApi from '../../views/services/api/model_api';
     )
   }
 
-  const selectedMode = ref('index')
-  
   const modeAlowability = (mode) => props.modesProperties[mode].allowed          
   const modeVisibility = (mode) => props.modesProperties[mode].visible
 </script>

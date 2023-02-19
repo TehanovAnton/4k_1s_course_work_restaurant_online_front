@@ -155,7 +155,6 @@ const refreshDishes = (dishes) => {
                    :mode-store="currentMenuModeStore"
                    :selected-mode-store="selectedModeStore"
                    :modes-properties="menusModesProperties"
-                   :record="currentMenu"
                    :with-slot="false"
                    @set-mode="setMode"/>
     </div>
