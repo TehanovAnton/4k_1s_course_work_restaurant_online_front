@@ -136,7 +136,6 @@ const syncModes = (mode) => {
 }
 
 const refreshDishes = (dishes) => {
-  debugger
   currentMenu.value.dishes = dishes
 }
 

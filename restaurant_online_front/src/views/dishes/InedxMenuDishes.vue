@@ -7,6 +7,7 @@
   import { useCurrentDishIdStore } from './stores/CurrentDishStore'
   import { useCurrentDishModeStore } from './stores/CurrentDishModeStore';
 import EditView from './EditView.vue';
+import DeleteModel from '../../components/DeleteModel.vue';
 
   const props = defineProps(['dishes', 'menu'])
   const emits = defineEmits(['refresh-data'])
@@ -94,6 +95,7 @@ import EditView from './EditView.vue';
     let { response, isSuccessful } = await dishApi.apiIndexModels(args)
 
     if (isSuccessful) {      
+      debugger
       if (currentDish.value) {
         currentDishIdStore.setCurrentDishId(currentDish.value.id)
       }
@@ -122,18 +124,21 @@ import EditView from './EditView.vue';
     {{ dish.name }}
   </div>
 
-  {{ currentMode }}
-
   <div class="menu-dishes-container"
        v-if="currentMode == 'edit' ">
-    <EditView @data-change="setMode('index')" :dish="currentDish" />
+    <EditView @data-change="setMode('index')" 
+              :dish="currentDish" />
   </div>
 
   <div v-if="currentMode == 'create' && modeAlowability('create')">
-    <CreateDish @data-change="refreshDishes()" :menu="menu" />
+    <CreateDish @data-change="refreshDishes()"
+                :menu="menu" />
   </div>
 
-  <div v-if="currentMode == 'delete' && modeAlowability('delete')">
+  <div v-if="currentMode == 'delete'">
+    <DeleteModel @deleted-sucessfully="refreshDishes()"
+                 :record="currentDish"
+                 :destroy-url="`http://localhost:3000/dishes/${currentDish.id}`" />
   </div>
 </template>
 
@@ -164,4 +169,4 @@ import EditView from './EditView.vue';
   .dish-bg {
     background-color: rgb(191, 160, 221);
   }
-</style>
+</style>reset
