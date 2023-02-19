@@ -5,11 +5,13 @@
   import CreateDish from './CreateView.vue';
   import dishApi from '../services/api/model_api';
   import { useCurrentDishIdStore } from './stores/CurrentDishStore'
+  import { useCurrentDishModeStore } from './stores/CurrentDishModeStore';
 
   const props = defineProps(['dishes', 'menu'])
   const emits = defineEmits(['refresh-data'])
 
   const currentDishIdStore = useCurrentDishIdStore()
+  const currentDishModeStore = useCurrentDishModeStore()
 
   const currentDish = ref({})
   
@@ -56,8 +58,17 @@
   const currentMode = computed(() => {
     if (dishes.value.length == 0) {
       return 'create'
+    } else {
+      return 'edit'
     }
+    
+
+    return currentDishModeStore.getCurrentDishMode.value
   })
+
+  const setMode = (modeName) => {
+    currentDishModeStore.setCurrentDishMode(modeName)
+  }
 
   const modesProperties = ref({
     index:{ action:'index', allowed:true, visible:true },
@@ -84,7 +95,6 @@
     
     let { response, isSuccessful } = await dishApi.apiIndexModels(args)
 
-    debugger
     if (isSuccessful) {      
       if (currentDish.value) {
         currentDishIdStore.setCurrentDishId(currentDish.value.id)
@@ -97,24 +107,27 @@
   const dishActivityStyle = (dish) => {
     let commonStyle = 'border dish-padding d-element-flex'
 
-    if (currentDish.value && dish.id == currentDish.value.id) {
+    if (currentDish.value && dish.id == currentDish.value.id) {      
+      setMode('edit')
       return `current-dish-bg ${commonStyle}`
     }
 
     return `dish-bg ${commonStyle}`
-  }
+  }  
 
 </script>
 
 <template>  
-  <div v-for="dish in dishes"
+  <div v-if="currentMode == 'index'"
+       v-for="dish in dishes"
        v-bind:class="dishActivityStyle(dish)"
        @click="setCurrentDish(dish)">
     {{ dish.name }}
   </div>
 
   <div class="menu-dishes-container"
-       v-if="currentMode == 'edit' && modeAlowability('edit')">
+       v-if="currentMode == 'edit' ">
+    Edit Dish
   </div>
 
   <div v-if="currentMode == 'create' && modeAlowability('create')">
@@ -123,9 +136,6 @@
 
   <div v-if="currentMode == 'delete' && modeAlowability('delete')">
   </div>
-
-  {{ currentMode }}
-  {{ currentDish }}
 </template>
 
 <style>
