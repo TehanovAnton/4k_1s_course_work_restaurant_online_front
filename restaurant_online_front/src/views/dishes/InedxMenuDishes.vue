@@ -6,6 +6,7 @@
   import dishApi from '../services/api/model_api';
   import { useCurrentDishIdStore } from './stores/CurrentDishStore'
   import { useCurrentDishModeStore } from './stores/CurrentDishModeStore';
+import EditView from './EditView.vue';
 
   const props = defineProps(['dishes', 'menu'])
   const emits = defineEmits(['refresh-data'])
@@ -57,11 +58,8 @@
   
   const currentMode = computed(() => {
     if (dishes.value.length == 0) {
-      return 'create'
-    } else {
-      return 'edit'
+      return 'create'&& modeAlowability('edit')
     }
-    
 
     return currentDishModeStore.getCurrentDishMode.value
   })
@@ -108,7 +106,6 @@
     let commonStyle = 'border dish-padding d-element-flex'
 
     if (currentDish.value && dish.id == currentDish.value.id) {      
-      setMode('edit')
       return `current-dish-bg ${commonStyle}`
     }
 
@@ -125,9 +122,11 @@
     {{ dish.name }}
   </div>
 
+  {{ currentMode }}
+
   <div class="menu-dishes-container"
        v-if="currentMode == 'edit' ">
-    Edit Dish
+    <EditView @data-change="setMode('index')" :dish="currentDish" />
   </div>
 
   <div v-if="currentMode == 'create' && modeAlowability('create')">

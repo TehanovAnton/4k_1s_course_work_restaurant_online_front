@@ -12,6 +12,7 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
   }
 
   const getCurrentDishMode = computed(() => {
+    debugger 
     return currentDishMode ? currentDishMode : defaultDishMode
   })
 
