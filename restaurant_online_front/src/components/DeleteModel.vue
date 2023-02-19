@@ -30,4 +30,6 @@ const destroyModel = async () => {
 <template>
   Destroy {{ record.name }}?
   <button @click="destroyModel">Ok</button>
+
+  <slot />
 </template>

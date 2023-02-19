@@ -17,7 +17,6 @@ import modelApi from '../../views/services/api/model_api';
     'modes',
     'modesProperties',
     'currentMode',
-    'record',
     'service',
     'withSlot'
   ])

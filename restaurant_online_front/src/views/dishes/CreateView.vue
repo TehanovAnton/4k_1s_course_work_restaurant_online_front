@@ -20,7 +20,6 @@
 
     let isSuccessful = await dishApi.apiCreateModel(args)
 
-    debugger
     if (isSuccessful) {      
       emits('data-change')
     }
@@ -34,4 +33,6 @@
     <DishForm action-name="create" :dish="dish"
             @form-submit="createDish" />
   </div>
+
+  <slot />
 </template>

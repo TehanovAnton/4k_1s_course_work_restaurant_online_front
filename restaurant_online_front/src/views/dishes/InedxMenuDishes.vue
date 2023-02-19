@@ -69,6 +69,7 @@
 
   const setMode = (modeName) => {
     currentDishModeStore.setCurrentMode(modeName)
+    selectedModeStore.setSelectedMode(modeName)
   }
 
   const setSelectedMode = () => {
@@ -102,14 +103,15 @@
     let { response, isSuccessful } = await dishApi.apiIndexModels(args)
 
     if (isSuccessful) {      
-      debugger
       if (currentDish.value) {
         currentDishIdStore.setCurrentDishId(currentDish.value.id)
+        setMode('index')
       }
 
       emits('refresh-data', response.data)
     }
   }
+
 
   const dishActivityStyle = (dish) => {
     let commonStyle = 'border dish-padding d-element-flex'
@@ -136,7 +138,6 @@
                    :mode-store="currentDishModeStore"
                    :selected-mode-store="selectedModeStore"
                    :modes-properties="modesProperties"
-                   :record="dish"
                    :with-slot="false"
                    @set-mode="setSelectedMode"/>
     </div>
@@ -145,18 +146,42 @@
   <div class="menu-dishes-container"
        v-if="currentMode == 'edit' ">
     <EditView @data-change="setMode('index')" 
-              :dish="currentDish" />
+              :dish="currentDish">
+      <ModesSelect :modes="modes"
+                   :current-mode="currentMode"
+                   :mode-store="currentDishModeStore"
+                   :selected-mode-store="selectedModeStore"
+                   :modes-properties="modesProperties"
+                   :with-slot="false"
+                   @set-mode="setSelectedMode"/>
+    </EditView>
   </div>
 
   <div v-if="currentMode == 'create' && modeAlowability('create')">
     <CreateDish @data-change="refreshDishes()"
-                :menu="menu" />
+                :menu="menu">
+      <ModesSelect :modes="modes"
+                   :current-mode="currentMode"
+                   :mode-store="currentDishModeStore"
+                   :selected-mode-store="selectedModeStore"
+                   :modes-properties="modesProperties"
+                   :with-slot="false"
+                   @set-mode="setSelectedMode"/>
+    </CreateDish>
   </div>
 
   <div v-if="currentMode == 'delete'">
     <DeleteModel @deleted-sucessfully="refreshDishes()"
                  :record="currentDish"
-                 :destroy-url="`http://localhost:3000/dishes/${currentDish.id}`" />
+                 :destroy-url="`http://localhost:3000/dishes/${currentDish.id}`">
+      <ModesSelect :modes="modes"
+                   :current-mode="currentMode"
+                   :mode-store="currentDishModeStore"
+                   :selected-mode-store="selectedModeStore"
+                   :modes-properties="modesProperties"
+                   :with-slot="false"
+                   @set-mode="setSelectedMode"/>
+    </DeleteModel>
   </div>
 </template>
 
