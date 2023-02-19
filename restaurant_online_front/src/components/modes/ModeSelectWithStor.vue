@@ -17,7 +17,6 @@ import modelApi from '../../views/services/api/model_api';
     'modes',
     'modesProperties',
     'currentMode',
-    'record',
     'service',
     'withSlot'
   ])
@@ -38,10 +37,6 @@ import modelApi from '../../views/services/api/model_api';
       ['index', 'show', 'create_rating', 'message'], 
       modeProperties.args
     )
-  }
-
-  const emitChange = () => {
-    emits('set-mode',)
   }
 
   const selectedMode = ref('index')

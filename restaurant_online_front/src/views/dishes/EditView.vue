@@ -2,6 +2,7 @@
   import DishForm from '../../components/dishes/DishForm.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
+  import ModesSelect from '../../components/modes/ModeSelectWithStor.vue';
 
   const props = defineProps(['dish'])
   const emits = defineEmits(['data-change'])
@@ -17,7 +18,7 @@
 
     let isSuccessful = await dishApi.apiUpdateModel(args)
 
-    if (isSuccessful) {      
+    if (isSuccessful) {
       emits('data-change')
     }
   }
@@ -27,5 +28,7 @@
   <div class="block">
     Edit Dish:
     <DishForm :dish="dish" action-name="update" @form-submit="updatMenu"/>
+
+    <slot />
   </div>  
 </template>

@@ -33,4 +33,6 @@
     <DishForm action-name="create" :dish="dish"
             @form-submit="createDish" />
   </div>
+
+  <slot />
 </template>
