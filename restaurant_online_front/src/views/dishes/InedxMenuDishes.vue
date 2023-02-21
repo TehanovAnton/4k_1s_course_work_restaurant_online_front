@@ -8,14 +8,14 @@
   import { useSelectedModeStore } from './stores/SelectedDishModeStore';
   import EditView from './EditView.vue';
   import DeleteModel from '../../components/DeleteModel.vue';
-  import ModesSelect from '../../components/modes/ModeSelectWithStor.vue';
+  import ModesSelect from '../../components/modes/ModesSelectWithSettableModesProps.vue';
 
   const props = defineProps(['dishes', 'menu'])
   const emits = defineEmits(['refresh-data'])
 
   onBeforeMount(() => {
     currentDishModeStore.udpateDependentFromDishModesArgs(props.dishes[0].id)
-    currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu.id)
+    currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu.id)    
   })
 
   const currentDishIdStore = useCurrentDishIdStore()
@@ -58,6 +58,10 @@
 
   const setSelectedMode = () => {
     currentDishModeStore.setCurrentMode(selectedModeStore.selectedMode)
+  }
+
+  const setModeAllowability = (modeName, allowability) => {
+    currentDishModeStore.modesSettableProperties[modeName].allowed = allowability
   }
   
   const modes = computed(() => currentDishModeStore.modes) 
@@ -107,12 +111,11 @@
 
   <div>
     <ModesSelect :modes="modes"
-                  :modes-properties="modesProperties"
-                  :current-mode="currentMode"
-                  :mode-store="currentDishModeStore"
-                  :selected-mode-store="selectedModeStore"
-                  :with-slot="false"
-                  @set-mode="setSelectedMode"/>
+                 :current-mode-stor="currentDishModeStore"
+                 :selected-mode-store="selectedModeStore"
+                 :with-slot="false"
+                 @set-mode="setSelectedMode"
+                 @set-mode-allowability="setModeAllowability" />
   </div>
   </div>
 
@@ -121,11 +124,11 @@
     <EditView @data-change="setMode('index')" 
               :dish="currentDish">
       <ModesSelect :modes="modes"
-                  :mode-store="currentDishModeStore"
-                  :selected-mode-store="selectedModeStore"
-                  :modes-properties="modesProperties"
-                  :with-slot="false"
-                  @set-mode="setSelectedMode"/>
+                   :current-mode-stor="currentDishModeStore"
+                   :selected-mode-store="selectedModeStore"
+                   :with-slot="false"
+                   @set-mode="setSelectedMode"
+                   @set-mode-allowability="setModeAllowability" />
     </EditView>
   </div>
 
@@ -133,11 +136,11 @@
     <CreateDish @data-change="refreshDishes()"
                 :menu="menu">
       <ModesSelect :modes="modes"
-                  :mode-store="currentDishModeStore"
-                  :selected-mode-store="selectedModeStore"
-                  :modes-properties="modesProperties"
-                  :with-slot="false"
-                  @set-mode="setSelectedMode"/>
+                   :current-mode-stor="currentDishModeStore"
+                   :selected-mode-store="selectedModeStore"
+                   :with-slot="false"
+                   @set-mode="setSelectedMode"
+                   @set-mode-allowability="setModeAllowability" />
     </CreateDish>
   </div>
 
@@ -146,11 +149,11 @@
                 :record="currentDish"
                 :destroy-url="`http://localhost:3000/dishes/${currentDish.id}`">
       <ModesSelect :modes="modes"
-                  :mode-store="currentDishModeStore"
-                  :selected-mode-store="selectedModeStore"
-                  :modes-properties="modesProperties"
-                  :with-slot="false"
-                  @set-mode="setSelectedMode"/>
+                   :current-mode-stor="currentDishModeStore"
+                   :selected-mode-store="selectedModeStore"
+                   :with-slot="false"
+                   @set-mode="setSelectedMode"
+                   @set-mode-allowability="setModeAllowability" />
     </DeleteModel>
   </div>
 </template>

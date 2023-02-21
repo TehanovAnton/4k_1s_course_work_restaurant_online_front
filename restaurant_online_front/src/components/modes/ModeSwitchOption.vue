@@ -2,7 +2,7 @@
   const props = defineProps(['mode', 'allowed', 'visible'])   
 </script>
 
-<template>  
+<template>
   <option v-if="(allowed && visible)"
           v-bind:value="mode">
     {{ mode }}

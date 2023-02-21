@@ -8,11 +8,11 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
   const modes = ['index', 'create', 'edit', 'delete']
   const menu_id = ref('')
   const dish_id = ref('')
-  const modesAllowabilities = ref({
-    index:{ allowed:true },
-    create:{ allowed:false },
-    edit:{ allowed:false},
-    delete:{ allowed:false }
+  const modesSettableProperties = ref({
+    index:{  allowed:true,  visible:true },
+    create:{ allowed:false, visible:true },
+    edit:{   allowed:false, visible:true },
+    delete:{ allowed:false, visible:true }
   })
 
   const createModeArgs = computed(() => {
@@ -48,18 +48,19 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
     dish_id.value = id
   }
 
-  const modeAllowability = (mode) => modesAllowabilities[mode].allowed
+  const modesAllowabilities = (mode) => modesSettableProperties.value[mode].allowed
+  const modesVisiabilities = (mode) => modesSettableProperties.value[mode].visible
 
   const modesProperties = computed(() => {
     return {
-      index:{ action:'index', allowed:modeAllowability('index'), visible:true },
-      create:{ action:'create', allowed:modeAllowability('create'), visible:true,
+      index:{ action:'index', allowed:modesAllowabilities('index'), visible:modesVisiabilities('index') },
+      create:{ action:'create', allowed:modesAllowabilities('create'), visible:modesVisiabilities('create'),
         args: createModeArgs.value
       },
-      edit:{ action:'update', allowed:modeAllowability('edit'), visible:true,
+      edit:{ action:'update', allowed:modesAllowabilities('edit'), visible:modesVisiabilities('edit'),
         args: editModeArgs.value
       },
-      delete:{ action:'destroy', allowed:modeAllowability('delete'), visible: true,
+      delete:{ action:'destroy', allowed:modesAllowabilities('delete'), visible: modesVisiabilities('delete'),
         args: destroyArgs.value
       }
     }
@@ -86,6 +87,6 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
     dish_id,
     createModeArgs,
     editModeArgs,
-    modesAllowabilities,
+    modesSettableProperties
   }
 })
