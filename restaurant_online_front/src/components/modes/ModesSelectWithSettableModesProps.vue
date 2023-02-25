@@ -33,9 +33,6 @@
   }
 
   const setModeAlowability = async (mode) => {
-    if (!!!currentModeStor.value)
-      debugger
-
     let modeProperties = currentModeStor.value.modesProperties[mode]
     let modeAlloability = await modelApi.can(modeProperties.action, 
                                              ['index', 'show', 'create_rating', 'message'], 

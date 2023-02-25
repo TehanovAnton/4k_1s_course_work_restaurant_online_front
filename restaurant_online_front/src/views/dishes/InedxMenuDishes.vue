@@ -15,7 +15,7 @@
 
   onBeforeMount(() => {
     currentDishModeStore.udpateDependentFromDishModesArgs(props.dishes[0].id)
-    currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu.id)    
+    currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu.id)
   })
 
   const currentDishIdStore = useCurrentDishIdStore()
@@ -39,7 +39,7 @@
     return props.dishes
   })  
   const menu = computed(() => {
-    currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu)
+    currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu.id)
     return props.menu
   })  
   

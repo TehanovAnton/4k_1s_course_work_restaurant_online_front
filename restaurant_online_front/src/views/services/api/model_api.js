@@ -75,7 +75,7 @@ const can = async (action, public_actions, args) => {
 const apiCanRequest = async (action, args) => {
   let response = await axios.get(args[`can${action}Url`],
                                  args['requestOptions']    
-  ).catch(errorshandler)
+  ).catch(errorshandler)  
 
   return apiResponseHandelr(response)
 }
