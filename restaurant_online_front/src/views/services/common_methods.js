@@ -12,7 +12,9 @@ const errorshandler = (error) => {
   if (error.response.status == 401) {
     sessionStorage.clear()
     router.push({ name:'sign_in' })
-  }  
+  }
+
+  return error.response
 }
 
 const setHeadersIfSuccessful = (headers, isSuccessful) => {
