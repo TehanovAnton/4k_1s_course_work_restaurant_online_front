@@ -2,6 +2,7 @@
 import { defineStore } from "pinia"
 import { computed, ref } from "vue"
 import tokensService from '../../services/tokensService';
+import modelApi from '../../../views/services/api/model_api';
 
 export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
   const defaultDishMode = 'index'
@@ -76,10 +77,23 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
     return currentDishMode ? currentDishMode : defaultDishMode
   })
 
+  const getModesAllowabilities = async () => {
+    modes.forEach(async mode => await setModeAlowability(mode))
+  }
+
+  const setModeAlowability = async (mode) => {
+    let modeProperties = modesProperties.value[mode]
+    modesSettableProperties.value[mode].allowed = await modelApi.can(modeProperties.action, 
+                                                                     ['index', 'show', 'create_rating', 'message'], 
+                                                                     modeProperties.args
+                                                                    )
+  }
+
   return {
     udpateDependentFromMenuModesArgs,
     udpateDependentFromDishModesArgs,
     setCurrentMode,
+    getModesAllowabilities,
     getCurrentMode,
     modes,
     modesProperties,

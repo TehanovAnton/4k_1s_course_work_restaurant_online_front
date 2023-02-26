@@ -1,14 +1,6 @@
 <script setup>
-  import { onBeforeMount, ref, computed } from 'vue';
+  import { ref, computed } from 'vue';
   import ModeSwitchOption from './ModeSwitchOption.vue';
-  import modelApi from '../../views/services/api/model_api';
-
-
-  onBeforeMount(async () => {    
-    await getModesAllowabilities()
-    
-    dataReady.value = true
-  })
 
   const props = defineProps([
     'modeStore',
@@ -18,29 +10,11 @@
     'withSlot'
   ])
   const emits = defineEmits(['set-mode', 'set-mode-allowability'])
-  
-  const dataReady = ref(false)
 
   const currentModeStor = computed(() => props.currentModeStor)
   const modes = computed(() => {
     return props.modes
-  })
-
-  const getModesAllowabilities = async () => {
-    props.modes.forEach(async mode => {       
-      await setModeAlowability(mode)
-    })
-  }
-
-  const setModeAlowability = async (mode) => {
-    let modeProperties = currentModeStor.value.modesProperties[mode]
-    let modeAlloability = await modelApi.can(modeProperties.action, 
-                                             ['index', 'show', 'create_rating', 'message'], 
-                                             modeProperties.args
-                                            )
-
-    emits('set-mode-allowability', mode, modeAlloability)
-  }
+  })  
 
   const modeAlowability = (mode) => {
     return currentModeStor.value.modesProperties[mode].allowed
@@ -50,7 +24,6 @@
 
 <template>
   <select class="raw"
-          v-if="dataReady"
           v-model="selectedModeStore.selectedMode"
           @change="$emit('set-mode')">
       <ModeSwitchOption v-for="mode in modes" 

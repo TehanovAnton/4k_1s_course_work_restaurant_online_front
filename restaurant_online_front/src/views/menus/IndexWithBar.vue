@@ -73,6 +73,11 @@ const currentMenuMode = computed(() => {
 })
 
 const menus = computed(() => {
+  if (props.menus.length == 0) {
+    syncModes('create')
+    return [];
+  }
+
   let menuFromStore = props.menus.find((menu) => {
     return menu.id == currentMenuIdStore.getCurrentMenuId
   })
@@ -114,16 +119,21 @@ const refreshMenus = async () => {
 
   let { response, isSuccessful } = await menuApi.apiIndexModels(args)
 
-  if (isSuccessful) {      
-    currentMenuIdStore.setCurrentMenuId(currentMenu.value.id)
+  if (isSuccessful) {
+    if (response.data.length != 0) {
+      currentMenu.value = response.data[0]
+      currentMenuIdStore.setCurrentMenuId(currentMenu.value.id)
+    }
+
     emits('refreshMenus', response.data)
   }
 }
 
 const resetIndex = async () => {
   await refreshMenus()
+
+  setCurrentMenu(menus.value[0])
   syncModes('index')
-  setCurrentMenu(menus[0])
 }
 
 const setMode = () => {
@@ -131,8 +141,8 @@ const setMode = () => {
 }
 
 const syncModes = (mode) => {
-  currentMenuModeStore.setCurrentMenuMode('index')
-  selectedModeStore.setSelectedMenuMode('index')
+  currentMenuModeStore.setCurrentMenuMode(mode)
+  selectedModeStore.setSelectedMenuMode(mode)
 }
 
 const refreshDishes = (dishes) => {

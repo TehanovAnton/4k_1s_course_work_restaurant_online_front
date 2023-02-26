@@ -13,9 +13,12 @@
   const props = defineProps(['dishes', 'menu'])
   const emits = defineEmits(['refresh-data'])
 
-  onBeforeMount(() => {
-    currentDishModeStore.udpateDependentFromDishModesArgs(props.dishes[0].id)
+  onBeforeMount(async () => {
+    if (props.dishes.length != 0)
+      currentDishModeStore.udpateDependentFromDishModesArgs(props.dishes[0].id)
+
     currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu.id)
+    await currentDishModeStore.getModesAllowabilities()
   })
 
   const currentDishIdStore = useCurrentDishIdStore()
@@ -23,22 +26,41 @@
   const selectedModeStore = useSelectedModeStore()
 
   const currentDish = ref({})
+  const dataReady = ref(false)
   
   const setCurrentDish = (dish) => {
     currentDishModeStore.udpateDependentFromDishModesArgs(dish.id)
     currentDish.value = dish
   }
 
-  const dishes = computed(() => {
+  const initCurrentDishId = () => {
     let dishFromStore = props.dishes.find((dish) => {
       return dish.id == currentDishIdStore.getCurrentDishId
     })
 
-    setCurrentDish(dishFromStore || props.dishes[0])
+    if (!!dishFromStore)
+      return dishFromStore
+
+    return props.dishes[0]
+  }
+
+  const dishes = computed(() => {
+    if (props.dishes.length == 0) {
+      setMode('create')
+      return []
+    }      
+
+    let curreDishId = initCurrentDishId()    
+    setCurrentDish(curreDishId)
 
     return props.dishes
   })  
+
   const menu = computed(() => {
+    if (currentDishModeStore.menu_id != props.menu.id)
+      if (props.dishes.length != 0)
+        setMode('index')
+
     currentDishModeStore.udpateDependentFromMenuModesArgs(props.menu.id)
     return props.menu
   })  
@@ -102,7 +124,7 @@
 
 </script>
 
-<template>  
+<template>
   <div v-if="currentMode == 'index'"
       v-for="dish in dishes"
       v-bind:class="dishActivityStyle(dish)"
@@ -131,7 +153,7 @@
                    @set-mode-allowability="setModeAllowability" />
     </EditView>
   </div>
-
+  
   <div v-if="currentMode == 'create' && modeAlowability('create')">
     <CreateDish @data-change="refreshDishes()"
                 :menu="menu">
