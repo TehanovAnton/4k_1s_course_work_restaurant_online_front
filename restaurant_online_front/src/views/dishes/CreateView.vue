@@ -3,6 +3,7 @@
   import DishForm from '../../components/dishes/DishForm.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
+  import dishCreateService from '../services/modelCreateServices/modelCreateService'
 
   const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
@@ -17,19 +18,9 @@
       requestOptions: { 
         headers: tokensService.auth_headers()
       }
-    }  
-  
-    let { response, isSuccessful } = await dishApi.apiCreateModel(args)
-
-
-    if (isSuccessful) {
-      emits('data-change')
-    } else {
-      Object.keys(response.data).forEach((attribute) => {
-        let attributeErrosMessages = response.data[attribute]      
-        errors.value.push(attributeErrosMessages[0])
-      })
     }
+    let successfullCallback = () => emits('data-change')
+    dishCreateService.createModel(dishApi, args, successfullCallback, errors)
   }
 
 </script>
