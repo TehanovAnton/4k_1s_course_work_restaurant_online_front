@@ -1,13 +1,15 @@
 <script setup>
   import { ref } from 'vue';
   import DishForm from '../../components/dishes/DishForm.vue';
-  import dish_service from '../services/dishes/DishesService';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
+  import dishCreateService from '../services/modelCreateServices/modelCreateService'
 
   const props = defineProps(['menu'])
-  const dish = ref({ name:'', menu_id: props.menu.id })
   const emits = defineEmits(['data-change'])
+
+  const dish = ref({ name:'', menu_id: props.menu.id })
+  const errors = ref([])
 
   const createDish = async () => {
     let args = {
@@ -17,21 +19,21 @@
         headers: tokensService.auth_headers()
       }
     }
-
-    let isSuccessful = await dishApi.apiCreateModel(args)
-
-    if (isSuccessful) {      
-      emits('data-change')
-    }
+    let successfullCallback = () => emits('data-change')
+    dishCreateService.createModel(dishApi, args, successfullCallback, errors)
   }
 
 </script>
 
 <template>
+  <p v-for="error in errors">
+    {{ error }}
+  </p>
+
   <div class="block">
     Add Dish:
     <DishForm action-name="create" :dish="dish"
-            @form-submit="createDish" />
+              @form-submit="createDish" />
   </div>
 
   <slot />
