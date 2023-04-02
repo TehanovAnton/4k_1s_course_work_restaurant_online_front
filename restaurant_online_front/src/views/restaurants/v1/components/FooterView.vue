@@ -17,6 +17,7 @@
 
 <style>
   .r-footer {
-
+    background-color: black;
+    color: white;
   }
 </style>
