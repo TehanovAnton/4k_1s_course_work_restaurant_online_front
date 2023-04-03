@@ -1,23 +1,28 @@
 <script setup>
+import HeaderView from './components/HeaderView.vue';
+import FooterView from './components/FooterView.vue';
 import { useContentsStore } from '../stores/ContentsStore';
-import { computed } from '@vue/reactivity';
 
-import ModelsContentView from './../v1/components/ModelsContentView.vue';
-import EditView from '../v1/EditView.vue'
+import RestaurantIndexView from './../v1/IndexView.vue';
+import RestaurantEditView from '../v1/EditView.vue'
 
 const contentsStore = useContentsStore()
 const contents = {
-  ModelsContentView,
-  EditView
+  RestaurantIndexView,
+  RestaurantEditView
 }
 </script>
 
 <template>
+  <HeaderView />
+  
   <div class="overview-container">
     <div class="oc-width">
       <component :is="contents[contentsStore.currentContent]" />
     </div>
   </div>
+
+  <FooterView />
 </template>
 
 <style>

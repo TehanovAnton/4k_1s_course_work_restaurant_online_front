@@ -18,7 +18,7 @@ const router = createRouter({
     {
       path: '/restaurants/:id/index',
       name: 'restaurantIndex',
-      component: () => import('../views/restaurants/v1/IndexView.vue')
+      component: () => import('../views/restaurants/v1/LayoutView.vue')
     },
 
     {
