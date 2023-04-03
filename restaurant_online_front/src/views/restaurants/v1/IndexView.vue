@@ -3,19 +3,16 @@ import { useContentsStore } from '../../restaurants/stores/ContentsStore';
 import EditIconWrap from '../../restaurants/v1/components/EditIconWrap.vue';
 
 const contentsStore = useContentsStore()
-const restaurantEdit = () => {
-  contentsStore.currentContent = 'RestaurantEditView'
-}
 </script>
 
 <template>
   <div class="overviews o-height">
-    <EditIconWrap @edit-click="restaurantEdit">
+    <EditIconWrap @edit-click="contentsStore.setContent('RestaurantEditView')">
       Restaurant
     </EditIconWrap>
 
     <div v-if="true" class="secondary-model-container">
-      <EditIconWrap>
+      <EditIconWrap @edit-click="contentsStore.setContent('MenuEditView')">
         Menu
       </EditIconWrap>
     </div>
