@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useContentsStore } from '../../restaurants/stores/ContentsStore';
+import { useContentsStore } from '../stores/ContentsStore';
 import { useRestaurantsStore } from '../stores/RestaurantsStore';
-import EditIconWrap from '../../restaurants/v1/components/EditIconWrap.vue';
-import DishIdexView from '../../dishes/v1/IndexView.vue'
+import EditIconWrap from './components/EditIconWrap.vue';
+import DishShowView from '../../dishes/v1/ShowView.vue'
 import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue';
 
 const contentsStore = useContentsStore()
@@ -34,12 +34,12 @@ const currentRestaurant = computed(() => restaurantsStore.currentRestaurant )
       </div>
     </div>
     <div class="models-content-container">
-      <DishIdexView />
-      <DishIdexView />
-      <DishIdexView />
-      <DishIdexView />
-      <DishIdexView />
-      <DishIdexView />
+      <DishShowView />
+      <DishShowView />
+      <DishShowView />
+      <DishShowView />
+      <DishShowView />
+      <DishShowView />
     </div>  
   </LoadRestaurants>
 </template>

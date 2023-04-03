@@ -3,14 +3,14 @@ import HeaderView from './components/HeaderView.vue';
 import FooterView from './components/FooterView.vue';
 import { useContentsStore } from '../stores/ContentsStore';
 
-import RestaurantIndexView from './../v1/IndexView.vue';
+import RestaurantShowView from './ShowView.vue';
 import RestaurantEditView from '../v1/EditView.vue'
 import MenuEditView from  '../../menus/EditView.vue'
 import DishEditView from '../../dishes/EditView.vue'
 
 const contentsStore = useContentsStore()
 const contents = {
-  RestaurantIndexView,
+  RestaurantShowView,
   RestaurantEditView,
   MenuEditView,
   DishEditView

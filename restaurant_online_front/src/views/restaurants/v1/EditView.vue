@@ -23,7 +23,7 @@ const updatRestaurant = async (modefiedRestaurant) => {
   if (isSuccessful) {
     tokensService.setAuthTokens(response.headers)
     await restaurantsStore.updateAndSetCurrent(response.data)
-    contentsStore.setContent('RestaurantIndexView')
+    contentsStore.setContent('RestaurantShowView')
   }
 }
 </script>

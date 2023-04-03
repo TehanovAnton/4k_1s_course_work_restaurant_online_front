@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 import { computed, ref } from "vue"
 
 export const useContentsStore = defineStore('contentsStore', () => {  
-  const currentContent = ref('RestaurantIndexView')
+  const currentContent = ref('RestaurantShowView')
   const contentArgs = ref({})
 
   const setContent = (content, args) => {
