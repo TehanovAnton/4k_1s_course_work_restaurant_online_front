@@ -24,11 +24,7 @@ const apiGetRestaurant = async (authHeaders, restaurantId) => {
 
 const apiUpdateRestaurants = async (authHeaders, restaurant) => {
   let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
-  let data = {
-    name: restaurant.name,
-    email: restaurant.email,
-    address: restaurant.address
-  }
+  let data = restaurant.updateAttributes
   
   let response = await axios.put(
     updateUrl, 

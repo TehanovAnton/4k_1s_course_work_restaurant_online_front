@@ -1,24 +1,20 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-import restaurantService from '../../../../services/restaurants/restaurant_service';
-import tokensService from '../../../../services/tokensService';
+import { useRestaurantsStore } from '../../../stores/RestaurantsStore';
 
-const emits = defineEmits(['dataReady'])
+const restaurantsStore = useRestaurantsStore()
 
 onBeforeMount(async () => {
-  let { response, isSuccessful } = await restaurantService.apiIndexRestaurants(tokensService.auth_headers())
-
-  if (isSuccessful) {      
-    restaurants.value = response.data
+  await restaurantsStore.fetchRestaurants((_response) => {
     dataReady.value = true
+  })
 
-    tokensService.setAuthTokens(response.headers)
+  if (!!!restaurantsStore.currentRestaurant.id) {
+    restaurantsStore.setRestaurant(restaurantsStore.restaurants[0])
   }
-
-  emits('dataReady', restaurants)
+    
 })
 
-const restaurants = ref([])
 const dataReady = ref(false)
 </script>
 

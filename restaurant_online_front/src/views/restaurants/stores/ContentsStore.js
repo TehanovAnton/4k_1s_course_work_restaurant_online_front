@@ -3,9 +3,12 @@ import { computed, ref } from "vue"
 
 export const useContentsStore = defineStore('contentsStore', () => {  
   const currentContent = ref('RestaurantIndexView')
-  const setContent = (content) => {
+  const contentArgs = ref({})
+
+  const setContent = (content, args) => {
+    contentArgs.value = args
     currentContent.value = content
   }
 
-  return { currentContent, setContent }
+  return { currentContent, setContent, contentArgs }
 })
