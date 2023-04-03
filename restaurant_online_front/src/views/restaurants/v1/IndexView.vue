@@ -34,12 +34,4 @@ const contentsStore = useContentsStore()
     flex-direction: column;
     align-items: stretch;
   }
-
-  .dish {
-    background-color: darkgray;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: inset 0 0 5px 2px black;
-    margin: 5px 0px 0 0px;
-  }
 </style>
