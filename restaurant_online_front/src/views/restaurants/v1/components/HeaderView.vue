@@ -3,7 +3,7 @@
     <p class="h-element">Restaourants</p>
     <p class="h-element">Profile</p>
     <p class="h-element">Search</p>
-    <p class="h-element">Search</p>
+    <p class="h-element">Create</p>
   </div>
 </template>
 
