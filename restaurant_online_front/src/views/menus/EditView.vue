@@ -3,16 +3,15 @@
   import MenuForm from '../../components/menus/MenuForm.vue';  
   import service from '../services/menus/menu_service'
   import tokensService from '../services/tokensService';
+  import { useMenusStore } from './stores/MenusStore';
+  import { useContentsStore } from '../restaurants/stores/ContentsStore';
 
-  const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
 
-  const fieldsForUpdate = ['name']
-  const updatedMenu = computed(() => {
-    let menuProto = { id: 1, name: 'breakfast' }
-    // fieldsForUpdate.forEach(field => menuProto[field] = props.menu[field])
-
-    return menuProto
+  const menusStore = useMenusStore()
+  const contentsStore = useContentsStore()
+  const currentMenu = computed(() => {
+    return menusStore.currentMenu
   })
 
   const updatMenu = async (menu) => {
@@ -23,8 +22,9 @@
 
     if (isSuccessful) {   
       tokensService.setAuthTokens(response.headers)
-      setUpdatedFields(menu)
-      emits('data-change')
+
+      menusStore.updateAndSetCurrent(response.data)
+      contentsStore.setContent('RestaurantShowView')
     }
   }  
 
@@ -37,5 +37,5 @@
 </script>
 
 <template>
-  <MenuForm :menu="updatedMenu" action-name="update" @form-submit="updatMenu"/>
+  <MenuForm :menu="currentMenu" action-name="update" @form-submit="updatMenu"/>
 </template>

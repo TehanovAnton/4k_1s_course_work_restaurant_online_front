@@ -2,18 +2,21 @@
 import { ref, computed } from 'vue';
 import { useContentsStore } from '../stores/ContentsStore';
 import { useRestaurantsStore } from '../stores/RestaurantsStore';
+import { useMenusStore } from '../../menus/stores/MenusStore';
 import EditIconWrap from './components/EditIconWrap.vue';
 import DishShowView from '../../dishes/v1/ShowView.vue'
 import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue';
 
 const contentsStore = useContentsStore()
 const restaurantsStore = useRestaurantsStore()
+const menusStore = useMenusStore()
 
 const editRestaurant = () => {
   contentsStore.setContent('RestaurantEditView')
 }
 
-const currentRestaurant = computed(() => restaurantsStore.currentRestaurant )
+const currentRestaurant = computed(() => restaurantsStore.currentRestaurant)
+const currentMenu = computed(() => menusStore.currentMenu)
 </script>
 
 <template>
@@ -29,7 +32,7 @@ const currentRestaurant = computed(() => restaurantsStore.currentRestaurant )
 
       <div v-if="true" class="secondary-model-container">
         <EditIconWrap @edit-click="contentsStore.setContent('MenuEditView')">
-          Menu
+          {{ currentMenu.name }}
         </EditIconWrap>
       </div>
     </div>

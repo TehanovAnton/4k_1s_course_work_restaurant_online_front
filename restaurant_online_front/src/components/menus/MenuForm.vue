@@ -1,15 +1,27 @@
 <script setup>
+  import { ref } from 'vue';
+
   const props = defineProps(['menu', 'actionName'])
   const emits = defineEmits(['formSubmit'])
+
+  const modefiedMenu = ref({ 
+    id: props.menu.id,
+    updateAttributes: {}
+  })
+
+  const inlcudeAttribute = (attr) => {
+    modefiedMenu.value.updateAttributes[attr] = props.menu[attr]
+  }
 </script>
 
 <template>
   <form class="block">
     <div class="centrenize-content-column">
       <label for="m-name">Name: </label>
-      <input id='m-name' v-model="menu.name"/>
+      <input id='m-name' v-model="menu.name"
+                         :on-change="inlcudeAttribute('name')" />
     </div>
 
-    <button type="button" @click="$emit('formSubmit', menu)">{{ actionName }}</button>
+    <button type="button" @click="$emit('formSubmit', modefiedMenu)">{{ actionName }}</button>
   </form>
 </template>
