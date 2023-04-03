@@ -1,6 +1,7 @@
 <script setup>
 import { useContentsStore } from '../../restaurants/stores/ContentsStore';
 import EditIconWrap from '../../restaurants/v1/components/EditIconWrap.vue';
+import DishIdexView from '../../dishes/v1/IndexView.vue'
 
 const contentsStore = useContentsStore()
 </script>
@@ -18,14 +19,12 @@ const contentsStore = useContentsStore()
     </div>
   </div>
   <div class="models-content-container">
-    <div class="dish">Dish</div>
-    <div class="dish">Dish</div>
-    <div class="dish">Dish</div>
-    <div class="dish">Dish</div>
-    <div class="dish">Dish</div>
-    <div class="dish">Dish</div>
-    <div class="dish">Dish</div>
-    <div class="dish">Dish</div>
+    <DishIdexView />
+    <DishIdexView />
+    <DishIdexView />
+    <DishIdexView />
+    <DishIdexView />
+    <DishIdexView />
   </div>  
 </template>
 
