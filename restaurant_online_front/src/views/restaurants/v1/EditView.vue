@@ -14,6 +14,8 @@ const contentRestaurant = computed(() => {
   return restaurantsStore.currentRestaurant
 })
 
+const showRestaurant = () => contentsStore.setContent('RestaurantShowView')
+
 const updatRestaurant = async (modefiedRestaurant) => {
   let { 
     response,
@@ -35,7 +37,7 @@ const updatRestaurant = async (modefiedRestaurant) => {
     </EditIconWrap>    
   </div>
   <RestaurantForm :restaurant="contentRestaurant" :action-name="'Update'" 
-                  @form-submit="updatRestaurant"/>
+                  @form-submit="updatRestaurant" @cancel="showRestaurant" />
 </template>
 
 <style>

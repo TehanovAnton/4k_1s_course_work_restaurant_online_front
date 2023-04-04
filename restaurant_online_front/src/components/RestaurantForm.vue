@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue';
   const props = defineProps(['restaurant', 'actionName'])
-  const emits = defineEmits(['formSubmit'])
+  const emits = defineEmits(['formSubmit', 'cancel'])
 
   const modefiedRestaurant = ref({ 
     id: props.restaurant.id,
@@ -28,6 +28,11 @@
       <input id='r-address' v-model="restaurant.address"
                             v-on:change="inlcudeAttribute('address')" />
     </div>
-    <button type="button" @click="$emit('formSubmit', modefiedRestaurant)">{{ actionName }}</button>
+
+    <button type="button" @click="$emit('formSubmit', modefiedRestaurant)">
+      {{ actionName }}
+    </button>
+
+    <button type="button" @click="$emit('cancel')">back</button>
   </form>
 </template>

@@ -3,7 +3,7 @@
   import { useMenusStore } from '../../views/menus/stores/MenusStore';
 
   const props = defineProps(['dish', 'actionName'])
-  const emits = defineEmits(['formSubmit'])
+  const emits = defineEmits(['formSubmit', 'cancel'])
 
   const menusStore = useMenusStore()
   const modefiedDish = ref({ 
@@ -37,6 +37,12 @@
                          :on-change="inlcudeAttribute('name')" />
     </div>
 
-    <button type="button" @click="$emit('formSubmit', modefiedDish)">{{ actionName }}</button>
+    <button type="button" @click="$emit('formSubmit', modefiedDish)">
+      {{ actionName }}
+    </button>
+
+    <button type="button" @click="$emit('cancel')">
+      back
+    </button>
   </form>
 </template>

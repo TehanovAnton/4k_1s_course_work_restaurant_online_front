@@ -2,7 +2,7 @@
   import { ref } from 'vue';
 
   const props = defineProps(['menu', 'actionName'])
-  const emits = defineEmits(['formSubmit'])
+  const emits = defineEmits(['formSubmit', 'cancel'])
 
   const modefiedMenu = ref({ 
     id: props.menu.id,
@@ -24,6 +24,12 @@
                          :on-change="inlcudeAttribute('name')" />
     </div>
 
-    <button type="button" @click="$emit('formSubmit', modefiedMenu)">{{ actionName }}</button>
+    <button type="button" @click="$emit('formSubmit', modefiedMenu)">
+      {{ actionName }}
+    </button>
+
+    <button type="button" @click="$emit('cancel')">
+      back
+    </button>
   </form>
 </template>
