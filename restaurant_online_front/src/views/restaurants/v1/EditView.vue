@@ -34,7 +34,6 @@ const updatRestaurant = async (modefiedRestaurant) => {
       Restaurant  
     </EditIconWrap>    
   </div>
-  {{ contentRestaurant }}
   <RestaurantForm :restaurant="contentRestaurant" :action-name="'Update'" 
                   @form-submit="updatRestaurant"/>
 </template>

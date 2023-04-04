@@ -19,7 +19,6 @@
 </script>
 
 <template>
-  {{ modefiedDish }}
   <form>
     <div v-if="actionName == 'create'">
       <label for="menu-slect">Choose Menu</label>

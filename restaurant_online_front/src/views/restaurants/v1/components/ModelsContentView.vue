@@ -34,12 +34,6 @@ const restaurantEdit = () => {
 </template>
 
 <style>
-  .models-content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .dish {
     background-color: darkgray;
     border-radius: 15px;

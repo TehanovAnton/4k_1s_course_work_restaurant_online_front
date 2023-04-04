@@ -13,7 +13,7 @@
     <p class="h-element">Restaourants</p>
     <p class="h-element">Profile</p>
     <p class="h-element">Search</p>
-    <button @click="createWelcome">Click</button>
+    <button @click="createWelcome">Create</button>
   </div>
 </template>
 
