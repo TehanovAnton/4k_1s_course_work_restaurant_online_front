@@ -2,10 +2,17 @@
 import { computed } from '@vue/reactivity';
 import EditIcon from '../../restaurants/v1/components/EditIcon.vue';
 import { useContentsStore } from '../../restaurants/stores/ContentsStore';
+import { useDishesStore } from '../stores/DishesStore';
 
 const props = defineProps(['dish'])
 const dish = computed(() => props.dish)
 const contentsStore = useContentsStore()
+const dishesStore = useDishesStore()
+
+const editDish = () => {
+  dishesStore.setDish(dish.value)
+  contentsStore.setContent('DishEditView')
+}
 </script>
 
 <template>
@@ -29,7 +36,7 @@ const contentsStore = useContentsStore()
     </div>
 
     <div class="dish-edit-icon">
-      <EditIcon @icon-click="contentsStore.setContent('DishEditView')" />
+      <EditIcon @icon-click="editDish" />
     </div>
   </div>
 </template>
