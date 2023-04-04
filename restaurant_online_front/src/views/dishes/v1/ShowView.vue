@@ -1,7 +1,10 @@
 <script setup>
+import { computed } from '@vue/reactivity';
 import EditIcon from '../../restaurants/v1/components/EditIcon.vue';
 import { useContentsStore } from '../../restaurants/stores/ContentsStore';
 
+const props = defineProps(['dish'])
+const dish = computed(() => props.dish)
 const contentsStore = useContentsStore()
 </script>
 
@@ -9,7 +12,7 @@ const contentsStore = useContentsStore()
   <div class="dish">
     <div class="dish-content">
       <p>
-        Dish
+        {{ dish.name }}
       </p>
 
       <p>
@@ -17,11 +20,11 @@ const contentsStore = useContentsStore()
       </p>
 
       <p>
-        Cost
+        {{ dish.price_cents }}
       </p>
 
       <p>
-        Descip
+        {{ dish.description }}
       </p>
     </div>
 

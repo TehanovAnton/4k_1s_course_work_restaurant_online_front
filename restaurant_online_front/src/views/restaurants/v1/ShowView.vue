@@ -3,13 +3,15 @@ import { ref, computed } from 'vue';
 import { useContentsStore } from '../stores/ContentsStore';
 import { useRestaurantsStore } from '../stores/RestaurantsStore';
 import { useMenusStore } from '../../menus/stores/MenusStore';
+import { useDishesStore } from '../../dishes/stores/DishesStore';
 import EditIconWrap from './components/EditIconWrap.vue';
-import DishShowView from '../../dishes/v1/ShowView.vue'
+import DishesIndexView from '../../dishes/v1/IndexView.vue';
 import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue';
 
 const contentsStore = useContentsStore()
 const restaurantsStore = useRestaurantsStore()
 const menusStore = useMenusStore()
+const dishesStore = useDishesStore()
 
 const editRestaurant = () => {
   contentsStore.setContent('RestaurantEditView')
@@ -36,14 +38,8 @@ const currentMenu = computed(() => menusStore.currentMenu)
         </EditIconWrap>
       </div>
     </div>
-    <div class="models-content-container">
-      <DishShowView />
-      <DishShowView />
-      <DishShowView />
-      <DishShowView />
-      <DishShowView />
-      <DishShowView />
-    </div>  
+    
+    <DishesIndexView />
   </LoadRestaurants>
 </template>
 
