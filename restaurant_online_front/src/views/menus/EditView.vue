@@ -1,6 +1,7 @@
 <script setup>
   import { computed } from '@vue/reactivity';
-  import MenuForm from '../../components/menus/MenuForm.vue';  
+  import MenuForm from '../../components/menus/MenuForm.vue';
+  import CurrentMenu from './v1/components/CurrentMenu.vue';
   import service from '../services/menus/menu_service'
   import tokensService from '../services/tokensService';
   import { useMenusStore } from './stores/MenusStore';
@@ -25,17 +26,11 @@
       menusStore.updateAndSetCurrent(response.data, { view: 'with_dishes' })
       contentsStore.setContent('RestaurantShowView')
     }
-  }  
-
-  const setUpdatedFields = (menu) => {
-    let exceptFields = ['id']
-    Object.keys(menu)
-    .filter(field => !exceptFields.includes(field))
-    .forEach(field => { props.menu[field] = menu[field] })
   }
 </script>
 
 <template>
+  <CurrentMenu />
   <MenuForm :menu="currentMenu" action-name="update"
             @form-submit="updatMenu" @cancel="showRestaurant"/>
 </template>
