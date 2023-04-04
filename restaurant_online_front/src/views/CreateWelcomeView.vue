@@ -3,9 +3,8 @@
 
   const contentsStore = useContentsStore()
 
-  const createMenu = () => {
-    contentsStore.setContent('MenuCreateView')
-  }
+  const createMenu = () => contentsStore.setContent('MenuCreateView')
+  const createDish = () => contentsStore.setContent('DishCreateView')
 </script>
 
 <template>
@@ -18,7 +17,7 @@
       <h1>Menu</h1>
     </div>
 
-    <div class="create-element">
+    <div class="create-element" @click="createDish">
       <h1>Dish</h1>
     </div>
   </div>

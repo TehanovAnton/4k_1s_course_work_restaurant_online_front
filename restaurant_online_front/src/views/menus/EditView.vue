@@ -23,7 +23,7 @@
     if (isSuccessful) {   
       tokensService.setAuthTokens(response.headers)
 
-      menusStore.updateAndSetCurrent(response.data)
+      menusStore.updateAndSetCurrent(response.data, { view: 'with_dishes' })
       contentsStore.setContent('RestaurantShowView')
     }
   }  

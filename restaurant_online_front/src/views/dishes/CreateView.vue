@@ -1,26 +1,33 @@
 <script setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import DishForm from '../../components/dishes/DishForm.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
   import dishCreateService from '../services/modelCreateServices/modelCreateService'
+  import { useMenusStore } from '../menus/stores/MenusStore';
+  import { useContentsStore } from '../restaurants/stores/ContentsStore';
 
   const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
 
-  const dish = ref({ name:'', menu_id: props.menu.id })
+  const menusStore = useMenusStore()
+  const currentMenu = computed(() => menusStore.currentMenu)
+  const contentsStore = useContentsStore()
+  const dish = ref({ name:'', menu_id: currentMenu.value.id })
   const errors = ref([])
 
-  const createDish = async () => {
+  const createDish = async (modefiedDish) => {
     let args = {
-      postUrl: `http://localhost:3000/menus/${dish.value.menu_id}/dishes`,
-      data: dish.value,
+      postUrl: `http://localhost:3000/menus/${currentMenu.value.id}/dishes`,
+      data: modefiedDish.attributes,
       requestOptions: { 
         headers: tokensService.auth_headers()
       }
     }
-    let successfullCallback = () => emits('data-change')
-    dishCreateService.createModel(dishApi, args, successfullCallback, errors)
+    await dishCreateService.createModel(dishApi, args, errors, () => {
+      menusStore.updateAndSetCurrent(currentMenu.value, { view:'with_dishes' })
+      contentsStore.setContent('RestaurantShowView')
+    })
   }
 
 </script>

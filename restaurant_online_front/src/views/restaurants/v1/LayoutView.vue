@@ -7,6 +7,7 @@ import RestaurantShowView from './ShowView.vue';
 import RestaurantEditView from '../v1/EditView.vue'
 import MenuEditView from  '../../menus/EditView.vue'
 import DishEditView from '../../dishes/EditView.vue'
+import DishCreateView from '../../dishes/CreateView.vue';
 import CreateWelcomeView from '../../CreateWelcomeView.vue';
 import MenuCreateView from '../../menus/CreateView.vue';
 
@@ -16,6 +17,7 @@ const contents = {
   RestaurantEditView,
   MenuEditView,
   DishEditView,
+  DishCreateView,
   CreateWelcomeView,
   MenuCreateView
 }

@@ -5,7 +5,6 @@ import tokensService from '../../services/tokensService';
 const apiIndexMenus = async (authHeaders, restaurantId, options) => {
   let getUrl = `http://localhost:3000/restaurants/${restaurantId}/menus?`
 
-  debugger
   if (!!options['view'])
     getUrl += `view=${options['view']}`
   

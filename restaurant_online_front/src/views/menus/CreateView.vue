@@ -20,7 +20,7 @@
     let args = {
       postUrl: `http://localhost:3000/restaurants/${currentRestaurant.value.id}/menus`,
       data: modefiedMenu.attributes,
-      requestOptions: { 
+      requestOptions: {     
         headers: tokensService.auth_headers()
       }
     }
