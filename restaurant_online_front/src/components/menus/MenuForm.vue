@@ -6,11 +6,13 @@
 
   const modefiedMenu = ref({ 
     id: props.menu.id,
-    updateAttributes: {}
+    attributes: {
+      restaurant_id: props.menu.restaurant_id,
+    }
   })
 
   const inlcudeAttribute = (attr) => {
-    modefiedMenu.value.updateAttributes[attr] = props.menu[attr]
+    modefiedMenu.value.attributes[attr] = props.menu[attr]
   }
 </script>
 

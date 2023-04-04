@@ -1,4 +1,11 @@
 <script setup>
+  import { useContentsStore } from './restaurants/stores/ContentsStore';
+
+  const contentsStore = useContentsStore()
+
+  const createMenu = () => {
+    contentsStore.setContent('MenuCreateView')
+  }
 </script>
 
 <template>
@@ -7,7 +14,7 @@
       <h1>Restaurant</h1>
     </div>
 
-    <div class="create-element">
+    <div class="create-element" @click="createMenu">
       <h1>Menu</h1>
     </div>
 

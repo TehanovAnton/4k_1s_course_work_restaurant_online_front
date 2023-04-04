@@ -36,7 +36,7 @@ const apiShowMenu = async (authHeaders, menu) => {
 
 const apiUpdateMenu = async (authHeaders, menu) => {
   let updateUrl = `http://localhost:3000/menus/${menu.id}`
-  let data = menu.updateAttributes
+  let data = menu.attributes
     
   let response = await axios.put(
     updateUrl, 

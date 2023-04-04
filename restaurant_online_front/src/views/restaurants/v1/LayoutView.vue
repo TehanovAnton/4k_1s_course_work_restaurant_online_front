@@ -8,6 +8,7 @@ import RestaurantEditView from '../v1/EditView.vue'
 import MenuEditView from  '../../menus/EditView.vue'
 import DishEditView from '../../dishes/EditView.vue'
 import CreateWelcomeView from '../../CreateWelcomeView.vue';
+import MenuCreateView from '../../menus/CreateView.vue';
 
 const contentsStore = useContentsStore()
 const contents = {
@@ -15,7 +16,8 @@ const contents = {
   RestaurantEditView,
   MenuEditView,
   DishEditView,
-  CreateWelcomeView
+  CreateWelcomeView,
+  MenuCreateView
 }
 </script>
 
