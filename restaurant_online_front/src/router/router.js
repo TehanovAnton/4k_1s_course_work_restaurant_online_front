@@ -16,6 +16,12 @@ const router = createRouter({
     },
 
     {
+      path: '/restaurants/:id/index',
+      name: 'restaurantIndex',
+      component: () => import('../views/restaurants/v1/LayoutView.vue')
+    },
+
+    {
       path: '/sign_up',
       name: 'sign_up',
       component: () => import('../views/auth/SignUpView.vue'),
