@@ -2,15 +2,17 @@
   import { ref } from 'vue';
 
   const props = defineProps(['menu', 'actionName'])
-  const emits = defineEmits(['formSubmit'])
+  const emits = defineEmits(['formSubmit', 'cancel'])
 
   const modefiedMenu = ref({ 
     id: props.menu.id,
-    updateAttributes: {}
+    attributes: {
+      restaurant_id: props.menu.restaurant_id,
+    }
   })
 
   const inlcudeAttribute = (attr) => {
-    modefiedMenu.value.updateAttributes[attr] = props.menu[attr]
+    modefiedMenu.value.attributes[attr] = props.menu[attr]
   }
 </script>
 
@@ -22,6 +24,12 @@
                          :on-change="inlcudeAttribute('name')" />
     </div>
 
-    <button type="button" @click="$emit('formSubmit', modefiedMenu)">{{ actionName }}</button>
+    <button type="button" @click="$emit('formSubmit', modefiedMenu)">
+      {{ actionName }}
+    </button>
+
+    <button type="button" @click="$emit('cancel')">
+      back
+    </button>
   </form>
 </template>

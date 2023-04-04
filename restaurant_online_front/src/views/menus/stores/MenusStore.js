@@ -16,16 +16,18 @@ export const useMenusStore = defineStore('menusStore', () => {
     currentMenu.value = menu
   }
 
-  const updateAndSetCurrent = async (menu) => {
+  const updateAndSetCurrent = async (menu, options = {}) => {
     fetchMenus((response) => {
-      currentMenu.value = response.data.filter(m => m.id === menu.id)[0]
-    })
+        currentMenu.value = response.data.filter(m => m.id === menu.id)[0]
+      },
+      options
+    )
   }
 
-  const fetchMenus = async (callback) => {
+  const fetchMenus = async (callback, options = {}) => {
     let { response, isSuccessful } = await menuservice.apiIndexMenus(tokensService.auth_headers(),
                                                                      restaurantsStore.currentRestaurant.id,
-                                                                     {})
+                                                                     options)
     if (isSuccessful) {
       tokensService.setAuthTokens(response.headers)
       restaurantsStore.currentRestaurant.menus = response.data

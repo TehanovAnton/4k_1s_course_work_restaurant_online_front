@@ -7,13 +7,21 @@ import RestaurantShowView from './ShowView.vue';
 import RestaurantEditView from '../v1/EditView.vue'
 import MenuEditView from  '../../menus/EditView.vue'
 import DishEditView from '../../dishes/EditView.vue'
+import DishCreateView from '../../dishes/CreateView.vue';
+import CreateWelcomeView from '../../CreateWelcomeView.vue';
+import MenuCreateView from '../../menus/CreateView.vue';
+import MenuIndexView from '../../../components/menus/v1/IndexView.vue';
 
 const contentsStore = useContentsStore()
 const contents = {
   RestaurantShowView,
   RestaurantEditView,
   MenuEditView,
-  DishEditView
+  DishEditView,
+  DishCreateView,
+  CreateWelcomeView,
+  MenuCreateView,
+  MenuIndexView
 }
 </script>
 
@@ -39,18 +47,6 @@ const contents = {
 
   .oc-width {
     width: 80%;    
-  }
-
-  .o-height {
-    height: 300px;
-  }
-
-  .overviews {    
-    align-items: center;
-
-    background-color: #c5bfbf;
-    display: flex;
-    justify-content: space-evenly;
   }
 
   .secondary-model-container {

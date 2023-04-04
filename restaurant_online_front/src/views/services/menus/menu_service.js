@@ -5,7 +5,6 @@ import tokensService from '../../services/tokensService';
 const apiIndexMenus = async (authHeaders, restaurantId, options) => {
   let getUrl = `http://localhost:3000/restaurants/${restaurantId}/menus?`
 
-  debugger
   if (!!options['view'])
     getUrl += `view=${options['view']}`
   
@@ -36,7 +35,7 @@ const apiShowMenu = async (authHeaders, menu) => {
 
 const apiUpdateMenu = async (authHeaders, menu) => {
   let updateUrl = `http://localhost:3000/menus/${menu.id}`
-  let data = menu.updateAttributes
+  let data = menu.attributes
     
   let response = await axios.put(
     updateUrl, 

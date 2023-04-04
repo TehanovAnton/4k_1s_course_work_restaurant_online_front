@@ -10,9 +10,8 @@
 
   const menusStore = useMenusStore()
   const contentsStore = useContentsStore()
-  const currentMenu = computed(() => {
-    return menusStore.currentMenu
-  })
+  const currentMenu = computed(() => menusStore.currentMenu)
+  const showRestaurant = () => contentsStore.setContent('RestaurantShowView')
 
   const updatMenu = async (menu) => {
     let { 
@@ -23,7 +22,7 @@
     if (isSuccessful) {   
       tokensService.setAuthTokens(response.headers)
 
-      menusStore.updateAndSetCurrent(response.data)
+      menusStore.updateAndSetCurrent(response.data, { view: 'with_dishes' })
       contentsStore.setContent('RestaurantShowView')
     }
   }  
@@ -37,5 +36,6 @@
 </script>
 
 <template>
-  <MenuForm :menu="currentMenu" action-name="update" @form-submit="updatMenu"/>
+  <MenuForm :menu="currentMenu" action-name="update"
+            @form-submit="updatMenu" @cancel="showRestaurant"/>
 </template>

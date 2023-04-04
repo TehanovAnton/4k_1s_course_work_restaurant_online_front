@@ -10,8 +10,8 @@
   const dishesStore = useDishesStore()
   const contentsStore = useContentsStore()
  
-  const updatDish = async (modefiedDish) => {
-    debugger
+  const showRestaurant = () => contentsStore.setContent('RestaurantShowView')
+  const updateDish = async (modefiedDish) => {
     let args = {
       updateUrl: `http://localhost:3000/dishes/${modefiedDish.id}`,
       data: modefiedDish.updateAttributes,
@@ -30,8 +30,8 @@
 <template>
   <div class="block">
     Edit Dish:
-    <DishForm :dish="dishesStore.currentDish" action-name="update" @form-submit="updatDish"/>
-
+    <DishForm :dish="dishesStore.currentDish" action-name="update"
+              @form-submit="updateDish" @cancel="showRestaurant"/>
     <slot />
   </div>  
 </template>

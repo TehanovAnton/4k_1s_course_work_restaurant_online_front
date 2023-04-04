@@ -1,9 +1,19 @@
+<script setup>
+  import { useContentsStore } from '../../stores/ContentsStore';
+
+  const contentsStore = useContentsStore()
+
+  const createWelcome = () => {
+    contentsStore.setContent('CreateWelcomeView')
+  }
+</script>
+
 <template>
-  <div class="r-header">
+  <div class="r-header" :on-click="createWelcome">
     <p class="h-element">Restaourants</p>
     <p class="h-element">Profile</p>
     <p class="h-element">Search</p>
-    <p class="h-element">Create</p>
+    <button @click="createWelcome">Create</button>
   </div>
 </template>
 

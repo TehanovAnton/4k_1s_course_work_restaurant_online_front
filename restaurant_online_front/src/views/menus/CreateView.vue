@@ -1,30 +1,33 @@
 <script setup>
-  import { onBeforeMount, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import MenuForm from '../../components/menus/MenuForm.vue';
   import menuCreateService from '../services/modelCreateServices/modelCreateService'
   import menuApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
-
-  onBeforeMount(() => {
-    menu.value.restaurant_id = props.restaurant.id
-  })
+  import { useContentsStore } from '../restaurants/stores/ContentsStore';
+  import { useRestaurantsStore } from '../restaurants/stores/RestaurantsStore';
 
   const props = defineProps(['restaurant'])
   const emits = defineEmits(['data-change'])
 
-  const menu = ref({ name:'', restaurant_id: '' })
+  const contentsStore = useContentsStore()
+  const restaurantsStore = useRestaurantsStore()
+  const currentRestaurant = computed(() => restaurantsStore.currentRestaurant)
+  const menu = ref({ restaurant_id: currentRestaurant.value.id })
   const errors = ref([])
 
-  const createMenu = async () => {    
+  const createMenu = async (modefiedMenu) => {
     let args = {
-      postUrl: `http://localhost:3000/restaurants/${menu.value.restaurant_id}/menus`,
-      data: menu.value,
-      requestOptions: { 
+      postUrl: `http://localhost:3000/restaurants/${currentRestaurant.value.id}/menus`,
+      data: modefiedMenu.attributes,
+      requestOptions: {     
         headers: tokensService.auth_headers()
       }
     }
-    let successfullCallback = () => emits('data-change')
-    menuCreateService.createModel(menuApi, args, successfullCallback, errors)
+
+    await menuCreateService.createModel(menuApi, args, errors, () => {
+      contentsStore.setContent('RestaurantShowView')
+    })
   }
 
 </script>

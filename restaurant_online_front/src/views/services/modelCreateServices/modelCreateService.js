@@ -1,5 +1,5 @@
 
-const createModel = async (modelApi, args, successfulCallback, errors) => {
+const createModel = async (modelApi, args, errors, successfulCallback) => {
   let { response, isSuccessful } = await modelApi.apiCreateModel(args)
 
   if (isSuccessful) {
