@@ -1,17 +1,25 @@
 <script setup>
-  import { computed } from '@vue/reactivity';
-  import MenuForm from '../../components/menus/MenuForm.vue';  
+  import { computed, ref } from '@vue/reactivity';
+  import MenuForm from '../../components/menus/MenuForm.vue';
+  import Errors from '../../components/errors/Errors.vue';
+  import CurrentMenu from './v1/components/CurrentMenu.vue';
   import service from '../services/menus/menu_service'
   import tokensService from '../services/tokensService';
   import { useMenusStore } from './stores/MenusStore';
   import { useContentsStore } from '../restaurants/stores/ContentsStore';
+  import { useMenuFormErrorsStore } from './stores/MenuFormErrorsStore'
 
   const emits = defineEmits(['data-change'])
 
   const menusStore = useMenusStore()
   const contentsStore = useContentsStore()
-  const currentMenu = computed(() => menusStore.currentMenu)
-  const showRestaurant = () => contentsStore.setContent('RestaurantShowView')
+  const menuFormErrorsStore = useMenuFormErrorsStore()
+  const showRestaurant = () => {
+    menuFormErrorsStore.clearErrors()
+    contentsStore.setContent('RestaurantShowView')
+  }
+
+  const currentMenuCopy = ref(Object.assign({}, menusStore.currentMenu))
 
   const updatMenu = async (menu) => {
     let { 
@@ -19,23 +27,23 @@
       isSuccessful
     } = await service.apiUpdateMenu(tokensService.auth_headers(), menu)
 
-    if (isSuccessful) {   
+    if (isSuccessful) {
       tokensService.setAuthTokens(response.headers)
 
       menusStore.updateAndSetCurrent(response.data, { view: 'with_dishes' })
+      menuFormErrorsStore.clearErrors()
       contentsStore.setContent('RestaurantShowView')
+    } else {
+      menuFormErrorsStore.setErrors(response.data)
     }
-  }  
-
-  const setUpdatedFields = (menu) => {
-    let exceptFields = ['id']
-    Object.keys(menu)
-    .filter(field => !exceptFields.includes(field))
-    .forEach(field => { props.menu[field] = menu[field] })
   }
 </script>
 
 <template>
-  <MenuForm :menu="currentMenu" action-name="update"
+  <CurrentMenu>
+    <Errors :errors-store="menuFormErrorsStore" />
+  </CurrentMenu>
+
+  <MenuForm :menu="currentMenuCopy" action-name="update"
             @form-submit="updatMenu" @cancel="showRestaurant"/>
 </template>
