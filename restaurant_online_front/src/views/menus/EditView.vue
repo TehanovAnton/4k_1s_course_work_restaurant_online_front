@@ -1,6 +1,7 @@
 <script setup>
   import { computed, ref } from '@vue/reactivity';
   import MenuForm from '../../components/menus/MenuForm.vue';
+  import Errors from '../../components/errors/Errors.vue';
   import CurrentMenu from './v1/components/CurrentMenu.vue';
   import service from '../services/menus/menu_service'
   import tokensService from '../services/tokensService';
@@ -13,7 +14,6 @@
   const menusStore = useMenusStore()
   const contentsStore = useContentsStore()
   const menuFormErrorsStore = useMenuFormErrorsStore()
-  const errorsPresent = computed(() => menuFormErrorsStore.errorsPresent)
   const showRestaurant = () => {
     menuFormErrorsStore.clearErrors()
     contentsStore.setContent('RestaurantShowView')
@@ -41,14 +41,9 @@
 
 <template>
   <CurrentMenu>
-    <div class="menu-form-errors" v-if="errorsPresent">
-      <ul>
-        <li v-for="error in menuFormErrorsStore.errors.value">
-          {{ error }}
-        </li>
-      </ul>
-    </div>
+    <Errors :errors-store="menuFormErrorsStore" />
   </CurrentMenu>
+
   <MenuForm :menu="currentMenuCopy" action-name="update"
             @form-submit="updatMenu" @cancel="showRestaurant"/>
 </template>

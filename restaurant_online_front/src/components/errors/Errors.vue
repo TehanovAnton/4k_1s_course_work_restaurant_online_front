@@ -1,17 +1,13 @@
 <script setup>
-    const props = defineProps([
-        'errors'
-    ])
-
-    const isErrorsPresent = () => {
-        return props.errors.length != 0;
-    }
+  const props = defineProps(['errorsStore'])
 </script>
 
 <template>
-    <div v-if="isErrorsPresent()" v-for="error in props.errors" class="errors">
-        <p>
-            {{ error }}
-        </p>
-    </div>
+  <div class="menu-form-errors" v-if="errorsStore.errorsPresent">
+    <ul>
+      <li v-for="error in errorsStore.errors.value">
+        {{ error }}
+      </li>
+    </ul>
+  </div>
 </template>
