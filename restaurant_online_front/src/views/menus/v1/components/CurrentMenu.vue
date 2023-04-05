@@ -17,6 +17,8 @@
       <h1>{{ currentMenu.name }}</h1>
       <button @click="indexMenus">All Menus</button>
     </EditIconWrap>
+
+    <slot />
   </div>
 </template>
 
