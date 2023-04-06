@@ -3,6 +3,8 @@
   import { useMenusStore } from '../../../views/menus/stores/MenusStore';
   import ImageInput from './inputs/ImageInput.vue';
   import NameInput from './inputs/NameInput.vue';
+  import PriceInput from './inputs/PriceInput.vue'
+  import DescriptionInput from './inputs/DescriptionInput.vue'
 
   const props = defineProps(['dish', 'actionName'])
   const emits = defineEmits(['formSubmit', 'cancel'])
@@ -37,6 +39,14 @@
 
     <div class="centrenize-content-column">
       <NameInput :init-value="dish.name" @name-change="inlcudeAttribute" />
+    </div>
+
+    <div>
+      <DescriptionInput :init-value="dish.description" @description-change="inlcudeAttribute"/>
+    </div>
+
+    <div>
+      <PriceInput :init-value="dish.price_cents" @price-change="inlcudeAttribute" />
     </div>
 
     <button type="button" @click="$emit('formSubmit', modefiedDish)">
