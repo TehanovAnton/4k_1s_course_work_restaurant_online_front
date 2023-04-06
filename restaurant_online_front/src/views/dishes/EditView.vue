@@ -35,6 +35,7 @@
     let { isSuccessful, response } = await dishApi.apiUpdateModel(args)
 
     if (isSuccessful) {
+      await dishesStore.updateAndSetCurrent()
       contentsStore.setContent('RestaurantShowView')
     } else {
       dishFormErrorsStore.setErrors(response.data)

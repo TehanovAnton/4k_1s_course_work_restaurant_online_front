@@ -20,13 +20,14 @@ export const useDishesStore = defineStore('dishesStore', () => {
 
   const updateAndSetCurrent = async (dish) => {
     fetchDishes((response) => {
-      currentDish.value = response.data.filter(m => m.id === dish.id)[0]
+      if (!!dish)
+        currentDish.value = response.data.filter(m => m.id === dish.id)[0]
     })
   }
 
   const fetchDishes = async (callback) => {
     let args = { 
-      getUrl: `http://localhost:3000/menus/${currentMenu.id}/dishes?`,
+      getUrl: `http://localhost:3000/menus/${currentMenu.value.id}/dishes?`,
       requestOptions: { 
         headers: tokensService.auth_headers()
       }
@@ -35,7 +36,7 @@ export const useDishesStore = defineStore('dishesStore', () => {
     let { 
       response, 
       isSuccessful 
-    } = await dishApi.apiIndexDishes(args)
+    } = await dishApi.apiIndexModels(args)
     
     if (isSuccessful) {
       menusStore.currentMenu.dishes = response.data
