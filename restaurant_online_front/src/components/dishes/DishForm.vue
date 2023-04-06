@@ -1,6 +1,7 @@
 <script setup>
   import { ref } from 'vue';
   import { useMenusStore } from '../../views/menus/stores/MenusStore';
+  import AttacheImage from './AttacheImage.vue';
 
   const props = defineProps(['dish', 'actionName'])
   const emits = defineEmits(['formSubmit', 'cancel'])
@@ -12,8 +13,14 @@
       menu_id: props.dish.menu_id
     }
   })
+  const dishImage = ref({})
+  const setDishImage = (event) => {
+    debugger
+    modefiedDish.value.attributes['image'] = event.target.files[0]
+  }
 
-  const inlcudeAttribute = (attr, sourceObjectAttr = attr, sourceObject = props.dish) => {  
+  const inlcudeAttribute = (attr, sourceObjectAttr = attr, sourceObject = props.dish) => {
+    // debugger
     modefiedDish.value.attributes[attr] = sourceObject[sourceObjectAttr]
   }
 </script>
@@ -30,6 +37,13 @@
         </option>
       </select>
     </div>
+
+    <!-- <div>
+      <input type="file" accept="image/*"
+             @change="setDishImage"/>
+    </div> -->
+
+    <AttacheImage :dish="dish" />
 
     <div class="centrenize-content-column">
       <label for="d-name">Name: </label>
