@@ -32,7 +32,6 @@
     }
     args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
 
-    debugger
     let { isSuccessful, response } = await dishApi.apiUpdateModel(args)
 
     if (isSuccessful) {
