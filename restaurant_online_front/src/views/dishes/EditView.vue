@@ -23,24 +23,15 @@
   const currentDishCopy = ref(Object.assign({}, dishesStore.currentDish))
 
   const updateDish = async (modefiedDish) => {
-    let formData = new FormData()
-
-    Object.keys(modefiedDish.attributes).forEach((attribute) => {
-      let attributeValue = modefiedDish.attributes[attribute],
-          formAttribute = `dish[${attribute}]`
-      formData.append(formAttribute, attributeValue)  
-    })
-
-    let headers = tokensService.auth_headers()
-    headers["Content-Type"] = "multipart/form-data"
-
     let args = {
       updateUrl: `http://localhost:3000/dishes/${modefiedDish.id}`,
-      data: formData,
+      data: '',
       requestOptions: {
-        headers: headers
+        headers: ''
       }
     }
+    args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
+
     let { isSuccessful, response } = await dishApi.apiUpdateModel(args)
 
     if (isSuccessful) {

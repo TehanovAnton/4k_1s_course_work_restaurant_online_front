@@ -19,11 +19,13 @@
   const createDish = async (modefiedDish) => {
     let args = {
       postUrl: `http://localhost:3000/menus/${currentMenu.value.id}/dishes`,
-      data: modefiedDish.attributes,
+      data:'',
       requestOptions: { 
-        headers: tokensService.auth_headers()
+        headers:''
       }
     }
+    args = args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
+
     await dishCreateService.createModel(dishApi, args, errors, () => {
       menusStore.updateAndSetCurrent(currentMenu.value, { view:'with_dishes' })
       contentsStore.setContent('RestaurantShowView')
