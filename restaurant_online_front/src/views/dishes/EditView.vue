@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue';
-  import DishForm from '../../components/dishes/DishForm.vue';
+  import DishForm from '../../components/dishes/form/DishForm.vue';
   import Errors from '../../components/errors/Errors.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
@@ -23,11 +23,22 @@
   const currentDishCopy = ref(Object.assign({}, dishesStore.currentDish))
 
   const updateDish = async (modefiedDish) => {
+    let formData = new FormData()
+
+    Object.keys(modefiedDish.attributes).forEach((attribute) => {
+      let attributeValue = modefiedDish.attributes[attribute],
+          formAttribute = `dish[${attribute}]`
+      formData.append(formAttribute, attributeValue)  
+    })
+
+    let headers = tokensService.auth_headers()
+    headers["Content-Type"] = "multipart/form-data"
+
     let args = {
       updateUrl: `http://localhost:3000/dishes/${modefiedDish.id}`,
-      data: modefiedDish.attributes,
+      data: formData,
       requestOptions: {
-        headers: tokensService.auth_headers()
+        headers: headers
       }
     }
     let { isSuccessful, response } = await dishApi.apiUpdateModel(args)

@@ -1,6 +1,6 @@
 <script setup>
   import { computed, ref } from 'vue';
-  import DishForm from '../../components/dishes/DishForm.vue';
+  import DishForm from '../../components/dishes/form/DishForm.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
   import dishCreateService from '../services/modelCreateServices/modelCreateService'
