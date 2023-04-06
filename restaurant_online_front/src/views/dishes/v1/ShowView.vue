@@ -1,18 +1,19 @@
 <script setup>
-import { computed } from '@vue/reactivity';
-import EditIcon from '../../restaurants/v1/components/EditIcon.vue';
-import { useContentsStore } from '../../restaurants/stores/ContentsStore';
-import { useDishesStore } from '../stores/DishesStore';
+  import { computed } from '@vue/reactivity';
+  import EditIcon from '../../restaurants/v1/components/EditIcon.vue';
+  import { useContentsStore } from '../../restaurants/stores/ContentsStore';
+  import { useDishesStore } from '../stores/DishesStore';
 
-const props = defineProps(['dish'])
-const dish = computed(() => props.dish)
-const contentsStore = useContentsStore()
-const dishesStore = useDishesStore()
+  const props = defineProps(['dish'])
 
-const editDish = () => {
-  dishesStore.setDish(dish.value)
-  contentsStore.setContent('DishEditView')
-}
+  const contentsStore = useContentsStore()
+  const dishesStore = useDishesStore()
+  const dish = computed(() => props.dish)
+
+  const editDish = () => {
+    dishesStore.setDish(dish.value)
+    contentsStore.setContent('DishEditView')
+  }
 </script>
 
 <template>
@@ -23,7 +24,9 @@ const editDish = () => {
       </p>
 
       <p>
-        image
+        <img id="output"
+             width="200"
+             :src="dish.image"/>
       </p>
 
       <p>

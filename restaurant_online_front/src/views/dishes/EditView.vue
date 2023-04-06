@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue';
-  import DishForm from '../../components/dishes/DishForm.vue';
+  import DishForm from '../../components/dishes/form/DishForm.vue';
   import Errors from '../../components/errors/Errors.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
@@ -25,14 +25,17 @@
   const updateDish = async (modefiedDish) => {
     let args = {
       updateUrl: `http://localhost:3000/dishes/${modefiedDish.id}`,
-      data: modefiedDish.attributes,
+      data: '',
       requestOptions: {
-        headers: tokensService.auth_headers()
+        headers: ''
       }
     }
+    args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
+
     let { isSuccessful, response } = await dishApi.apiUpdateModel(args)
 
     if (isSuccessful) {
+      await dishesStore.updateAndSetCurrent()
       contentsStore.setContent('RestaurantShowView')
     } else {
       dishFormErrorsStore.setErrors(response.data)

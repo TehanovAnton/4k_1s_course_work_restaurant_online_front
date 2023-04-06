@@ -96,11 +96,28 @@ const urlOptionsEditor = (url, options) => {
   return url
 }
 
+const formDataArgs = (args, attributes, headers) => {
+  let formData = new FormData()
+
+  Object.keys(attributes).forEach((attribute) => {
+    let attributeValue = attributes[attribute],
+        formAttribute = `dish[${attribute}]`
+    formData.append(formAttribute, attributeValue)  
+  })
+
+  headers["Content-Type"] = "multipart/form-data"
+
+  args.requestOptions['headers'] = headers
+  args.data = formData
+  return args
+}
+
 export default {
   apiIndexModels,
   apiCreateModel,
   apiUpdateModel,
   apiDeletModel,
   can,
-  urlOptionsEditor
+  urlOptionsEditor,
+  formDataArgs
 }
