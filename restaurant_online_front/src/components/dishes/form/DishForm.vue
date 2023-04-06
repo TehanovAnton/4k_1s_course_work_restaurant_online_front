@@ -5,6 +5,7 @@
   import NameInput from './inputs/NameInput.vue';
   import PriceInput from './inputs/PriceInput.vue'
   import DescriptionInput from './inputs/DescriptionInput.vue'
+  import MenuSelectInput from './inputs/MenuSelectInput.vue';
 
   const props = defineProps(['dish', 'actionName'])
   const emits = defineEmits(['formSubmit', 'cancel'])
@@ -20,22 +21,23 @@
   const inlcudeAttribute = (attr, sourceObjectAttr = attr, sourceObject = props.dish) => {
     modefiedDish.value.attributes[attr] = sourceObject[sourceObjectAttr]
   }
+
+  const includeMenuAttribute = (attr, sourceObjectAttr = attr, sourceObject) => {
+    debugger
+    menusStore.setMenu(sourceObject)
+    inlcudeAttribute(attr, sourceObjectAttr, sourceObject)
+  }
 </script>
 
 <template>
   <form>
     <div v-if="actionName == 'create'">
-      <label for="menu-slect">Choose Menu</label>
-      <select v-model="menusStore.currentMenu"
-              @change="inlcudeAttribute('menu_id', 'id', menusStore.currentMenu)">
-        <option v-for="menu in menusStore.menus"
-                v-bind:value="menu">
-          {{ menu.name }}
-        </option>
-      </select>
+      <MenuSelectInput :init-value="menusStore.currentMenu"
+                       :menus="menusStore.menus"
+                       @menu-change="includeMenuAttribute" />
     </div>
 
-    <ImageInput @img-change="inlcudeAttribute" />
+    <ImageInput :init-value="dish.image" @img-change="inlcudeAttribute" />
 
     <div class="centrenize-content-column">
       <NameInput :init-value="dish.name" @name-change="inlcudeAttribute" />

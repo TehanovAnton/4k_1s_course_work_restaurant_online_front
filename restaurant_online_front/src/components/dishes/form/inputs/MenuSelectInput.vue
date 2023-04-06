@@ -1,8 +1,10 @@
 <script setup>
-  const props = defineProps(['menus'])
+  import { ref } from 'vue';
+
+  const props = defineProps(['initValue', 'menus'])
   const emits = defineEmits(['menuChange'])
 
-  const choosenMenu = ref({})
+  const choosenMenu = ref(props.initValue)
 
   const setMenu = () => {
     emits('menuChange', 'menu_id', 'id', choosenMenu.value)

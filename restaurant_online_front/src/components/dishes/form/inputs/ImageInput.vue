@@ -1,9 +1,10 @@
 <script setup>
   import { ref } from 'vue';
 
+  const props = defineProps(['initValue'])
   const emits = defineEmits(['imgChange'])
 
-  const image = ref({ file:'', src:'' })
+  const image = ref({ file:'', src: props.initValue })
 
   const setImage = (event) => {
     let file = event.target.files[0],
@@ -16,7 +17,7 @@
 
 <template>
   <p>
-    <input type="file"  
+    <input type="file"
             accept="image/*"
             name="image"
             id="file"
