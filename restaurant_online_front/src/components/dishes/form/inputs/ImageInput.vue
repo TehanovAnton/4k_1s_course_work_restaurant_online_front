@@ -12,25 +12,6 @@
     
     emits('imgChange', 'image', 'file', image.value)
   }
-
-  // const attache = async () => {
-  //   let formData = new FormData()
-  //   formData.append('image', imageObject.value.file)
-
-  //   let headers = tokensService.auth_headers()
-  //   headers["Content-Type"] = "multipart/form-data"
-
-  //   let args = {
-  //     updateUrl: `http://localhost:3000/dishes/${props.dish.id}/attache_image`,
-  //     data: formData,
-  //     requestOptions: {
-  //       headers: headers
-  //     }
-  //   }
-
-  //   debugger
-  //   await dishApi.apiUpdateModel(args)
-  // }
 </script>
 
 <template>
