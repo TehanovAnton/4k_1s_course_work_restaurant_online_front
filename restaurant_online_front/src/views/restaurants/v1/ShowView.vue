@@ -1,5 +1,4 @@
 <script setup>
-  import EditIconWrap from './components/EditIconWrap.vue';
   import DishesIndexView from '../../dishes/v1/IndexView.vue';
   import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue';
   import CurrentRestaurant from './CurrentRestaurant.vue';

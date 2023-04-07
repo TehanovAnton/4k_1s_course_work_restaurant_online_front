@@ -1,19 +1,31 @@
 <script setup>
   import { computed } from '@vue/reactivity';
   import EditIcon from '../../restaurants/v1/components/EditIcon.vue';
+  import AddToBasketIcon from '../../orders/baskets/AddToBasketIcon.vue';
+  import RemoveFromBasketIcon from '../../orders/baskets/RemoveFromBasketIcon.vue';
   import { useContentsStore } from '../../restaurants/stores/ContentsStore';
   import { useDishesStore } from '../stores/DishesStore';
+  import { useBasketsStore } from '../../orders/stores/BasketsStore';
 
   const props = defineProps(['dish'])
 
   const contentsStore = useContentsStore()
   const dishesStore = useDishesStore()
+  const basketsStore = useBasketsStore()
   const dish = computed(() => props.dish)
 
   const editDish = () => {
     dishesStore.setDish(dish.value)
     contentsStore.setContent('DishEditView')
   }
+
+  const addDishToBasket = () => {
+    basketsStore.addDish(dish.value)
+  }
+
+  const removeDishFromBasket = () => {
+    basketsStore.removeDish(dish.value)
+  } 
 </script>
 
 <template>
@@ -40,6 +52,8 @@
 
     <div class="dish-edit-icon">
       <EditIcon @icon-click="editDish" />
+      <AddToBasketIcon @icon-click="addDishToBasket" />
+      <RemoveFromBasketIcon @icon-click="removeDishFromBasket" />
     </div>
   </div>
 </template>
@@ -65,6 +79,8 @@
     flex: 1;
     height: 152px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
   }
 </style>
