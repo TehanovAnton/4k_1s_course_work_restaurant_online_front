@@ -23,7 +23,6 @@
   }
 
   const includeMenuAttribute = (attr, sourceObjectAttr = attr, sourceObject) => {
-    debugger
     menusStore.setMenu(sourceObject)
     inlcudeAttribute(attr, sourceObjectAttr, sourceObject)
   }
