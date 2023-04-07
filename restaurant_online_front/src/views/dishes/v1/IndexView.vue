@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  {{ basketsStore.currentBasket }}
+  {{ basketsStore.baskets }}
   <ShowView v-for="dish in dishesStore.dishes"
             :dish="dish"/>
 </template>
