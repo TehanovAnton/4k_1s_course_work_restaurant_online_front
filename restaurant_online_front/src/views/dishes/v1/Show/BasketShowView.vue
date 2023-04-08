@@ -50,41 +50,51 @@
       </div>
 
       <div class="basket-dish-count">
-        <AddIcon @icon-click="incBasketDishCount(dish)" />
-        {{ basketsStore.basketDishCount(dish) }}
-        <RemoveIcon @icon-click="decrementBasketDishCount(dish)" />
-      </div>
-    </div>
+        <div class="dish-counter">
+          <AddIcon @icon-click="incBasketDishCount(dish)" />
+          {{ basketsStore.basketDishCount(dish) }}
+          <RemoveIcon @icon-click="decrementBasketDishCount(dish)" />
+        </div>
 
-    <div>
-      <BackToContent :content="'RestaurantShowView'" />
+        <div class="">
+          <BackToContent :content="'RestaurantShowView'" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<style>
-  .dish {
-    display: flex;
-    background-color: darkgray;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: inset 0 0 5px 2px black;
-    margin: 5px 0px 0 0px;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-around;
-  }
+<style lang="scss">
+  .backet-show-view {
+    .backet-dishes {
+      display: flex;
+      background-color: darkgray;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: inset 0 0 5px 2px black;
+      margin: 5px 0px 0 0px;
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-around;
+    }
 
-  .dish-content {
-    flex: 20;
-  }
+    .dish-content {
+      flex: 20;
+    }
+    
+    .dish-counter {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
 
-  .dish-edit-icon {
-    flex: 1;
-    height: 152px;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
+    .basket-dish-count {
+      height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 100px;
+      align-items: center;
+    }
   }
 </style>

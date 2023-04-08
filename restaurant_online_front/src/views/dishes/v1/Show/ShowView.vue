@@ -59,7 +59,7 @@
 </template>
 
 <style>
-.dish {
+  .dish {
     display: flex;
     background-color: darkgray;
     border-radius: 15px;
