@@ -55,14 +55,14 @@ export const useBasketsStore = defineStore('basketsStore', () => {
 
   const addDish = (dish) => {
     updateSessionBaskets(() => {
-      // if (baskets.value.length == 0) {
-      //   let initBasket = {
-      //     restaurantId: currentRestaurantId.value,
-      //     dishes: [{ dish_id: dish.id }]
-      //   }
+      if (baskets.value.length == 0) {
+        let initBasket = {
+          restaurantId: currentRestaurantId.value,
+          dishes: [{ dish_id: dish.id }]
+        }
 
-      //   return baskets.value.push(initBasket)
-      // }
+        return baskets.value.push(initBasket)
+      }
 
       currentBasketUpdate((basket) => {
         basket.dishes.push({ dish_id: dish.id })
