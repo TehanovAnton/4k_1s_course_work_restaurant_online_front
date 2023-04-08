@@ -1,5 +1,5 @@
 <script setup>
-import EditIcon from './EditIcon.vue';
+import EditIcon from '../../../icons/EditIcon.vue';
 const emits = defineEmits(['edit-click'])
 
 </script>

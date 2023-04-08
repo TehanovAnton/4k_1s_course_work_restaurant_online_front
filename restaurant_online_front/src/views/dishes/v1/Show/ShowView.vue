@@ -1,11 +1,11 @@
 <script setup>
   import { computed } from '@vue/reactivity';
-  import EditIcon from '../../restaurants/v1/components/EditIcon.vue';
-  import AddToBasketIcon from '../../orders/baskets/AddToBasketIcon.vue';
-  import RemoveFromBasketIcon from '../../orders/baskets/RemoveFromBasketIcon.vue';
-  import { useContentsStore } from '../../restaurants/stores/ContentsStore';
-  import { useDishesStore } from '../stores/DishesStore';
-  import { useBasketsStore } from '../../orders/stores/BasketsStore';
+  import EditIcon from '../../../icons/EditIcon.vue';
+  import AddToBasketIcon from '../../../icons/AddIcon.vue';
+  import RemoveFromBasketIcon from '../../../icons/RemoveIcon.vue';
+  import { useContentsStore } from '../../../restaurants/stores/ContentsStore';
+  import { useDishesStore } from '../../stores/DishesStore';
+  import { useBasketsStore } from '../../../orders/stores/BasketsStore';
 
   const props = defineProps(['dish'])
 

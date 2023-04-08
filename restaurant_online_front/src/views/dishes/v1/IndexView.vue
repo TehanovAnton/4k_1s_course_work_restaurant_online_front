@@ -1,7 +1,7 @@
 <script setup>
   import { useDishesStore } from '../stores/DishesStore';
   import { useBasketsStore } from '../../orders/stores/BasketsStore';
-  import ShowView from './ShowView.vue';
+  import ShowView from './Show/ShowView.vue';
 
   const dishesStore = useDishesStore()
   const basketsStore = useBasketsStore()
