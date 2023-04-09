@@ -8,7 +8,7 @@
 
 <template>
   <LoadOrders>
-    <ShowView 
-              :order="ordersStore.orders[0]"  />
+    <ShowView v-for="order in ordersStore.currentRestaurantOrders"
+              :order="order"  />
   </LoadOrders>
 </template>

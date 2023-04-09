@@ -2,7 +2,7 @@
   const props = defineProps(['order'])
 
   const orderDishCount = (dish) => {
-    let dishes = props.order.dishes.filter(d => d.dish_id === dish.id)
+    let dishes = props.order.dishes.filter(d => d.id === dish.id)
     return dishes.length
   }
 </script>

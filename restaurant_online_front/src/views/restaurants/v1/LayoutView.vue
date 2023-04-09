@@ -13,7 +13,7 @@ import MenuCreateView from '../../menus/CreateView.vue';
 import MenuIndexView from '../../../components/menus/v1/IndexView.vue';
 import BasketShowView from '../../dishes/v1/Show/BasketShowView.vue';
 import OrderCreateView from '../../orders/v1/CreateView.vue';
-import OrderIndexView from '../../orders/v1/IndexView.vue';
+import OrdersIndexView from '../../orders/v1/IndexView.vue';
 
 const contentsStore = useContentsStore()
 const contents = {
@@ -27,7 +27,7 @@ const contents = {
   MenuIndexView,
   BasketShowView,
   OrderCreateView,
-  OrderIndexView
+  OrdersIndexView
 }
 </script>
 

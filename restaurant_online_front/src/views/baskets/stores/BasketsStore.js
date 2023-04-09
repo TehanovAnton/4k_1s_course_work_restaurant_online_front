@@ -98,11 +98,20 @@ export const useBasketsStore = defineStore('basketsStore', () => {
       })
     })
   }
+
+  const clearBasket = () => {
+    updateSessionBaskets(() => {
+      currentBasketUpdate((basket) => {
+        basket.dishes = []
+      })
+    })
+  }
   
   return {
     baskets,
     dishes,
     currentBasket,
+    clearBasket,
     addDish,
     removeDish,
     basketDishCount,
