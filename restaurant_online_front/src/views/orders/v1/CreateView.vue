@@ -1,10 +1,12 @@
 <script setup>
-  import DishesList from './DishesList.vue';
+  import DishesList from '../../baskets/DishesList.vue';
   import OrderForm from '../../../components/orders/v1/OrderForm.vue';
   import order_service from '../../services/orders/order_service';
+  import { useBasketsStore } from '../../baskets/stores/BasketsStore';
+
+  const basketsStore = useBasketsStore()
 
   const createOrder = async (order) => {
-    debugger
     let { isSuccessful } = await order_service.apiCreateOrder(order)
 
     if (isSuccessful) {      
@@ -14,7 +16,7 @@
 </script>
 
 <template>
-  <DishesList />
+  <DishesList :dishes="basketsStore.dishes" />
   <OrderForm :order="{}"
              @form-submit="createOrder" />
 </template>
