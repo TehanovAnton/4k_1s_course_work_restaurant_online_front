@@ -102,6 +102,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
   return {
     baskets,
     dishes,
+    currentBasket,
     addDish,
     removeDish,
     basketDishCount,
