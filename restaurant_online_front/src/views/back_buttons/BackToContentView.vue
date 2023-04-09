@@ -1,7 +1,7 @@
 <script setup>
   import { useContentsStore } from '../restaurants/stores/ContentsStore';
 
-  const props = defineProps(['content'])
+  const props = defineProps(['content', 'name'])
 
   const contentsStore = useContentsStore()
   
@@ -12,6 +12,6 @@
 
 <template>
   <button type="button" @click="setContent(content)">
-    back
+    {{ name }}
   </button>
 </template>
