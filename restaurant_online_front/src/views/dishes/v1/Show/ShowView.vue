@@ -5,7 +5,7 @@
   import RemoveFromBasketIcon from '../../../icons/RemoveIcon.vue';
   import { useContentsStore } from '../../../restaurants/stores/ContentsStore';
   import { useDishesStore } from '../../stores/DishesStore';
-  import { useBasketsStore } from '../../../orders/stores/BasketsStore';
+  import { useBasketsStore } from '../../../baskets/stores/BasketsStore';
 
   const props = defineProps(['dish'])
 

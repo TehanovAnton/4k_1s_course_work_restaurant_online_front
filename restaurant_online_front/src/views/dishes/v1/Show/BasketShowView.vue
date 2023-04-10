@@ -2,7 +2,7 @@
   import { computed } from '@vue/reactivity';
   import { useContentsStore } from '../../../restaurants/stores/ContentsStore';
   import { useDishesStore } from '../../stores/DishesStore';
-  import { useBasketsStore } from '../../../orders/stores/BasketsStore';
+  import { useBasketsStore } from '../../../baskets/stores/BasketsStore';
   import { useMenusStore } from '../../../menus/stores/MenusStore'
   import AddIcon from '../../../icons/AddIcon.vue';
   import RemoveIcon from '../../../icons/RemoveIcon.vue';
@@ -57,7 +57,8 @@
         </div>
 
         <div class="">
-          <BackToContent :content="'RestaurantShowView'" />
+          <BackToContent :content="'RestaurantShowView'" name="back" />
+          <BackToContent :content="'OrderCreateView'" name="Make Order" />
         </div>
       </div>
     </div>
