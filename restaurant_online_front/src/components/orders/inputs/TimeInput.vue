@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue';
-  const props = defineProps(['initValue', 'attribute'])
+  const props = defineProps(['initValue', 'attribute', 'label'])
   const emits = defineEmits(['timeChange'])
 
   const timeValue = ref({
@@ -14,7 +14,7 @@
 
 <template>
   <div class="time-input-container">
-    <label for="time-input">Choose Ready Time</label>
+    <label for="time-input">{{ label }}</label>
     <input id="time-input" type="datetime-local" v-model="timeValue.time" @change="setTime" />
   </div>
 </template>

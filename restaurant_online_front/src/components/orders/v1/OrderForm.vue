@@ -28,9 +28,13 @@
   }
 
   const order = ref(initOrder())
+  const orderPlaceType = computed(() => order.value.attributes.reservation_attributes.place_type)
   const placeType = computed(() => {
     let reservation = props.order.reservation
     return !!reservation ? reservation.place_type : '' 
+  })
+  const placeTypeInside = computed(() => {
+    return orderPlaceType.value === 'inside'
   })
 
   const inlcudeAttribute = (attr, sourceObjectAttr = attr, sourceObject = props.order) => {
@@ -44,7 +48,13 @@
 
 <template>
   <form>
-    <TimeInput attribute="start_at" @time-change="inlcudeAttribute" />
+    <TimeInput attribute="start_at" label="Choose Ready Time"
+               @time-change="inlcudeAttribute" />
+    <TimeInput v-if="placeTypeInside" 
+               attribute="end_at" label="Choose End Time"
+               @time-change="inlcudeAttribute" />
+    <TableInput />
+
     <PlaceTypeInput :init-value="placeType" attribute="place_type"
                     @place-type-change="inlcudeAttribute" />
     <button type="button" @click="formSubmit">Order</button>
