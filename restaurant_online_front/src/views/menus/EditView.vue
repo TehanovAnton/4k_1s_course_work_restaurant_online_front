@@ -40,10 +40,6 @@
 </script>
 
 <template>
-  <CurrentMenu>
-    <Errors :errors-store="menuFormErrorsStore" />
-  </CurrentMenu>
-
   <div class="edit-menu-container">
     <MenuForm :menu="currentMenuCopy" action-name="update" :from-label="'Edit Menu'"
             @form-submit="updatMenu" @cancel="showRestaurant"/>
