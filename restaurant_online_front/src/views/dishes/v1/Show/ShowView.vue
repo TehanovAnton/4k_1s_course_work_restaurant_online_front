@@ -1,5 +1,5 @@
 <script setup>
-  import { computed } from '@vue/reactivity';
+  import { computed, ref } from 'vue';
   import EditIcon from '../../../icons/EditIcon.vue';
   import AddToBasketIcon from '../../../icons/AddIcon.vue';
   import RemoveFromBasketIcon from '../../../icons/RemoveIcon.vue';
@@ -14,73 +14,110 @@
   const basketsStore = useBasketsStore()
   const dish = computed(() => props.dish)
 
+  const selectedDishCount = ref(basketsStore.basketDishCount(dish.value))
+
   const editDish = () => {
     dishesStore.setDish(dish.value)
     contentsStore.setContent('DishEditView')
   }
 
-  const addDishToBasket = () => {
-    basketsStore.addDish(dish.value)
+  const addDishToBasket = (dish) => {
+      basketsStore.incBasketDishCount(dish)
   }
 
-  const removeDishFromBasket = () => {
+  const removeDishFromBasket = (dish) => {
+      basketsStore.decrementBasketDishCount(dish)
+  }
+
+  const increment = (dish) => {
+    addDishToBasket(dish);
+    selectedDishCount.value++
+  };
+
+  const decrement = (dish) => {
+    removeDishFromBasket(dish);
+    selectedDishCount.value--
+  }; 
+
+  const selectDishCount = () => {
     basketsStore.removeDish(dish.value)
-  } 
+    let times = selectedDishCount.value
+
+    for(let i = 0; i < times; ++i)
+      addDishToBasket(dish.value);
+  }
 </script>
 
 <template>
-  <div class="dish">
-    <div class="dish-content">
-      <p>
-        {{ dish.name }}
-      </p>
+  <div class="dish-card">
+    <div class="card">
+      <div class="card-img-top-container">
+        <img src="https://c.ndtvimg.com/2022-06/gp4k2jro_burgers_625x300_20_June_22.jpg?im=FeatureCrop,algorithm=dnn,width=620,height=350" class="card-img-top" alt="...">
+      </div>
 
-      <p>
-        <img id="output"
-             width="200"
-             :src="dish.image"/>
-      </p>
-
-      <p>
-        {{ dish.price_cents }}
-      </p>
-
-      <p>
-        {{ dish.description }}
-      </p>
-  </div>
-
-    <div class="dish-edit-icon">
-      <EditIcon @icon-click="editDish" />
-      <AddToBasketIcon @icon-click="addDishToBasket" />
-      <RemoveFromBasketIcon @icon-click="removeDishFromBasket" />
+      <div class="card-body">
+        <h5 class="card-title">{{ dish.name }}</h5>
+        <p class="card-text text-muted">{{ dish.description }}</p>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" type="button" @click="decrement(dish)">-</button>
+          </div>
+          {{ selectedDishCount }}
+          <select class="form-select" v-model="selectedDishCount" @change="selectDishCount(dish)">
+            <option v-for="i in 11" :value="i-1">{{ i-1 }}</option>
+          </select>
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" @click="increment(dish)">+</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<style>
-  .dish {
-    display: flex;
-    background-color: darkgray;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: inset 0 0 5px 2px black;
-    margin: 5px 0px 0 0px;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-around;
-  }
+<style lang="scss">
+  .dish-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
-  .dish-content {
-    flex: 20;
-  }
+    .dish-card {
+    flex-basis: calc(33.33% - 10px);
+    margin-bottom: 20px;
+      
+      .card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
 
-  .dish-edit-icon {
-    flex: 1;
-    height: 152px;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
+        .card-img-top-wrapper {
+        height: 150px;
+        position: relative;
+        }
+
+        .card-img-top {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        }
+
+        .card-title {
+        font-weight: bold;
+        font-size: 20px;
+        margin: 10px;
+        }
+
+        .card-text {
+        padding: 0 10px;
+        margin-bottom: 10px;
+        color: #666;
+        }
+
+        .price {
+        font-weight: bold;
+        margin: 10px;
+        } 
+      }
+    }
   }
 </style>

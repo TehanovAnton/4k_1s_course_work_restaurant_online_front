@@ -1,5 +1,6 @@
 import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../common_methods';
 import axios from 'axios';
+import router from '../../../router/router';
 
 const apiIndexModels = async (args) => {
   let response = await axios.get(args['getUrl'],
