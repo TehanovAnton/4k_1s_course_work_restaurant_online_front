@@ -21,6 +21,7 @@
     <p class="h-element">Restaourants</p>
     <p class="h-element">Profile</p>
     <p class="h-element">Search</p>
+    <button @click="setContentView('RestaurantsIndexView')">Restaurants</button>
     <button @click="setContentView('OrderIndexView')">Orders</button>
     <button @click="createWelcome">Create</button>
     <button @click="basketShowView">Basket</button>
