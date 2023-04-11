@@ -58,6 +58,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ dish.name }}</h5>
         <p class="card-text text-muted">{{ dish.description }}</p>
+        <EditIcon @icon-click="editDish" />
         <div class="input-group">
           <div class="input-group-prepend">
             <button class="btn btn-outline-secondary" type="button" @click="decrement(dish)">-</button>

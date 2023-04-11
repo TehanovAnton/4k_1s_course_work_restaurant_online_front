@@ -13,5 +13,13 @@
 
 <template>
   <label for="d-description">Description: </label>
-  <textarea id='d-description' v-model="description.description" @change="setDescription" />
+  <textarea id='d-description' class="desc-input" v-model="description.description" @change="setDescription" />
 </template>
+
+<style lang="scss">
+
+  .desc-input {
+    height: 70%;
+    width: 70%;
+  }
+</style>

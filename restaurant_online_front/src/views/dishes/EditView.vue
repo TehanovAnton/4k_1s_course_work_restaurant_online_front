@@ -44,13 +44,21 @@
 </script>
 
 <template>
-  <CurrentMenu>
+  <!-- <CurrentMenu>
     <Errors :errors-store="dishFormErrorsStore" />
-  </CurrentMenu>
+  </CurrentMenu> -->
 
-  <div class="block">
-      Edit Dish:
+  <div class="edit-container">
       <DishForm :dish="currentDishCopy" action-name="update"
                 @form-submit="updateDish" @cancel="showRestaurant"/>
     </div>
 </template>
+
+<style lang="scss">
+  .edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px;
+  }
+</style>

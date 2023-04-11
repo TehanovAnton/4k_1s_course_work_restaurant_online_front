@@ -32,16 +32,20 @@
     </label>
   </p>
 
-  <p>
+  <div class="img-container">
     <img id="output"
-          width="200"
+          width="300"
+          height="200"
           :src="image.src"/>
-  </p>
+  </div>
 </template>
 
 <style>
   .image-input {
     display: none;
+  }
+
+  .img-container {
   }
   
   .image-input-label {
