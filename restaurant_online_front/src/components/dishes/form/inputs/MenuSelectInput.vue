@@ -12,10 +12,16 @@
 </script>
 
 <template>
-  <label for="menu-slect">Choose Menu</label>
-  <select id="menu-slect" v-model="choosenMenu" @change="setMenu">
+  <label for="menu-slect">Menu</label>
+  <select id="menu-slect" class="text-input menu-select" v-model="choosenMenu" @change="setMenu">
     <option v-for="menu in menus" v-bind:value="menu">
       {{ menu.name }}
     </option>
   </select>
 </template>
+
+<style>
+  .menu-select {
+    background: none;
+  }
+</style>

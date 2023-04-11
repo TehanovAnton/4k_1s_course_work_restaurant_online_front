@@ -12,6 +12,9 @@
 </script>
 
 <template>
-  <label for="d-name">Name: </label>
-  <input id='d-name' v-model="name.name" @change="setName" />
+  <label for="d-name">Name</label>
+  <input id='d-name' class="text-input" v-model="name.name" @change="setName" />
 </template>
+
+<style>
+</style>

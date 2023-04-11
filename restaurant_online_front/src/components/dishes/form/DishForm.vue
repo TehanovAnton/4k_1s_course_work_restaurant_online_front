@@ -38,7 +38,7 @@
   };
 
   const onCancel = () => {
-    emits.cancel();
+    emits('cancel');
   };
 </script>
 
@@ -78,13 +78,18 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
   .left-column-inputs {
     display: flex;
     flex-direction: column;
   }
+
   .right-column-inputs {
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
   }
   .dish-form__content {
     display: flex;
@@ -101,6 +106,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .text-input {
+      border-width: thin;
+      border-right: none;
+      border-left: none;
+      border-top: none;
+      margin: 10px;
+      outline: none
+    }
   }
 
   .dish-form__image {
