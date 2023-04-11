@@ -3,7 +3,7 @@ const createModel = async (modelApi, args, errorsStore, successfulCallback) => {
   let { response, isSuccessful } = await modelApi.apiCreateModel(args)
 
   if (isSuccessful) {
-    successfulCallback()
+    successfulCallback(response)
   } else {
     errorsStore.setErrors(response.data)
   }

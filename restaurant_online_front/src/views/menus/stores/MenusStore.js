@@ -41,11 +41,19 @@ export const useMenusStore = defineStore('menusStore', () => {
     menus.value.forEach(menu => dishes = dishes.concat(menu.dishes));
     return dishes
   })
+  
+  const menusExists = computed(() => {
+    if (!!!menus.value)
+      return false
+
+    return menus.value.length > 0
+  })
 
   return { 
     currentMenu, 
     menus,
     allDishes,
+    menusExists,
     setMenu, 
     updateAndSetCurrent,
     fetchMenus

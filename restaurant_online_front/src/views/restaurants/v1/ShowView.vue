@@ -7,6 +7,7 @@
   import { useMenusStore } from '../../menus/stores/MenusStore';
   import { useDishesStore } from '../../dishes/stores/DishesStore';
   import { useBasketsStore } from '../../baskets/stores/BasketsStore';
+  import MenuCreateView from '../../menus/CreateView.vue';
 
   const restaurantStore = useRestaurantsStore();
   const restaurant = computed(() => { return restaurantStore.currentRestaurant })
@@ -26,10 +27,12 @@
           </div>
         </div>
 
-        <CurrentMenu />
+        <CurrentMenu v-if="menusStore.menusExists" />    
       </div>
 
-      <DishesIndexView />
+      <DishesIndexView v-if="menusStore.menusExists" />
+
+      <MenuCreateView v-if="!menusStore.menusExists" />
     </div>
   </LoadRestaurants>
 </template>

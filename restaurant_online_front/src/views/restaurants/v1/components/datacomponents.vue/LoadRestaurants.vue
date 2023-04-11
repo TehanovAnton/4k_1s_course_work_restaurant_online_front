@@ -10,19 +10,14 @@
 
   onBeforeMount(async () => {
     await restaurantsStore.fetchRestaurants((_response) => {
-      dataReady.value = true
-    })
-
-    if (!!!restaurantsStore.currentRestaurant.id) {
       let routeRestaurant = restaurantsStore.restaurants.find(restaurant => restaurant.id.toString() === route.params.id)
       restaurantsStore.setRestaurant(routeRestaurant)
 
-      if (!!!menusStore.currentMenu.id){
-        if (restaurantsStore.currentRestaurant.menus.length > 0)
+      if (restaurantsStore.currentRestaurant.menus.length > 0)
           menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
-      }
-    }
-      
+
+      dataReady.value = true
+    })      
   })
 
   const dataReady = ref(false)

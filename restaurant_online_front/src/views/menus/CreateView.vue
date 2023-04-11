@@ -6,12 +6,17 @@
   import tokensService from '../services/tokensService';
   import { useContentsStore } from '../restaurants/stores/ContentsStore';
   import { useRestaurantsStore } from '../restaurants/stores/RestaurantsStore';
+  import { useMenusStore } from './stores/MenusStore';
+  import { useMenuFormErrorsStore } from './stores/MenuFormErrorsStore';
 
   const props = defineProps(['restaurant'])
   const emits = defineEmits(['data-change'])
 
   const contentsStore = useContentsStore()
   const restaurantsStore = useRestaurantsStore()
+  const menusStore = useMenusStore()
+  const menuFormErrorsStore = useMenuFormErrorsStore()
+
   const currentRestaurant = computed(() => restaurantsStore.currentRestaurant)
   const menu = ref({ restaurant_id: currentRestaurant.value.id })
   const errors = ref([])
@@ -25,7 +30,9 @@
       }
     }
 
-    await menuCreateService.createModel(menuApi, args, errors, () => {
+    await menuCreateService.createModel(menuApi, args, menuFormErrorsStore, (response) => {
+      menusStore.updateAndSetCurrent(response.data, { view: 'with_dishes' })
+      menuFormErrorsStore.clearErrors()
       contentsStore.setContent('RestaurantShowView')
     })
   }
