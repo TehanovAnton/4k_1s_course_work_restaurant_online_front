@@ -20,6 +20,7 @@
   const errors = ref([])
 
   const createDish = async (modefiedDish) => {
+    debugger
     let args = {
       postUrl: `http://localhost:3000/menus/${currentMenu.value.id}/dishes`,
       data:'',
@@ -45,12 +46,18 @@
 <template>
   <Errors :errors-store="dishFormErrorsStore" />
 
-  <div class="block">
-    Add Dish:
+  <div class="create-container">
     <DishForm action-name="create" :dish="dish"
               @form-submit="createDish"
               @cancel="showRestaurant" />
   </div>
-
-  <slot />
 </template>
+
+<style lang="scss">
+  .create-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px;
+  }
+</style>

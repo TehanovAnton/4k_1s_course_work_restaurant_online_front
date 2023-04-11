@@ -44,14 +44,10 @@
 </script>
 
 <template>
-  <!-- <CurrentMenu>
-    <Errors :errors-store="dishFormErrorsStore" />
-  </CurrentMenu> -->
-
   <div class="edit-container">
-      <DishForm :dish="currentDishCopy" action-name="update"
-                @form-submit="updateDish" @cancel="showRestaurant"/>
-    </div>
+    <DishForm :dish="currentDishCopy" action-name="update"
+              @form-submit="updateDish" @cancel="showRestaurant"/>
+  </div>
 </template>
 
 <style lang="scss">

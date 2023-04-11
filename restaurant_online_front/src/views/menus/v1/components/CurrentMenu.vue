@@ -8,11 +8,11 @@
   const contentsStore = useContentsStore()
   const menus = computed(() => { return menusStore.menus })
 
-  const selectedMenu = ref(Object.assign({}, menusStore.currentMenu))
+  // const selectedMenu = ref(Object.assign({}, menusStore.currentMenu))
 
-  const updateCurrentMenu = () => {
-    menusStore.setMenu(selectedMenu.value);
-  };
+  // const updateCurrentMenu = () => {
+  //   menusStore.setMenu(selectedMenu.value);
+  // };
 </script>
 
 <template>
@@ -20,14 +20,14 @@
       <div class="card-body">
         <h2 class="card-title">Current Menu</h2>
         <div class="sub-card">
-          <select v-model="selectedMenu" v-on:change="updateCurrentMenu">
+          <select v-model="menusStore.currentMenu" v-on:change="updateCurrentMenu">
             <option v-for="menu in menus" :key="menu.id" :value="menu">{{ menu.name }}</option>
           </select>
         </div>
       </div>
     </div>
 </template>
-.value
+
 <style>
   
 </style>

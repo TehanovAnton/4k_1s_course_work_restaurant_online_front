@@ -34,7 +34,7 @@
   }
 
   const onFormSubmit = () => {
-    emits.formSubmit(modefiedDish.value.attributes);
+    emits('formSubmit', modefiedDish.value);
   };
 
   const onCancel = () => {
@@ -47,14 +47,14 @@
     <div class="dish-form__image">
       <ImageInput
         :init-value="dish.image"
-        @img-change="includeMenuAttribute"
+        @img-change="inlcudeAttribute"
       />
     </div>
 
     <div class="dish-form__content">
       <div class="left-column-inputs">
-        <NameInput :init-value="dish.name" @name-change="includeMenuAttribute" />
-        <PriceInput :init-value="dish.price_cents" @price-change="includeMenuAttribute" />
+        <NameInput :init-value="dish.name" @name-change="inlcudeAttribute" />
+        <PriceInput :init-value="dish.price_cents" @price-change="inlcudeAttribute" />
         <MenuSelectInput
           :init-value="menusStore.currentMenu"
           :menus="menusStore.menus"
@@ -63,7 +63,7 @@
       </div>
 
       <div class="right-column-inputs">
-        <DescriptionInput :init-value="dish.description" @description-change="includeMenuAttribute" />
+        <DescriptionInput :init-value="dish.description" @description-change="inlcudeAttribute" />
       </div>
     </div>
 
