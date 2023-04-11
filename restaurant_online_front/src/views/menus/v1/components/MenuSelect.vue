@@ -1,5 +1,5 @@
 <script setup>
-  import { watch, computed, ref } from 'vue';
+  import { ref, computed, watch } from 'vue';
 
   const props = defineProps(['initValue', 'menus'])
   const emits = defineEmits(['menuChange'])
@@ -9,13 +9,12 @@
   watch(initValue, (newInit, _) => choosenMenu.value = newInit)
 
   const setMenu = () => {
-    emits('menuChange', 'menu_id', 'id', choosenMenu.value)
+    emits('menuChange', choosenMenu.value)
   }
 </script>
 
 <template>
-  <label for="menu-slect">Menu</label>
-  <select id="menu-slect" class="text-input menu-select" v-model="choosenMenu" @change="setMenu">
+  <select id="menu-slect" class="menu-select" v-model="choosenMenu" @change="setMenu">
     <option v-for="menu in menus" v-bind:value="menu">
       {{ menu.name }}
     </option>
@@ -24,6 +23,12 @@
 
 <style>
   .menu-select {
+    border-width: thin;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    margin: 10px;
+    outline: none;
     background: none;
   }
 </style>

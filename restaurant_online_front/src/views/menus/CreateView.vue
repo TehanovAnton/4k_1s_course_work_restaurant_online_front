@@ -49,7 +49,7 @@
   </p>
 
   <div class="create-menu-container">
-    <MenuForm action-name="create" :menu="menu"
+    <MenuForm action-name="create" :menu="menu" from-label="New Menu"
               @form-submit="createMenu" @cancel="restaurantShow" />
   </div>
 </template>

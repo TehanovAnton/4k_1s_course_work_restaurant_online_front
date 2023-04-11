@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue';
 
-  const props = defineProps(['menu', 'actionName'])
+  const props = defineProps(['menu', 'actionName', 'fromLabel'])
   const emits = defineEmits(['formSubmit', 'cancel'])
 
   const modefiedMenu = ref({ 
@@ -18,7 +18,7 @@
 
 <template>
   <form class="menu-form">
-    <label for="menu-form">New Menu</label>
+    <label for="menu-form">{{ fromLabel }}</label>
       <div class="menu-form__content">
         <label for="m-name">Name</label>
         <input id='m-name' class="text-input" 
