@@ -13,7 +13,7 @@
       let routeRestaurant = restaurantsStore.restaurants.find(restaurant => restaurant.id.toString() === route.params.id)
       restaurantsStore.setRestaurant(routeRestaurant)
 
-      if (restaurantsStore.currentRestaurant.menus.length > 0)
+      if (!!!menusStore.currentMenu.id && restaurantsStore.currentRestaurant.menus.length > 0)
           menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
 
       dataReady.value = true
