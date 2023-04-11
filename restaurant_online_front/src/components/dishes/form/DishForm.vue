@@ -130,4 +130,11 @@
     width: 100%;
     height: 100%;
   }
+
+  .dish-form__actions {
+    display: flex;
+    width: 70%;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
 </style>
