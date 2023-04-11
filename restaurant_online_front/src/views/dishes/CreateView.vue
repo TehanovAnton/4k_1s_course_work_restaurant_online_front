@@ -20,7 +20,6 @@
   const errors = ref([])
 
   const createDish = async (modefiedDish) => {
-    debugger
     let args = {
       postUrl: `http://localhost:3000/menus/${currentMenu.value.id}/dishes`,
       data:'',

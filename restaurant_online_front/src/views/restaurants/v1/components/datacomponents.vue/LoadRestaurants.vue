@@ -2,9 +2,11 @@
   import { onBeforeMount, ref } from 'vue';
   import { useRestaurantsStore } from '../../../stores/RestaurantsStore';
   import { useMenusStore } from '../../../../menus/stores/MenusStore';
+  import { useRoute } from 'vue-router';
 
   const restaurantsStore = useRestaurantsStore()
   const menusStore = useMenusStore()
+  const route = useRoute()
 
   onBeforeMount(async () => {
     await restaurantsStore.fetchRestaurants((_response) => {
@@ -12,7 +14,8 @@
     })
 
     if (!!!restaurantsStore.currentRestaurant.id) {
-      restaurantsStore.setRestaurant(restaurantsStore.restaurants[0])
+      let routeRestaurant = restaurantsStore.restaurants.find(restaurant => restaurant.id.toString() === route.params.id)
+      restaurantsStore.setRestaurant(routeRestaurant)
 
       if (!!!menusStore.currentMenu.id){
         if (restaurantsStore.currentRestaurant.menus.length > 0)
