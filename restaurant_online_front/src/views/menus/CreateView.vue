@@ -37,6 +37,10 @@
     })
   }
 
+  const restaurantShow = () => {
+    contentsStore.setContent('RestaurantShowView')
+  }
+
 </script>
 
 <template>
@@ -46,7 +50,7 @@
 
   <div class="create-menu-container">
     <MenuForm action-name="create" :menu="menu"
-            @form-submit="createMenu" />
+              @form-submit="createMenu" @cancel="restaurantShow" />
   </div>
 </template>
 
