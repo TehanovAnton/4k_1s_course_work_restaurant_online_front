@@ -18,56 +18,57 @@
 
 <template>
   <form class="menu-form">
-    <div class="menu-attributes">
-      <div class="menu-attribute">
-        <label for="m-name">Name: </label>
-        <input id='m-name' v-model="menu.name"
+    <label for="menu-form">New Menu</label>
+      <div class="menu-form__content">
+        <label for="m-name">Name</label>
+        <input id='m-name' class="text-input" 
+                          v-model="menu.name"
                           :on-change="inlcudeAttribute('name')" />
       </div>
-    </div>
 
-    <div class="menu-form-buttons">
-      <button type="button" @click="$emit('formSubmit', modefiedMenu)">
-        {{ actionName }}
-      </button>
+      <div class="menu-form__actions">
+        <button type="button" @click="$emit('formSubmit', modefiedMenu)">
+          {{ actionName }}
+        </button>
 
-      <button type="button" @click="$emit('cancel')">
-        back
-      </button>
-    </div>
+        <button type="button" @click="$emit('cancel')">
+          back
+        </button>
+      </div>
   </form>
 </template>
 
 <style lang="scss">
+  .menu-form__content {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
   .menu-form {
+    width: 40%;
+    border: 1px solid #ccc;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 300px;
-    justify-content: space-around;
-    background-color: #c5bbbb;
-    
-    .menu-attributes {
-      width: 100%;
 
-      .menu-attribute {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        justify-content: space-evenly;
-        background-color: #9b7878;
-        height: 100px;
-        border-radius: 15px;
-      }
+    .text-input {
+      border-width: thin;
+      border-right: none;
+      border-left: none;
+      border-top: none;
+      margin: 10px;
+      outline: none
     }
+  }
 
-    .menu-form-buttons {
-      display: flex;
-      width: 100%;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-evenly;
-    }
+  .menu-form__actions {
+    display: flex;
+    width: 70%;
+    flex-direction: row;
+    justify-content: space-evenly;
   }
 </style>

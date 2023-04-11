@@ -44,6 +44,17 @@
     {{ error }}
   </p>
 
-  <MenuForm action-name="create" :menu="menu"
+  <div class="create-menu-container">
+    <MenuForm action-name="create" :menu="menu"
             @form-submit="createMenu" />
+  </div>
 </template>
+
+<style lang="scss">
+  .create-menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+  }
+</style>
