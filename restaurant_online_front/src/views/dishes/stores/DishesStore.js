@@ -46,7 +46,7 @@ export const useDishesStore = defineStore('dishesStore', () => {
 
   return { 
     currentDish, 
-    dishes, 
+    dishes,
     setDish, 
     updateAndSetCurrent,
     fetchDishes

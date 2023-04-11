@@ -82,6 +82,9 @@ export const useBasketsStore = defineStore('basketsStore', () => {
   }
 
   const basketDishCount = (dish) => {
+    if (!!!currentBasket.value)
+      return 0
+  
     let dishes = currentBasket.value.dishes.filter(d => d.dish_id === dish.id)
     return dishes.length
   }

@@ -48,7 +48,7 @@
       <p>
         {{ dish.description }}
       </p>
-    </div>
+  </div>
 
     <div class="dish-edit-icon">
       <EditIcon @icon-click="editDish" />

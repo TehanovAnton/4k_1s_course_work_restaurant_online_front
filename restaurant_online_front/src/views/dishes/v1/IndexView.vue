@@ -9,6 +9,7 @@
 
 <template>
   {{ basketsStore.baskets }}
+  {{ dishesStore.dishes }}
   <ShowView v-for="dish in dishesStore.dishes"
             :dish="dish"/>
 </template>
