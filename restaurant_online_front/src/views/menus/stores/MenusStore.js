@@ -22,7 +22,6 @@ export const useMenusStore = defineStore('menusStore', () => {
 
   const initObject = () => {
     let sessionData = sessionOBjectContent()
-    debugger
     if (!!sessionData)
       return sessionObject(sessionData)
 
