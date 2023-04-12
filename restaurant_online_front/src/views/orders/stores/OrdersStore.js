@@ -35,18 +35,23 @@ export const useOrdersStore = defineStore('ordersStore', () => {
     fetchOders((_response) => {})
   }
 
-  const currentRestaurantOrders = computed(() => {
-    let restaurantOrders = orders.value.filter(order => {
-      return order.restaurant_id == restaurantsStore.currentRestaurant.id
+  const restaurantOrders = (restaurant) => {
+    let userRestaurantOrders = orders.value.filter(order => {
+      return order.restaurant_id == restaurant.id
     })
 
-    return restaurantOrders
+    return userRestaurantOrders
+  }
+
+  const currentRestaurantOrders = computed(() => {
+    return restaurantOrders(restaurantsStore.currentRestaurant)
   })
 
   return {
     orders,
     order,
     currentRestaurantOrders,
+    restaurantOrders,
     setOrder,
     fetchOders,
     updateOrders

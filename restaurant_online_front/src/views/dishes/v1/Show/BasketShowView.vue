@@ -28,6 +28,9 @@
 
 <template>
   <div class="backet-show-view">
+    <div v-if="basketsStore.dishes.length == 0">
+      <h1>There is nothing in basket!</h1>
+    </div>
     <div class="backet-dishes" v-for="dish in basketsStore.dishes">
       <div class="dish-content">
         <p>
