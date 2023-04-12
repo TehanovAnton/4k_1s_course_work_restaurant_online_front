@@ -3,35 +3,61 @@
   import { useBasketsStore } from '../../../views/baskets/stores/BasketsStore';
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';
+  import moment from 'moment-timezone';
 
   const props = defineProps(['pOrder', 'actionName'])
   const emits = defineEmits(['formSubmit', 'cancle'])
 
   const currentUserStore = useCurrentUserStore()
   const restaurantsStore = useRestaurantsStore()
-  const basketsStore = useBasketsStore();
+  const basketsStore = useBasketsStore();  
 
   const chosenDishes = computed(() => {
-    return basketsStore.dishes
+    return props.pOrder.dishes
   });
 
   const initOrder = () => {
     let iOrder = {
-      user_id: currentUserStore.user.id,
+      id: props.pOrder.id,
+      user_id: props.pOrder.user_id,
       attributes: {
-        restaurant_id: restaurantsStore.currentRestaurant.id,
-        user_id: currentUserStore.user.id,
-        orders_dishes_attributes: basketsStore.currentBasket.dishes,
-        reservation_attributes: { place_type: 'outside' }
+        restaurant_id: props.pOrder.restaurant_id,
+        user_id: props.pOrder.user_id,
+        // orders_dishes_attributes: props.pOrder.order_dishes_attributes,
+        reservation_attributes: { 
+          id: props.pOrder.reservation.id,
+          place_type: props.pOrder.reservation.place_type
+        }
       }
     }
 
     return iOrder
   }
+
   const order = ref(initOrder())
 
-  const insideOrder = ref(false);
+  const initInsideOrder = () => {
+    if (!!props.pOrder.reservation)
+      return props.pOrder.reservation.place_type === 'inside'
+
+    return false
+  }
+  const insideOrder = ref(initInsideOrder());
   const placeType = ref({ type: 'outside' })
+
+  const formatDate = (time) => {
+    return moment(time).tz(moment.tz.guess()).format('YYYY-MM-DDTHH:mm')
+  }
+
+  const formatDateWithTimeZone = (time) => {
+    return moment(time).tz(moment.tz.guess()).format()
+  }
+
+  const reservationTimes = ref({
+    start_at: formatDate(props.pOrder.reservation.start_at),
+    end_at: formatDate(props.pOrder.reservation.end_at)
+  })
+
   const tables = computed(() => {
     return restaurantsStore.currentRestaurant.tables
   })
@@ -46,6 +72,9 @@
 
     if (attr === 'place_type')
       sourceObjectAttrValue = setPlaceType()
+
+    if (['start_at', 'end_at'].includes(attr))
+      sourceObjectAttrValue = formatDateWithTimeZone(sourceObjectAttrValue)
 
     order.value.attributes.reservation_attributes[attr] = sourceObjectAttrValue
   }
@@ -74,7 +103,7 @@
 
       <div class="input-group">
         <label for="start-date">Start Date:</label>
-        <input type="datetime-local" id="start-date" v-model="pOrder.start_at" @change="inlcudeAttribute('start_at')" />
+        <input type="datetime-local" id="start-date" v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" />
       </div>
 
       <div class="input-group">
@@ -84,12 +113,12 @@
 
       <div v-if="insideOrder" class="input-group">
         <label for="end-date">End Date:</label>
-        <input type="datetime-local" id="end-date" v-model="pOrder.end_at" @change="inlcudeAttribute('end_at')" />
+        <input type="datetime-local" id="end-date" v-model="reservationTimes.end_at" @change="inlcudeAttribute('end_at', 'end_at', reservationTimes)" />
       </div>
 
       <div v-if="insideOrder" class="input-group">
         <label for="menu-slect">Table</label>
-        <select id="menu-slect" class="text-input menu-select" v-model="pOrder.table_id" @change="inlcudeAttribute('table_id')">
+        <select id="menu-slect" class="text-input menu-select" v-model="pOrder.reservation.table_id" @change="inlcudeAttribute('table_id', 'table_id', pOrder.reservation)">
           <option v-for="table in tables" v-bind:value="table.id">
             {{ table.number }}
           </option>

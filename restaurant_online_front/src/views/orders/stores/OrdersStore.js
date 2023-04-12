@@ -10,6 +10,7 @@ export const useOrdersStore = defineStore('ordersStore', () => {
   const currentUserStore = useCurrentUserStore()
 
   const orders = ref([])
+  const currentOrder = ref({})
 
   const fetchOders = async (callback) => {
     let { response, isSuccessful } = await orders_service.apiIndexOrders(currentUserStore.user.id)
@@ -20,6 +21,14 @@ export const useOrdersStore = defineStore('ordersStore', () => {
 
       callback(response)
     }
+  }
+
+  const order = computed(() => {
+    return currentOrder.value
+  })
+
+  const setOrder = (order) => {
+    currentOrder.value = order
   }
 
   const updateOrders = async () => {
@@ -36,7 +45,9 @@ export const useOrdersStore = defineStore('ordersStore', () => {
 
   return {
     orders,
+    order,
     currentRestaurantOrders,
+    setOrder,
     fetchOders,
     updateOrders
   }

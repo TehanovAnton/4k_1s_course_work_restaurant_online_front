@@ -1,23 +1,33 @@
-<script setup>
-  import OrderForm from '../../components/orders/OrderForm.vue';
+<script setup>  
+  import { ref } from 'vue';  
+  import { useContentsStore } from '../restaurants/stores/ContentsStore';
+  import { useOrdersStore } from './stores/OrdersStore';
+  import OrderForm from '../../components/orders/v1/OrderForm.vue';
   import service from '../services/orders/order_service'
 
-  const props = defineProps(['order'])
   const emits = defineEmits(['data-change'])
 
-  const updatMenu = async () => {
-    let isSuccessful = await service.apiUpdateOrder(props.order)
+  const ordersStore = useOrdersStore()
+  const contentsStore = useContentsStore()
+  const order = ref(ordersStore.order)
 
-    if (isSuccessful) {      
-      emits('data-change')
+  const updatMenu = async (order) => {
+    let { isSuccessful } = await service.apiUpdateOrder(order)
+
+    if (isSuccessful) {
+      ordersStore.updateOrders()
+      contentsStore.setContent('OrdersIndexView')
     }
+  }
+
+  const orderIndex = () => {
+    contentsStore.setContent('OrdersIndexView')
   }
 </script>
 
 <template>
-  <div class="block">
-    Edit Order:
-    <OrderForm :order="order" action-name="update"
-               @form-submit="updatMenu" />
+  <div>
+    <OrderForm :p-order="order" action-name="update"
+               @form-submit="updatMenu" @cancle="orderIndex" />
   </div>
 </template>

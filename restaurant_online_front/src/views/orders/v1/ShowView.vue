@@ -1,42 +1,75 @@
 <script setup>
-  import moment from 'moment';
-  import DishesList from './components/DishesList.vue';
+  import { computed } from 'vue';
+  import EditIcon from '../../icons/EditIcon.vue';
+  import { useContentsStore } from '../../restaurants/stores/ContentsStore';
+  import { useOrdersStore } from '../stores/OrdersStore';
+  import moment from 'moment-timezone'
 
   const props = defineProps(['order'])
 
-  const dtFormated = (dt, format) => {
-    let date = new Date(dt)
-    return moment(date).utcOffset(0).format(format)
+  const contentsStore = useContentsStore()
+  const ordersStore = useOrdersStore()
+
+  const reservation = computed(() => {
+    return props.order.reservation
+  })
+
+  const localeTime = (time) => {
+    return moment(time).tz(moment.tz.guess()).format('YYYY-MM-DD HH:mm')
+  }
+
+  const editOrder = () => {
+    ordersStore.setOrder(props.order)
+    contentsStore.setContent('OrderEditView')
   }
 </script>
 
+
 <template>
-  <div class="order-container">
-    <DishesList :order="order" />
-    <div class="order-datetime">
-      <div>Date: {{ dtFormated(order.reservation.start_at, 'YYYY-MM-DD') }}</div>
-      <div>Start Time: {{ dtFormated(order.reservation.start_at, 'HH:mm') }}</div>
+  <div class="order-card">
+    <h2>Order #{{ order.id }}</h2>
+    <div class="order-info">
+      <p><strong>Start:</strong> {{ localeTime(reservation.start_at) }}</p>
+      <p v-if="order.reservation.place_type === 'inside'"><strong>End:</strong> {{ localeTime(reservation.end_at) }}</p>
     </div>
-    
+    <div class="chosen-dishes">
+      <h3>Chosen Dishes:</h3>
+      <ul>
+        <li v-for="dish in order.dishes" :key="dish.id">{{ dish.name }}</li>
+      </ul>
+    </div>
+
+    <EditIcon @icon-click="editOrder" />
   </div>
 </template>
 
-<style lang="scss">
-  .order-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    background-color: darkgray;
-    border-radius: 20px;
-    box-shadow: inset 0 0 5px 2px black;
-    padding: 15px;
+<style lang="scss" scoped>
+  .order-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
 
-    .order-datetime {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
+    &:hover {
+      background-color: #f2f2f2;
+    }
+
+    .order-info {
+      margin-bottom: 10px;
+    }
+
+    .chosen-dishes {
+      margin-top: 10px;
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          margin-bottom: 5px;
+        }
+      }
     }
   }
 </style>

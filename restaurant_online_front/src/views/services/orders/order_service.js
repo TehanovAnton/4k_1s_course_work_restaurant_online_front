@@ -42,7 +42,7 @@ const apiCreateOrder = async (order) => {
 
 const apiUpdateOrder = async (order) => {
   let updateUrl = `http://localhost:3000/orders/${order.id}`
-  let data = order
+  let data = { order: order.attributes }
 
   let response = await axios.put(
     updateUrl,
