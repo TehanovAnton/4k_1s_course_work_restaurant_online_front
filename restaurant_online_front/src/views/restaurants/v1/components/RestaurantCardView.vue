@@ -1,10 +1,24 @@
 <script setup>
+  import { useMenusStore } from '../../../menus/stores/MenusStore';
+  import { useContentsStore } from '../../stores/ContentsStore';
+  import { useRestaurantsStore } from '../../stores/RestaurantsStore';
+
   const props = defineProps(['restaurant'])
+  const restaurantsStore = useRestaurantsStore()
+  const contentsStore = useContentsStore()
+  const menusStore = useMenusStore()
+
+  const showRestaurant = () => {
+    restaurantsStore.setRestaurant(props.restaurant)
+
+    if (!!!menusStore.currentMenu.id && restaurantsStore.currentRestaurant.menus.length > 0)
+        menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
+    contentsStore.setContent('RestaurantShowView')
+  }
 </script>
 
-
 <template>
-  <div class="restaurant-card">
+  <div class="restaurant-card" @click="showRestaurant">
     <h2>{{ restaurant.name }}</h2>
     <div class="restaurant-info">
       <p><strong>Email:</strong> {{ restaurant.email }}</p>
@@ -20,24 +34,33 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
   .restaurant-card {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
-  }
+    transition: background-color 0.3s ease;
 
-  .restaurant-info {
-    margin-bottom: 10px;
-  }
+    &:hover {
+      background-color: #f2f2f2;
+    }
 
-  .menu-list {
-    margin-top: 10px;
-  }
+    .restaurant-info {
+      margin-bottom: 10px;
+    }
 
-  .menu-list ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    .menu-list {
+      margin-top: 10px;
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          margin-bottom: 5px;
+        }
+      }
+    }
   }
 </style>

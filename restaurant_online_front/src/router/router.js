@@ -10,14 +10,8 @@ const router = createRouter({
     // },
 
     {
-      path: '/rests/preview',
+      path: '/restaurants',
       name: 'home',
-      component: () => import('../components/lists/RestaurantsList.vue')
-    },
-
-    {
-      path: '/restaurants/:id/index',
-      name: 'restaurantIndex',
       component: () => import('../views/restaurants/v1/LayoutView.vue')
     },
 
