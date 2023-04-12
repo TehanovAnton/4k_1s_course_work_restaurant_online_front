@@ -6,7 +6,9 @@
   const initValue = computed(() => props.initValue)
 
   const choosenMenu = ref(props.initValue)
-  watch(initValue, (newInit, _) => choosenMenu.value = newInit)
+  watch(initValue, (newInit, _) => {
+    choosenMenu.value = props.menus.find(m => m.id === newInit.id)
+  })
 
   const setMenu = () => {
     emits('menuChange', choosenMenu.value)

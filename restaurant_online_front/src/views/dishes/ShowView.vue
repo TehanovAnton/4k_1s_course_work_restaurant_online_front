@@ -10,7 +10,6 @@ const dishes = computed(() => {
   return props.menu.dishes
 })
 
-const menuDishesView = () => router.push({ name:'menu_dishes', params:{ menuId:props.menu.id } })
 const destroyMenu = async () => {
   let { 
     response, 

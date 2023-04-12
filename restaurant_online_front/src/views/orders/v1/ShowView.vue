@@ -1,9 +1,11 @@
 <script setup>
-  import { computed } from 'vue';
-  import EditIcon from '../../icons/EditIcon.vue';
+  import { computed } from 'vue';  
   import { useContentsStore } from '../../restaurants/stores/ContentsStore';
   import { useOrdersStore } from '../stores/OrdersStore';
   import moment from 'moment-timezone'
+  import order_service from '../../services/orders/order_service';
+  import DeleteIcon from '../../icons/DeleteIcon.vue';
+  import EditIcon from '../../icons/EditIcon.vue';
 
   const props = defineProps(['order'])
 
@@ -21,6 +23,17 @@
   const editOrder = () => {
     ordersStore.setOrder(props.order)
     contentsStore.setContent('OrderEditView')
+  }
+
+  const deleteOrder = async () => {
+    let {
+      isSuccessful
+    } = await order_service.apiDestroyOrder(props.order.id)
+
+    if (isSuccessful) {
+      ordersStore.updateOrders()
+      contentsStore.setContent('OrdersIndexView')
+    }
   }
 </script>
 
@@ -40,6 +53,7 @@
     </div>
 
     <EditIcon @icon-click="editOrder" />
+    <DeleteIcon @icon-click="deleteOrder" />
   </div>
 </template>
 

@@ -18,7 +18,6 @@
 
 <template>
   <div class="r-header" :on-click="createWelcome">
-    <p class="h-element">Restaourants</p>
     <p class="h-element">Profile</p>
     <p class="h-element">Search</p>
     <button @click="setContentView('RestaurantsIndexView')">Restaurants</button>

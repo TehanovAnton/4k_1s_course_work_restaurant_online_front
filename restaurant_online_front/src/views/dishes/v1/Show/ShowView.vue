@@ -1,11 +1,15 @@
 <script setup>
   import { computed, ref } from 'vue';
   import EditIcon from '../../../icons/EditIcon.vue';
+  import DeleteIcon from '../../../icons/DeleteIcon.vue';
   import AddToBasketIcon from '../../../icons/AddIcon.vue';
   import RemoveFromBasketIcon from '../../../icons/RemoveIcon.vue';
   import { useContentsStore } from '../../../restaurants/stores/ContentsStore';
   import { useDishesStore } from '../../stores/DishesStore';
   import { useBasketsStore } from '../../../baskets/stores/BasketsStore';
+  import dishApi from '../../../services/api/model_api';
+  import tokensService from '../../../services/tokensService';
+import { useMenusStore } from '../../../menus/stores/MenusStore';
 
   const props = defineProps(['dish'])
 
@@ -13,12 +17,29 @@
   const dishesStore = useDishesStore()
   const basketsStore = useBasketsStore()
   const dish = computed(() => props.dish)
+  const menusStore = useMenusStore()
 
   const selectedDishCount = ref(basketsStore.basketDishCount(dish.value))
 
   const editDish = () => {
     dishesStore.setDish(dish.value)
     contentsStore.setContent('DishEditView')
+  }
+
+  const deleteDish = async () => {
+    let args = {
+      deleteUrl: `http://localhost:3000/dishes/${props.dish.id}`,
+      requestOptions: { headers: tokensService.auth_headers() },
+    }
+
+    let {
+      isSuccessful
+    } = await dishApi.apiDeletModel(args)
+
+    if (isSuccessful) {
+      menusStore.updateAndSetCurrent(menusStore.currentMenu)
+      contentsStore.setContent('RestaurantShowView')
+    }
   }
 
   const addDishToBasket = (dish) => {
@@ -59,6 +80,7 @@
         <h5 class="card-title">{{ dish.name }}</h5>
         <p class="card-text text-muted">{{ dish.description }}</p>
         <EditIcon @icon-click="editDish" />
+        <DeleteIcon @icon-click="deleteDish" />
         <div class="input-group">
           <div class="input-group-prepend">
             <button class="btn btn-outline-secondary" type="button" @click="decrement(dish)">-</button>
