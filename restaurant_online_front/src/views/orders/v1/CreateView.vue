@@ -1,5 +1,5 @@
 <script setup>
-  import DishesList from '../../baskets/DishesList.vue';
+  import { ref } from 'vue';
   import OrderForm from '../../../components/orders/v1/OrderForm.vue';
   import order_service from '../../services/orders/order_service';
   import { useBasketsStore } from '../../baskets/stores/BasketsStore';
@@ -10,7 +10,10 @@
   const contentsStore = useContentsStore()
   const ordersStore = useOrdersStore()
 
+  const order = ref({})
+
   const createOrder = async (order) => {
+    debugger
     let { isSuccessful } = await order_service.apiCreateOrder(order)
 
     if (isSuccessful) {
@@ -19,10 +22,13 @@
       contentsStore.setContent('OrdersIndexView')
     }
   }
+
+  const showBasket = () => {
+    contentsStore.setContent('BasketShowView')
+  }
 </script>
 
 <template>
-  <DishesList :dishes="basketsStore.dishes" />
-  <OrderForm :order="{}"
-             @form-submit="createOrder" />
+  <OrderForm action-name="Create" :pOrder="order"
+             @form-submit="createOrder" @cancle="showBasket" />
 </template>

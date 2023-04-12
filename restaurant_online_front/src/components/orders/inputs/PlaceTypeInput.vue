@@ -10,7 +10,7 @@
   const setPlaceType  = () => {
     placeType.value.type = checkbox.value ? 'inside' : 'outside'
     emits('placeTypeChange', props.attribute, 'type', placeType.value)
-  }  
+  }
 </script>
 
 <template>
