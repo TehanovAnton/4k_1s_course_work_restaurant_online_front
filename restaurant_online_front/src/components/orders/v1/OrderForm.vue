@@ -28,11 +28,13 @@
 
     return iOrder
   }
-
   const order = ref(initOrder())
 
   const insideOrder = ref(false);
   const placeType = ref({ type: 'outside' })
+  const tables = computed(() => {
+    return restaurantsStore.currentRestaurant.tables
+  })
 
   const setPlaceType  = () => {
     placeType.value.type = insideOrder.value ? 'inside' : 'outside'
@@ -84,6 +86,15 @@
         <label for="end-date">End Date:</label>
         <input type="datetime-local" id="end-date" v-model="pOrder.end_at" @change="inlcudeAttribute('end_at')" />
       </div>
+
+      <div v-if="insideOrder" class="input-group">
+        <label for="menu-slect">Table</label>
+        <select id="menu-slect" class="text-input menu-select" v-model="pOrder.table_id" @change="inlcudeAttribute('table_id')">
+          <option v-for="table in tables" v-bind:value="table.id">
+            {{ table.number }}
+          </option>
+        </select>
+      </div>      
     </div>
     <div class="dish-form__actions">
       <button class="btn btn-primary" @click="onFormSubmit">

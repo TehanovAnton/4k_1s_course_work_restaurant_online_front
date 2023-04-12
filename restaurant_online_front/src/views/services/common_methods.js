@@ -9,7 +9,7 @@ const isSuccessful = (response) => {
 const errorshandler = (error) => {            
   console.log(error);
 
-  if (error.response.status == 401) {
+  if (!!error.response && error.response.status == 401) {
     sessionStorage.clear()
     router.push({ name:'sign_in' })
   }
