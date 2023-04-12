@@ -16,33 +16,29 @@
     return props.pOrder.dishes
   });
 
-  const initOrder = () => {
-    let iOrder = {
-      id: props.pOrder.id,
-      user_id: props.pOrder.user_id,
-      attributes: {
-        restaurant_id: props.pOrder.restaurant_id,
-        user_id: props.pOrder.user_id,
-        // orders_dishes_attributes: props.pOrder.order_dishes_attributes,
-        reservation_attributes: { 
-          id: props.pOrder.reservation.id,
-          place_type: props.pOrder.reservation.place_type
-        }
-      }
+  const creatingOrder = () => {
+    return !!!props.pOrder.id
+  }
+
+  const initOrderResrvation = () => {
+    return {
+      id: props.pOrder.reservation.id,
+      place_type: props.pOrder.reservation.place_type
     }
-
-    return iOrder
   }
 
-  const order = ref(initOrder())
+  const order = ref({
+    id: props.pOrder.id,
+    user_id: props.pOrder.user_id,
+    attributes: {
+      restaurant_id: props.pOrder.restaurant_id,
+      user_id: props.pOrder.user_id,
+      order_dishes_attributes: props.pOrder.order_dishes_attributes,
+      reservation_attributes: initOrderResrvation()
+    }
+  })
 
-  const initInsideOrder = () => {
-    if (!!props.pOrder.reservation)
-      return props.pOrder.reservation.place_type === 'inside'
-
-    return false
-  }
-  const insideOrder = ref(initInsideOrder());
+  const insideOrder = ref(props.pOrder.reservation.place_type === 'inside');
   const placeType = ref({ type: 'outside' })
 
   const formatDate = (time) => {
@@ -53,10 +49,13 @@
     return moment(time).tz(moment.tz.guess()).format()
   }
 
-  const reservationTimes = ref({
-    start_at: formatDate(props.pOrder.reservation.start_at),
-    end_at: formatDate(props.pOrder.reservation.end_at)
-  })
+  const initReservationTimes = () => {
+    return {
+      start_at: formatDate(props.pOrder.reservation.start_at),
+      end_at: formatDate(props.pOrder.reservation.end_at)
+    }
+  }
+  const reservationTimes = ref(initReservationTimes())
 
   const tables = computed(() => {
     return restaurantsStore.currentRestaurant.tables
@@ -91,7 +90,6 @@
 <template>
   <div class="order-form">
     <h2>Order Form</h2>
-    {{ order }}
     <div class="chosen-dishes">
       <h3>Chosen Dishes:</h3>
       <ul>
