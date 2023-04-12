@@ -44,7 +44,6 @@ export const useMenusStore = defineStore('menusStore', () => {
   }
 
   const updateSessionObjectContent = (callBack) => {
-    debugger
     if (!currentObjectExists())
       return
 
