@@ -5,20 +5,65 @@ import tokensService from "../../services/tokensService";
 import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
 
 export const useMenusStore = defineStore('menusStore', () => {  
-  const currentMenu = ref({})
+
+  const sessionObjectkey = 'menu'
+
+  const sessionObject = (sessionData) => {
+    return JSON.parse(sessionData)
+  }
+
+  const sessionOBjectContent = () => {
+    return sessionStorage.getItem(sessionObjectkey)
+  }
+
+  const defaultSessionObject = () => {
+    return {}
+  }
+
+  const initObject = () => {
+    let sessionData = sessionOBjectContent()
+    debugger
+    if (!!sessionData)
+      return sessionObject(sessionData)
+
+    return defaultSessionObject()
+  }
+
+  const currentMenu = ref(initObject())
   const restaurantsStore = useRestaurantsStore()
 
   const menus = computed(() => {
     return restaurantsStore.currentRestaurant.menus
   })
 
+  const currentObjectExists = () => {
+    return !!currentMenu.value
+  }
+
+  const sessionObjectJsonData = () => {
+    return JSON.stringify(currentMenu.value)
+  }
+
+  const updateSessionObjectContent = (callBack) => {
+    debugger
+    if (!currentObjectExists())
+      return
+
+    callBack()
+    
+    sessionStorage.setItem(sessionObjectkey, sessionObjectJsonData())
+  }
+
   const setMenu = (menu) => {
-    currentMenu.value = menu
+    updateSessionObjectContent(() => {
+      currentMenu.value = menu
+    })
   }
 
   const updateAndSetCurrent = async (menu, options = {}) => {
     fetchMenus((response) => {
-        currentMenu.value = response.data.filter(m => m.id === menu.id)[0]
+        let findedMenu = response.data.filter(m => m.id === menu.id)[0]
+        setMenu(findedMenu)
       },
       options
     )
