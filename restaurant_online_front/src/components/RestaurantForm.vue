@@ -17,6 +17,7 @@
 <template>
   <RegularFormStyle>
     <div class="form">
+      <label for="r-name">{{ label }}</label>
       <div class="form__content">
         <label for="r-name">Name</label>
         <input id='r-name' v-model="restaurant.name" class="text-input" @change="inlcudeAttribute('name')" />

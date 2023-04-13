@@ -41,20 +41,22 @@
 </script>
 
 <template>
-  <div class="card" v-if="user.id" >
-    <h2>{{ user.name }}</h2>
-    <EditIcon @icon-click="editUser" />
-    <p>Email: {{ user.email }}</p>
-    <p>Role: {{ user.type }}</p>
+  <div>
+    <div v-if="user.id && !editUserForm">
+      <h2>{{ user.name }}</h2>
+      <EditIcon @icon-click="editUser" />
+      <p>Email: {{ user.email }}</p>
+      <p>Role: {{ user.type }}</p>
 
-    <form v-if="currentUser.type === 'SuperAdmin'" @submit.prevent="searchUserByEmail">
-      <label for="search-email">Search User By Email:</label>
-      <input type="email" id="search-email" v-model="searchEmail" required>
+      <form v-if="currentUser.type === 'SuperAdmin'" @submit.prevent="searchUserByEmail">
+        <label for="search-email">Search User By Email:</label>
+        <input type="email" id="search-email" v-model="searchEmail" required>
 
-      <button type="submit">Search</button>
-    </form>
+        <button type="submit">Search</button>
+      </form>
+    </div>    
 
-    <div v-if="editUserForm">
+    <div v-if="editUserForm" class="user-form">
       <EditView :user="user"
                 @data-change="resetPage"
                 @cancle="resetPage" />
@@ -62,11 +64,9 @@
   </div>
 </template>
 
-<style scoped>
-.card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 5px;
-}
+<style>
+  .user-form {
+    display: flex;
+    justify-content: space-around;
+  }
 </style>

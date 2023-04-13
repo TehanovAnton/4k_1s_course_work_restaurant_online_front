@@ -2,7 +2,7 @@
 import { useCurrentUserStore } from '../../stores/users/currentUser';
 import RegularFormStyle from '../stylecomponents/RegularFormStyle.vue';
 
-  const props = defineProps(['user', 'actionName'])
+  const props = defineProps(['user', 'actionName', 'label'])
   const emits = defineEmits(['formSubmit', 'cancle'])
 
   const currentUserStore = useCurrentUserStore()
@@ -11,6 +11,7 @@ import RegularFormStyle from '../stylecomponents/RegularFormStyle.vue';
 <template>
   <RegularFormStyle>
     <div class="form">
+      <label for="u-name">{{ label }}</label>
       <div class="form__content">
         <label for="u-name">Name: </label>
         <input id='u-name' class="text-input" v-model="user.name"/>

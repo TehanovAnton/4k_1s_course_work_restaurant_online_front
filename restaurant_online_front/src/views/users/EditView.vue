@@ -21,6 +21,6 @@
 </script>
 
 <template>
-  <UserForm :user="user" action-name="update"
+  <UserForm :user="user" action-name="update" label="Edit User"
             @form-submit="updatUser" @cancle="$emit('cancle')"/>
 </template>  
