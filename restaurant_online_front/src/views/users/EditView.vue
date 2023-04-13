@@ -5,7 +5,7 @@
   import tokensService from '../services/tokensService';
 
   const props = defineProps(['user'])
-  const emits = defineEmits(['data-change'])
+  const emits = defineEmits(['data-change', 'cancle'])
 
   const updatUser = async () => {
     let { 
@@ -21,5 +21,6 @@
 </script>
 
 <template>
-  <UserForm :user="user" action-name="update" @form-submit="updatUser"/>
+  <UserForm :user="user" action-name="update"
+            @form-submit="updatUser" @cancle="$emit('cancle')"/>
 </template>  

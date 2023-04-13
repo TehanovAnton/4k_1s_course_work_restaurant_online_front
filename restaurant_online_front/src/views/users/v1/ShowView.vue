@@ -55,7 +55,9 @@
     </form>
 
     <div v-if="editUserForm">
-      <EditView :user="user" @data-change="resetPage"/>
+      <EditView :user="user"
+                @data-change="resetPage"
+                @cancle="resetPage" />
     </div>
   </div>
 </template>
