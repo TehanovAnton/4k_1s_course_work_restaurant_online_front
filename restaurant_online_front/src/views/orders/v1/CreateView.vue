@@ -24,7 +24,7 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
   })
 
   const createOrder = async (order) => {
-    debugger
+
     let { isSuccessful } = await order_service.apiCreateOrder(order)
 
     if (isSuccessful) {
