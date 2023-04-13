@@ -5,18 +5,21 @@
   import { useContentsStore } from '../../../views/restaurants/stores/ContentsStore';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';
   import tokensService from '../../../views/services/tokensService';
+  import { useCurrentUserStore } from '../../../stores/users/currentUser';
 
   const contentsStore = useContentsStore()
   const restaurantsStore = useRestaurantsStore()
+  const currentUserStore = useCurrentUserStore()
 
   const restaurant = ref({
     id: '',
     email: '',
     address: '',
-    phone: '',
+    phone: ''
   })
 
   const createRestaurant = async (restaurant) => {
+    restaurant.updateAttributes.restaurants_admins_attributes = [{ user_id: currentUserStore.user.id }]
     let { isSuccessful, response } = await restaurant_service.apiCreateRestaurants(tokensService.auth_headers(), restaurant.updateAttributes)
 
     if (isSuccessful) {

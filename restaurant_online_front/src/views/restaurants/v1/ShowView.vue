@@ -4,12 +4,15 @@
   import DishesIndexView from '../../dishes/v1/IndexView.vue';
   import CurrentMenu from '../../menus/v1/components/CurrentMenu.vue';
   import EditIcon from '../../icons/EditIcon.vue';
+  import restaurant_service from '../../services/restaurants/restaurant_service';
+  import tokensService from '../../services/tokensService';
   import { useRestaurantsStore } from '../stores/RestaurantsStore';
   import { useMenusStore } from '../../menus/stores/MenusStore';
   import { useDishesStore } from '../../dishes/stores/DishesStore';
-  import { useBasketsStore } from '../../baskets/stores/BasketsStore';
+  import { useBasketsStore } from '../../baskets/stores/BasketsStore';  
+  import { useContentsStore } from '../stores/ContentsStore';
   import MenuCreateView from '../../menus/CreateView.vue';
-import { useContentsStore } from '../stores/ContentsStore';
+  import DeleteIcon from '../../icons/DeleteIcon.vue';
 
   const restaurantStore = useRestaurantsStore();
   const contentsStore = useContentsStore()
@@ -18,6 +21,14 @@ import { useContentsStore } from '../stores/ContentsStore';
   const menusStore = useMenusStore();
   const editRestaurant = () => {
     contentsStore.setContent('RestaurantEditView')
+  }
+
+  const deleteRestaurant = async () => {
+    let { isSuccessful, response } = await restaurant_service.apiDestroyRestaurants(tokensService.auth_headers(), restaurant.value)
+
+    if (isSuccessful) {
+      contentsStore.setContent('RestaurantsIndexView')
+    }
   }
 </script>
 
@@ -33,6 +44,7 @@ import { useContentsStore } from '../stores/ContentsStore';
           </div>
 
           <EditIcon @icon-click="editRestaurant" />
+          <DeleteIcon @icon-click="deleteRestaurant" />
         </div>
 
         <CurrentMenu v-if="menusStore.menusExists" />    
