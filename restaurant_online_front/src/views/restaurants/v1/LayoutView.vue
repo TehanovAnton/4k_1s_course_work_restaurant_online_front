@@ -5,6 +5,7 @@ import { useContentsStore } from '../stores/ContentsStore';
 
 import RestaurantShowView from './ShowView.vue';
 import RestaurantEditView from '../v1/EditView.vue'
+import RestaurantCreateView from '../../../components/restaurants/v1/CreateView.vue';
 import RestaurantsIndexView from './IndexView.vue';
 import MenuEditView from  '../../menus/EditView.vue'
 import DishEditView from '../../dishes/EditView.vue'
@@ -21,6 +22,7 @@ const contentsStore = useContentsStore()
 const contents = {
   RestaurantShowView,
   RestaurantEditView,
+  RestaurantCreateView,
   RestaurantsIndexView,
   MenuEditView,
   DishEditView,
