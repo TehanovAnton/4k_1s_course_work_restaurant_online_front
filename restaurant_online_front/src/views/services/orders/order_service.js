@@ -56,6 +56,22 @@ const apiCreateRating = async (orderId, rating) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiUpdateOrderState = async (orderStateId, orderState) => {
+  let udpateUrl = `http://localhost:3000/cooks/order_states/${orderStateId}/transition`
+  let data = orderState
+
+  let response = await axios.put(
+    udpateUrl,
+    data,
+    { headers: tokensService.auth_headers() }
+  ).catch(errorshandler)
+  
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const apiUpdateOrder = async (order) => {
   let updateUrl = `http://localhost:3000/orders/${order.id}`
   let data = { order: order.attributes }
@@ -171,5 +187,6 @@ export default {
   apiDestroyOrder,
   apiCancelOrder,
   apiCreateRating,
+  apiUpdateOrderState,
   can
 }

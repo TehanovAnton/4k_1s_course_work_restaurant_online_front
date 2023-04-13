@@ -67,6 +67,17 @@
     }
   }
 
+  const submitFinish = async () => {
+    let {
+      isSuccessful
+    } = await order_service.apiUpdateOrderState(orderState.value.id, { transition: 'transition_finished' })
+    
+    if (isSuccessful) {
+      ordersStore.updateOrders()
+      hideRatingForm()
+    }
+  }
+
   const rating = ref(null)
   const ratingText = ref(null)
 
@@ -106,6 +117,13 @@
         <button type="button" @click="hideRatingForm">Cancel</button>
       </form>
     </div>
+    <div v-if="orderState.aasm_state === 'ready'">  
+      <form @submit.prevent="submitFinish">
+        <label for="rating">Finish Order!</label>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
     <div>
       <EditIcon @icon-click="editOrder" />
       <DeleteIcon @icon-click="deleteOrder" />
