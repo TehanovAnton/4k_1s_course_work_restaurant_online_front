@@ -5,11 +5,12 @@
 
   const createMenu = () => contentsStore.setContent('MenuCreateView')
   const createDish = () => contentsStore.setContent('DishCreateView')
+  const createRestaurant = () => contentsStore.setContent('RestaurantCreateView')
 </script>
 
 <template>
   <div class="create-elements-container">
-    <div class="create-element">
+    <div class="create-element" @click="createRestaurant">
       <h1>Restaurant</h1>
     </div>
 

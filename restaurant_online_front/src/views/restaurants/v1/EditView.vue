@@ -30,14 +30,11 @@ const updatRestaurant = async (modefiedRestaurant) => {
 }
 </script>
 
-<template>
-  <div class="overviews o-height">
-    <EditIconWrap>
-      Restaurant  
-    </EditIconWrap>    
+<template>  
+  <div class="edit-restaurant">
+    <RestaurantForm :restaurant="contentRestaurant" :action-name="'Update'" label="Edit Restaurant"
+                    @form-submit="updatRestaurant" @cancel="showRestaurant" />
   </div>
-  <RestaurantForm :restaurant="contentRestaurant" :action-name="'Update'" 
-                  @form-submit="updatRestaurant" @cancel="showRestaurant" />
 </template>
 
 <style>
@@ -53,5 +50,10 @@ const updatRestaurant = async (modefiedRestaurant) => {
     padding: 15px;
     box-shadow: inset 0 0 5px 2px rgb(207, 168, 168);
     margin: 5px 0px 0 0px;
+  }
+
+  .edit-restaurant {
+    display: flex;
+    justify-content: space-around;
   }
 </style>

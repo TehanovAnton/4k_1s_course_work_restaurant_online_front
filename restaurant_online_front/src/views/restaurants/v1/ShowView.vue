@@ -3,16 +3,22 @@
   import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue'
   import DishesIndexView from '../../dishes/v1/IndexView.vue';
   import CurrentMenu from '../../menus/v1/components/CurrentMenu.vue';
+  import EditIcon from '../../icons/EditIcon.vue';
   import { useRestaurantsStore } from '../stores/RestaurantsStore';
   import { useMenusStore } from '../../menus/stores/MenusStore';
   import { useDishesStore } from '../../dishes/stores/DishesStore';
   import { useBasketsStore } from '../../baskets/stores/BasketsStore';
   import MenuCreateView from '../../menus/CreateView.vue';
+import { useContentsStore } from '../stores/ContentsStore';
 
   const restaurantStore = useRestaurantsStore();
+  const contentsStore = useContentsStore()
   const restaurant = computed(() => { return restaurantStore.currentRestaurant })
 
-  const menusStore = useMenusStore();  
+  const menusStore = useMenusStore();
+  const editRestaurant = () => {
+    contentsStore.setContent('RestaurantEditView')
+  }
 </script>
 
 <template>
@@ -25,6 +31,8 @@
             <p class="card-text">{{ restaurant.address }}</p>
             <p class="card-text">{{ restaurant.workingTime }}</p>
           </div>
+
+          <EditIcon @icon-click="editRestaurant" />
         </div>
 
         <CurrentMenu v-if="menusStore.menusExists" />    
