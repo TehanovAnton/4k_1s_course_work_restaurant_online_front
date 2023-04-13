@@ -10,6 +10,17 @@ const apiShowUser = async (authHeaders, user_id) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
+const apiShowUserByEmail = async (authHeaders, userEmail) => {
+  let response = await axios.get(`http://localhost:3000/users/show_by_email`,
+                                 { 
+                                  headers: authHeaders,
+                                  params: { email: userEmail }
+                                 })
+                            .catch(errorshandler)
+  
+  return { response: response, isSuccessful: isSuccessful(response) }
+}
+
 const apiIndexUsers = async (authHeaders) => {
   let response = await axios.get('http://localhost:3000/users',
                                  { headers: authHeaders })
@@ -22,10 +33,7 @@ const apiIndexUsers = async (authHeaders) => {
 
 const apiUpdateUser = async (authHeaders, user) => {
   let updateUrl = `http://localhost:3000/users/${user.id}`
-  let data = {
-    name: user.name,
-    email: user.email
-  }
+  let data = { user: user }
     
   let response = await axios.put(
     updateUrl, 
@@ -126,5 +134,6 @@ export default {
   apiUpdateUser,
   apiCreateUser,
   apiDestroyUser,
+  apiShowUserByEmail,
   can
 }

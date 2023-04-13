@@ -17,6 +17,8 @@ import BasketShowView from '../../dishes/v1/Show/BasketShowView.vue';
 import OrderCreateView from '../../orders/v1/CreateView.vue';
 import OrdersIndexView from '../../orders/v1/IndexView.vue';
 import OrderEditView from '../../orders/EditView.vue';
+import UserShowView from '../../users/v1/ShowView.vue';
+import UserEditView from '../../users/EditView.vue';
 
 const contentsStore = useContentsStore()
 const contents = {
@@ -33,7 +35,9 @@ const contents = {
   BasketShowView,
   OrderCreateView,
   OrdersIndexView,
-  OrderEditView
+  OrderEditView,
+  UserShowView,
+  UserEditView
 }
 </script>
 

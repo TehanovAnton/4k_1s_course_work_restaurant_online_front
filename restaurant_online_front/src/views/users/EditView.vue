@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue';
+  import { onBeforeMount, ref } from 'vue';
   import UserForm from '../../components/users/UserForm.vue';  
   import service from '../services/users/user_service'
   import tokensService from '../services/tokensService';
@@ -22,4 +22,4 @@
 
 <template>
   <UserForm :user="user" action-name="update" @form-submit="updatUser"/>
-</template>
+</template>  

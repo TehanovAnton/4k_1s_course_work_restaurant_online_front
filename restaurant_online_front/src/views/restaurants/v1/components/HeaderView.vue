@@ -18,12 +18,11 @@
 
 <template>
   <div class="r-header" :on-click="createWelcome">
-    <p class="h-element">Profile</p>
     <p class="h-element">Search</p>
+    <button @click="setContentView('UserShowView')">Profile</button>
     <button @click="setContentView('RestaurantsIndexView')">Restaurants</button>
     <button @click="setContentView('OrdersIndexView')">Orders</button>
-    <button @click="createWelcome">Create</button>
-    <button @click="basketShowView">Basket</button>
+    <button @click="createWelcome">Create</button>sIndex
   </div>
 </template>
 
