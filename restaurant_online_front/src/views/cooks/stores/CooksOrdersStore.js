@@ -13,7 +13,6 @@ export const useCooksOrdersStore = defineStore('cooksOrdersStore', () => {
   const currentOrder = ref({})
 
   const fetchOders = async (callback) => {
-    debugger
     let { response, isSuccessful } = await orders_service.apiIndexCooksOrders(currentUserStore.user.restaurant.id)
 
     if (isSuccessful) {

@@ -5,13 +5,12 @@
   const ordersStore = useCooksOrdersStore()
 
   onBeforeMount(async () => {
-    debugger
     await ordersStore.fetchOders((_response) => dataReady.value = true)
   })
 
   const dataReady = ref(false)
 </script>
-
+      
 <template>
   <slot v-if="dataReady" />
 </template>

@@ -1,6 +1,6 @@
 <script setup>
   import { computed } from 'vue';
-import OrderShowView from '../orders/v1/ShowView.vue';
+  import OrderShowView from './OrderShowView.vue';
   import LoadCooksOrders from './LoadCooksOrders.vue';
   import { useCooksOrdersStore } from './stores/CooksOrdersStore';
 
@@ -12,8 +12,7 @@ import OrderShowView from '../orders/v1/ShowView.vue';
 
 <template>
   <LoadCooksOrders>
-    {{ orders }}
-    <!-- <OrderShowView v-for="order in orders" :order="order" /> -->
+    <OrderShowView v-for="order in orders" :order="order" />
   </LoadCooksOrders>  
 </template>
 
