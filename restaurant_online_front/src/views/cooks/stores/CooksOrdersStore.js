@@ -5,12 +5,9 @@ import orders_service from '../../services/orders/order_service';
 import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
 import { useCurrentUserStore } from '../../../../src/stores/users/currentUser'
 
-export const useCooksOrdersStore = defineStore('cooksOrdersStore', () => {  
-  const restaurantsStore = useRestaurantsStore()
+export const useCooksOrdersStore = defineStore('cooksOrdersStore', () => {
   const currentUserStore = useCurrentUserStore()
-
   const orders = ref([])
-  const currentOrder = ref({})
 
   const fetchOders = async (callback) => {
     let { response, isSuccessful } = await orders_service.apiIndexCooksOrders(currentUserStore.user.restaurant.id)
@@ -23,37 +20,24 @@ export const useCooksOrdersStore = defineStore('cooksOrdersStore', () => {
     }
   }
 
-  const order = computed(() => {
-    return currentOrder.value
-  })
-
-  const setOrder = (order) => {
-    currentOrder.value = order
-  }
-
   const updateOrders = async () => {
     fetchOders((_response) => {})
   }
 
-  const restaurantOrders = (restaurant) => {
-    let userRestaurantOrders = orders.value.filter(order => {
-      return order.restaurant_id == restaurant.id
+  const updateOrder = (updatedOrder) => {
+    orders.value = orders.value.map((order) => {
+      if (order.id === updatedOrder.id) {
+        return updatedOrder
+      }
+
+      return order
     })
-
-    return userRestaurantOrders
   }
-
-  const currentRestaurantOrders = computed(() => {
-    return restaurantOrders(restaurantsStore.currentRestaurant)
-  })
 
   return {
     orders,
-    order,
-    currentRestaurantOrders,
-    restaurantOrders,
-    setOrder,
     fetchOders,
-    updateOrders
+    updateOrders,
+    updateOrder
   }
 })

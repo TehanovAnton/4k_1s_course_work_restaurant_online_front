@@ -4,25 +4,28 @@
   import { useCooksOrdersStore } from './stores/CooksOrdersStore';
   import moment from 'moment-timezone'
   import order_service from '../services/orders/order_service';
+  import { useCooksOrdersSocketStore } from './sockets/CooksOrdersSocketStore';
 
   const props = defineProps(['order'])
 
-  const contentsStore = useContentsStore
-  const ordersStore = useCooksOrdersStore()
+  const contentsStore = useContentsStore()
+  const ordersSocketStore = useCooksOrdersSocketStore()
 
-  const rating = ref(null)
-  const ratingText = ref(null)
+  const order = computed(() => {
+    return props.order
+  })
+
   const statusesTransitions = {
     created: { transition: 'transition_in_progress', name: 'In Progress' },
     in_progress: { transition: 'transition_ready', name: 'Ready' }
   }
 
   const reservation = computed(() => {
-    return props.order.reservation
+    return order.value.reservation
   })
 
   const orderState = computed(() => {
-    return props.order.order_state
+    return order.value.order_state
   })
 
   const nextTransition = computed(() => {
@@ -33,21 +36,9 @@
     return moment(time).tz(moment.tz.guess()).format('YYYY-MM-DD HH:mm')
   }
 
-  const showRatingForm = ref(false)
-
-  const hideRatingForm = () => { 
-    showRatingForm.value = false
-  }
-
   const submitTransition = async () => {
-    debugger
-    let {
-      isSuccessful
-    } = await order_service.apiUpdateOrderState(orderState.value.id, { transition: nextTransition.value.transition })
-    
-    if (isSuccessful) {
-      ordersStore.updateOrders()
-    }
+    let transition = { transition: nextTransition.value.transition }
+    await ordersSocketStore.udpateTransition(orderState.value.id, transition)
   }
 </script>
 

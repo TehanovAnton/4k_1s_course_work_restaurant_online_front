@@ -23,6 +23,7 @@
     <button @click="setContentView('RestaurantsIndexView')">Restaurants</button>
     <button @click="setContentView('OrdersIndexView')">Orders</button>
     <button @click="setContentView('CooksOrdersView')">Cooks Orders</button>
+    <button @click="setContentView('BasketShowView')">Basket</button>
     <button @click="createWelcome">Create</button>
   </div>
 </template>
