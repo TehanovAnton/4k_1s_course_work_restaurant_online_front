@@ -13,6 +13,17 @@ const apiIndexOrders = async (userId) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiIndexCooksOrders = async (restaurantId) => {
+  let response = await axios.get(`http://localhost:3000/cooks/restaurants/${restaurantId}/orders`,
+                                 { headers: tokensService.auth_headers() })
+                            .catch(errorshandler)
+
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+  
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const apiGetOrder = async (orderId) => {  
   let response = await axios.get(`http://localhost:3000/orders/${orderId}`,
                                  { headers: tokensService.auth_headers() })
@@ -188,5 +199,6 @@ export default {
   apiCancelOrder,
   apiCreateRating,
   apiUpdateOrderState,
+  apiIndexCooksOrders,
   can
 }

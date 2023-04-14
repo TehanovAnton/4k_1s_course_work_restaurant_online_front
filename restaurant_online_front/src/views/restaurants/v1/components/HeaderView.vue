@@ -22,7 +22,8 @@
     <button @click="setContentView('UserShowView')">Profile</button>
     <button @click="setContentView('RestaurantsIndexView')">Restaurants</button>
     <button @click="setContentView('OrdersIndexView')">Orders</button>
-    <button @click="createWelcome">Create</button>sIndex
+    <button @click="setContentView('CooksOrdersView')">Cooks Orders</button>
+    <button @click="createWelcome">Create</button>
   </div>
 </template>
 
