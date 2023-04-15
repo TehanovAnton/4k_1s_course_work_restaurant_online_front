@@ -28,7 +28,7 @@
     }
     args = args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
 
-    await dishCreateService.createModel(dishApi, args, dishFormErrorsStore, () => {
+    await dishCreateService.createModel(dishApi, args, dishFormErrorsStore, (_response) => {
       menusStore.updateAndSetCurrent(currentMenu.value, { view:'with_dishes' })
       contentsStore.setContent('RestaurantShowView')
     })
@@ -44,7 +44,7 @@
 <template>
   <Errors :errors-store="dishFormErrorsStore" />
 
-  <div class="create-container">
+  <div class="create-container">response
     <DishForm action-name="create" :dish="dish"
               @form-submit="createDish"
               @cancel="showRestaurant" />

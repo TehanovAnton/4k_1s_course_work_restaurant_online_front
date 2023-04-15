@@ -32,7 +32,7 @@
     }
     args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
 
-    await dishApi.apiUpdateModel(args, dishFormErrorsStore, async () => {
+    await dishApi.apiUpdateModel(args, dishFormErrorsStore, async (_response) => {
       await dishesStore.updateAndSetCurrent()
       contentsStore.setContent('RestaurantShowView')
     })
