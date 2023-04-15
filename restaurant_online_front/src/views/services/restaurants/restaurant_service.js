@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../common_methods';
+import { errorshandler, isSuccessful, setHeadersIfSuccessful, processableErrors } from '../common_methods';
 import tokensService from '../../services/tokensService';
 
 const apiIndexRestaurants = async (authHeaders) => {
@@ -22,7 +22,7 @@ const apiGetRestaurant = async (authHeaders, restaurantId) => {
   return { response: response, isSuccessful: isSuccessful }
 }
 
-const apiUpdateRestaurants = async (authHeaders, restaurant) => {
+const apiUpdateRestaurants = async (authHeaders, restaurant, errorsStore, successCallback) => {
   let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
   let data = restaurant.updateAttributes
   
@@ -30,9 +30,19 @@ const apiUpdateRestaurants = async (authHeaders, restaurant) => {
     updateUrl, 
     data,
     { headers: authHeaders }
-  ).catch(errorshandler)
+  ).catch((errors) => {
+    let errsArr = [ {error: 'Something went wrong'} ],
+        response = errors.response
 
-  return { response: response, isSuccessful: isSuccessful(response) }
+    if (processableErrors(response)) {
+      errsArr = response.data
+    }
+    
+    errorsStore.setErrors(errsArr)
+  })
+
+  if (!!response)
+    await successCallback({ response: response, isSuccessful: isSuccessful(response) })
 }
 
 const apiCanUpdateRestaurant = async (authHeaders, restaurant) => {
@@ -46,7 +56,7 @@ const apiCanUpdateRestaurant = async (authHeaders, restaurant) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
-const apiCreateRestaurants = async (authHeaders, restaurant) => {
+const apiCreateRestaurants = async (authHeaders, restaurant, errorsStore, successCallback) => {
   let createUrl = `http://localhost:3000/restaurants`
   let data = { restaurant: restaurant }  
   
@@ -54,9 +64,19 @@ const apiCreateRestaurants = async (authHeaders, restaurant) => {
     createUrl, 
     data, 
     { headers: authHeaders }
-  ).catch(errorshandler)
+  ).catch((errors) => {
+    let errsArr = [ {error: 'Something went wrong'} ],
+        response = errors.response
 
-  return { response: response, isSuccessful: isSuccessful(response) }
+    if (processableErrors(response)) {
+      errsArr = response.data
+    }
+    
+    errorsStore.setErrors(errsArr)
+  })
+
+  if (!!response)
+    successCallback({ response: response, isSuccessful: isSuccessful(response) })
 }
 
 const apiCanCreateRestaurants = async (authHeaders) => {
