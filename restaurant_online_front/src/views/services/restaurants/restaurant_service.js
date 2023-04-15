@@ -113,9 +113,9 @@ const apiCanDestroyRestaurant = async (authHeaders, restaurant) => {
 }
 
 const apiRestaurantSearch = async (matchExpression) => {
-  let searchUrl = `http://localhost:3000/restaurants/search`
+  let searchUrl = `http://localhost:3000/restaurants/search`  
   let data = { match_expression: matchExpression }
-    
+
   let response = await axios.get(
     searchUrl, 
     { headers: tokensService.auth_headers(), params: data }

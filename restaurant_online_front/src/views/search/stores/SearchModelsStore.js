@@ -22,10 +22,10 @@ export const useSearchModelsStore = defineStore('SearchModelsStore', () => {
     }
   }
 
-  const search = (searchInputText) => {
+  const search = async (searchInputText) => {
     searchText.value = searchInputText
 
-    fetchSearch(() => {})
+    await fetchSearch((_response) => {})
   }
 
   return {

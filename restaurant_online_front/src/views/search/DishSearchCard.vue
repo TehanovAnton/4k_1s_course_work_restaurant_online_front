@@ -14,7 +14,6 @@
   const restaurant = computed(() => dishMenu.value.restaurant)
 
   const showRestaurant = () => {
-    debugger
     restaurantsStore.setRestaurant(restaurant.value)
     menusStore.setMenu(dishMenu.value)
     contentsStore.setContent('RestaurantShowView')

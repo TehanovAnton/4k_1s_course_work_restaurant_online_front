@@ -12,7 +12,7 @@
   const restaurant = computed(() => props.model)
 
   const showRestaurant = () => {
-    restaurantsStore.setRestaurant(props.restaurant)
+    restaurantsStore.setRestaurant(props.model)
 
     if (!!!menusStore.currentMenu.id && restaurantsStore.currentRestaurant.menus.length > 0)
         menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
