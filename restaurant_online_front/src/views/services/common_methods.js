@@ -30,10 +30,16 @@ const responseHandler = (response) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const processableErrors = (response) => {
+  return [422, 400].response.status
+}
+
+
 
 export {
   isSuccessful,
   errorshandler,
   setHeadersIfSuccessful,
-  responseHandler
+  responseHandler,
+  processableErrors
 }

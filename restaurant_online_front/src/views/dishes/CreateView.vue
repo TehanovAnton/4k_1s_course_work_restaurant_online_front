@@ -17,7 +17,6 @@
   const contentsStore = useContentsStore()
   const dishFormErrorsStore = useDishFormErrorsStore()
   const dish = ref({ name:'', menu_id: currentMenu.value.id })
-  const errors = ref([])
 
   const createDish = async (modefiedDish) => {
     let args = {
