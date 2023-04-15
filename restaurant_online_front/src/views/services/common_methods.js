@@ -31,7 +31,7 @@ const responseHandler = (response) => {
 }
 
 const processableErrors = (response) => {
-  return [422, 400].response.status
+  return [422, 400].includes(response.status)
 }
 
 

@@ -33,7 +33,6 @@ const apiUpdateModel = async (args, errorsStore, successCallback) => {
     
     errorsStore.setErrors(errsArr)
   })
-  debugger
 
   if (!!response)
     successCallback()
