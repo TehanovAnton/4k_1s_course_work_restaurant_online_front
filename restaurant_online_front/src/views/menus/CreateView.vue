@@ -1,6 +1,7 @@
 <script setup>
   import { computed, ref } from 'vue';
   import MenuForm from '../../components/menus/MenuForm.vue';
+  import Errors from '../../components/errors/Errors.vue';
   import menuCreateService from '../services/modelCreateServices/modelCreateService'
   import menuApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
@@ -19,7 +20,6 @@
 
   const currentRestaurant = computed(() => restaurantsStore.currentRestaurant)
   const menu = ref({ restaurant_id: currentRestaurant.value.id })
-  const errors = ref([])
 
   const createMenu = async (modefiedMenu) => {
     let args = {
@@ -44,9 +44,7 @@
 </script>
 
 <template>
-  <p v-for="error in errors">
-    {{ error }}
-  </p>
+  <Errors :errors-store="menuFormErrorsStore" />
 
   <div class="create-menu-container">
     <MenuForm action-name="create" :menu="menu" from-label="New Menu"

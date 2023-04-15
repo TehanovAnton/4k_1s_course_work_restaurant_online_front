@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { errorshandler, isSuccessful } from '../common_methods';
+import { errorshandler, isSuccessful, processableErrors } from '../common_methods';
 import tokensService from '../../services/tokensService';
 
 const apiIndexMenus = async (authHeaders, restaurantId, options) => {
@@ -33,7 +33,7 @@ const apiShowMenu = async (authHeaders, menu) => {
   return { response: response, isSuccessful: isSuccessful(response) }
 }
 
-const apiUpdateMenu = async (authHeaders, menu) => {
+const apiUpdateMenu = async (authHeaders, menu, errorsStore, successCallback) => {
   let updateUrl = `http://localhost:3000/menus/${menu.id}`
   let data = menu.attributes
     
@@ -41,9 +41,19 @@ const apiUpdateMenu = async (authHeaders, menu) => {
     updateUrl, 
     data,
     { headers: authHeaders }
-  ).catch(errorshandler)
+  ).catch((errors) => {
+    let errsArr = [ {error: 'Something went wrong'} ],
+        response = errors.response
 
-  return { response: response, isSuccessful: isSuccessful(response) }
+    if (processableErrors(response)) {
+      errsArr = response.data
+    }
+    
+    errorsStore.setErrors(errsArr)
+  })
+
+  if (!!response)
+    successCallback({ response: response, isSuccessful: isSuccessful(response) })
 }
 
 const apiCreateMenu = async (authHeaders, menu) => {

@@ -22,24 +22,21 @@
   const currentMenuCopy = ref(Object.assign({}, menusStore.currentMenu))
 
   const updatMenu = async (menu) => {
-    let { 
-      response, 
-      isSuccessful
-    } = await service.apiUpdateMenu(tokensService.auth_headers(), menu)
+    await service.apiUpdateMenu(tokensService.auth_headers(), menu, menuFormErrorsStore, (reqResponse) => {
+      let { response } = reqResponse
 
-    if (isSuccessful) {
       tokensService.setAuthTokens(response.headers)
 
       menusStore.updateAndSetCurrent(response.data, { view: 'with_dishes' })
       menuFormErrorsStore.clearErrors()
       contentsStore.setContent('RestaurantShowView')
-    } else {
-      menuFormErrorsStore.setErrors(response.data)
-    }
+    })
   }
 </script>
 
 <template>
+  <Errors :errors-store="menuFormErrorsStore" />
+
   <div class="edit-menu-container">
     <MenuForm :menu="currentMenuCopy" action-name="update" :from-label="'Edit Menu'"
             @form-submit="updatMenu" @cancel="showRestaurant"/>

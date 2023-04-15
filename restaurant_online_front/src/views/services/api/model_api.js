@@ -35,7 +35,7 @@ const apiUpdateModel = async (args, errorsStore, successCallback) => {
   })
 
   if (!!response)
-    successCallback()
+    successCallback(response)
 }
 
 const apiDeletModel = async (args) => {
