@@ -6,7 +6,7 @@
   onBeforeMount(async () => {
     const socket = new WebSocket('ws://localhost:3000/cable')
 
-    socket.onopen = (event) => {  
+    socket.onopen = (_event) => {  
       const identifier = { 
         channel:"ChatChannel", 
         room: "chat_channel", 
