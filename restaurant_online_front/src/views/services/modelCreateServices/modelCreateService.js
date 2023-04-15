@@ -1,3 +1,4 @@
+import { processableErrors } from "../common_methods"
 
 const createModel = async (modelApi, args, errorsStore, successfulCallback) => {
   let { response, isSuccessful } = await modelApi.apiCreateModel(args)
@@ -5,7 +6,13 @@ const createModel = async (modelApi, args, errorsStore, successfulCallback) => {
   if (isSuccessful) {
     successfulCallback(response)
   } else {
-    errorsStore.setErrors(response.data)
+    let errsArr = [ {error: 'Something went wrong'} ]
+
+    if (processableErrors(response)) {
+      errsArr = response.data
+    }
+    
+    errorsStore.setErrors(errsArr)
   }
 }
 

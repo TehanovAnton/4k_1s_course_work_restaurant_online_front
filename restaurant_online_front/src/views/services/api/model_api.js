@@ -1,4 +1,4 @@
-import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../common_methods';
+import { errorshandler, isSuccessful, setHeadersIfSuccessful, processableErrors } from '../common_methods';
 import axios from 'axios';
 import router from '../../../router/router';
 
@@ -19,13 +19,23 @@ const apiCreateModel = async (args) => {
   return apiResponseHandelr(response)
 }
 
-const apiUpdateModel = async (args) => {    
+const apiUpdateModel = async (args, errorsStore, successCallback) => {    
   let response = await axios.put(args['updateUrl'], 
                                  args['data'],
                                  args['requestOptions']
-  ).catch(errorshandler)
+  ).catch((errors) => {
+    let errsArr = [ {error: 'Something went wrong'} ],
+        response = errors.response
 
-  return apiResponseHandelr(response)
+    if (processableErrors(response)) {
+      errsArr = response.data
+    }
+    
+    errorsStore.setErrors(errsArr)
+  })
+
+  if (!!response)
+    successCallback(response)
 }
 
 const apiDeletModel = async (args) => {
@@ -82,6 +92,9 @@ const apiCanRequest = async (action, args) => {
 }
 
 const apiResponseHandelr = (response) => {
+  if (!!!response)
+    return
+
   let isSuccessfulReq = isSuccessful(response)
   let headers = response.headers
 

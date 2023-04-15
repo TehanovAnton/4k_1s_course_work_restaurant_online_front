@@ -20,7 +20,7 @@
     contentsStore.setContent('RestaurantShowView')
   }
 
-  const currentDishCopy = ref(Object.assign({}, dishesStore.currentDish))
+  const currentDishCopy = ref(Object.assign({}, dishesStore.currentDish))  
 
   const updateDish = async (modefiedDish) => {
     let args = {
@@ -32,18 +32,16 @@
     }
     args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
 
-    let { isSuccessful, response } = await dishApi.apiUpdateModel(args)
-
-    if (isSuccessful) {
+    await dishApi.apiUpdateModel(args, dishFormErrorsStore, async (_response) => {
       await dishesStore.updateAndSetCurrent()
       contentsStore.setContent('RestaurantShowView')
-    } else {
-      dishFormErrorsStore.setErrors(response.data)
-    }
+    })
   }
 </script>
 
 <template>
+  <Errors :errors-store="dishFormErrorsStore" />
+
   <div class="edit-container">
     <DishForm :dish="currentDishCopy" action-name="update"
               @form-submit="updateDish" @cancel="showRestaurant"/>
