@@ -20,9 +20,12 @@ import OrderEditView from '../../orders/EditView.vue';
 import UserShowView from '../../users/v1/ShowView.vue';
 import UserEditView from '../../users/EditView.vue';
 import CooksOrdersView from '../../cooks/OrdersView.vue';
+import SearchIndexView from '../../search/IndexView.vue';
+
 
 const contentsStore = useContentsStore()
 const contents = {
+  SearchIndexView,
   CooksOrdersView,
   RestaurantShowView,
   RestaurantEditView,

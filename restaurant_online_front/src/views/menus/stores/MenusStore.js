@@ -54,7 +54,8 @@ export const useMenusStore = defineStore('menusStore', () => {
 
   const setMenu = (menu) => {
     updateSessionObjectContent(() => {
-      currentMenu.value = menu
+      let findedMenu = menus.value.find((m) => m.id === menu.id)
+      currentMenu.value = findedMenu
     })
   }
 
