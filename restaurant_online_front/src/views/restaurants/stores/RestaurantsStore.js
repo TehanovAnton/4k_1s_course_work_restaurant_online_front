@@ -47,8 +47,9 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
   }
 
   const setRestaurant = (restaurant) => {
-    updateSessionObjectContent(() => { 
-      currentRestaurant.value = restaurant
+    updateSessionObjectContent(() => {
+      let findedRest = restaurants.value.find((r) => r.id === restaurant.id)
+      currentRestaurant.value = findedRest
     })
   }
 

@@ -18,7 +18,7 @@
 
 <template>
   <div class="r-header" :on-click="createWelcome">
-    <p class="h-element">Search</p>
+  <button @click="setContentView('SearchIndexView')">Search</button>
     <button @click="setContentView('UserShowView')">Profile</button>
     <button @click="setContentView('RestaurantsIndexView')">Restaurants</button>
     <button @click="setContentView('OrdersIndexView')">Orders</button>
