@@ -14,7 +14,12 @@
   const searchEmail = ref('');
 
   const setUser = (userValue) => {
-    user.value = userValue
+    if (!!userValue) {
+      if (currentUser.value.id === userValue.id)
+        currentUserStore.setCurrentUser(userValue)  
+
+      user.value = userValue
+    }
   }
 
   onBeforeMount(() => {
@@ -35,7 +40,8 @@
     editUserForm.value = true
   }
 
-  const resetPage = () => {
+  const resetPage = (formUser) => {
+    setUser(formUser)
     editUserForm.value = false
   }
 </script>

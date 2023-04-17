@@ -1,23 +1,40 @@
 <script setup>
-import { useCurrentUserStore } from '../../stores/users/currentUser';
-import RegularFormStyle from '../stylecomponents/RegularFormStyle.vue';
+  import { ref } from 'vue';
+  import { useCurrentUserStore } from '../../stores/users/currentUser';
+  import RegularFormStyle from '../stylecomponents/RegularFormStyle.vue';
 
   const props = defineProps(['user', 'actionName', 'label'])
   const emits = defineEmits(['formSubmit', 'cancle'])
 
   const currentUserStore = useCurrentUserStore()
+  const formUser = ref(Object.assign({}, props.user))
+
+  const setAdditionalAttributes = (formUser) => {
+    debugger
+    if (formUser.type === 'Cook') {
+      formUser.restaurants_cook_attributes = { restaurant_id: currentUserStore.user.restaurant.id }
+    } else if (formUser.type === 'SuperAdmin') {
+      formUser.restaurants_admin_attributes = { restaurant_id: currentUserStore.user.restaurant.id }
+    }
+  }
+
+  const formSubmit = (formUser) => {
+    debugger
+    emits('formSubmit', formUser)
+  }
 </script>
 
 <template>
   <RegularFormStyle>
+    <p>{{ formUser.restaurants_cook_attributes }}</p>
     <div class="form">
       <label for="u-name">{{ label }}</label>
       <div class="form__content">
-        <label for="u-name">Name: </label>
-        <input id='u-name' class="text-input" v-model="user.name"/>
+        <label for="u-name">Name: </label>Admin
+        <input id='u-name' class="text-input" v-model="formUser.name"/>
 
         <label for="u-email">Email: </label>
-        <input id='u-email' class="text-input" v-model="user.email"/>
+        <input id='u-email' class="text-input" v-model="formUser.email"/>
         
         <div v-if="actionName == 'create'">
           <label for="u-password">Password: </label>
@@ -32,8 +49,7 @@ import RegularFormStyle from '../stylecomponents/RegularFormStyle.vue';
 
         <div v-if="currentUserStore.user.type === 'SuperAdmin'">
           <label for="user-type">User Type:</label>
-          <select id="user-type" class="text-input" v-model="user.type">
-            <option value="">Select a type</option>
+          <select id="user-type" class="text-input" v-model="formUser.type" @change="setAdditionalAttributes(formUser)">
             <option value="Customer">Customer</option>
             <option value="Cook">Cook</option>
             <option value="SuperAdmin">SuperAdmin</option>
@@ -42,7 +58,7 @@ import RegularFormStyle from '../stylecomponents/RegularFormStyle.vue';
       </div>
 
       <div class="form__actions">
-        <button type="button" @click="$emit('formSubmit')">{{ actionName }}</button>
+        <button type="button" @click="formSubmit(formUser)">{{ actionName }}</button>
         <button type="button" @click="$emit('cancle')">cancle</button>
       </div>
     </div>

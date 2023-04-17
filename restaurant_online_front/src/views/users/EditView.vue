@@ -7,15 +7,15 @@
   const props = defineProps(['user'])
   const emits = defineEmits(['data-change', 'cancle'])
 
-  const updatUser = async () => {
+  const updatUser = async (formUser) => {
     let { 
       response, 
       isSuccessful
-    } = await service.apiUpdateUser(tokensService.auth_headers(), props.user)
+    } = await service.apiUpdateUser(tokensService.auth_headers(), formUser)
 
     if (isSuccessful) {      
       tokensService.setAuthTokens(response.headers)
-      emits('data-change')
+      emits('data-change', response.data)
     }
   }
 </script>
