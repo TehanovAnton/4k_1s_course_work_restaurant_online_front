@@ -41,6 +41,3 @@
     <OrderShowView v-for="order in readyOrders" :order="order" />
   </LoadCooksOrders>  
 </template>
-
-<style>
-</style>
