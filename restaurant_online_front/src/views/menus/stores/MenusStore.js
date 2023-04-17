@@ -3,8 +3,10 @@ import { computed, ref } from "vue"
 import menuservice from '../../services/menus/menu_service';
 import tokensService from "../../services/tokensService";
 import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
+import { OwnService } from "../../services/owns/ownService";
 
-export const useMenusStore = defineStore('menusStore', () => {  
+export const useMenusStore = defineStore('menusStore', () => {
+  const ownService = new OwnService()
 
   const sessionObjectkey = 'menu'
 
@@ -93,11 +95,26 @@ export const useMenusStore = defineStore('menusStore', () => {
     return menus.value.length > 0
   })
 
+  const ownMenu = (menu, user) => {
+    let userRestaurants = restaurantsStore.userRestaurants(user)
+
+    if (userRestaurants.length === 0)
+      return false
+
+    let restaurant = restaurantsStore.findRestaurant(userRestaurants, restaurantsStore.currentRestaurant)
+
+    if (!!!restaurant)
+      return false
+
+    return ownService.ownModel(menu, user, menus.value)
+  }
+
   return { 
     currentMenu, 
     menus,
     allDishes,
     menusExists,
+    ownMenu,
     setMenu, 
     updateAndSetCurrent,
     fetchMenus

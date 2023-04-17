@@ -101,7 +101,6 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
   }
 
   const ownRestaurant = (restaurant, user) => {
-    debugger
     return ownService.ownModel(restaurant, user, userRestaurants(user))
   }
 
@@ -109,6 +108,7 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
     currentRestaurant, 
     restaurants,
     currentUserRestaurants,
+    userRestaurants,
     ownRestaurant,
     findRestaurant,
     setRestaurant, 

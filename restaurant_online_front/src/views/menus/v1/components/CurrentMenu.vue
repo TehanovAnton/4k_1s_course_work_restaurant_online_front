@@ -8,9 +8,11 @@
   import MenuSelect from '../components/MenuSelect.vue'
   import DeleteIcon from '../../../icons/DeleteIcon.vue';
 import tokensService from '../../../services/tokensService';
+import { useCurrentUserStore } from '../../../../stores/users/currentUser';
 
   const menusStore = useMenusStore()
   const contentsStore = useContentsStore()
+  const currentUserSotre = useCurrentUserStore()
   const menus = computed(() => { return menusStore.menus })
 
   const currentMenu = computed(() => {
@@ -33,6 +35,10 @@ import tokensService from '../../../services/tokensService';
       contentsStore.setContent('RestaurantShowView')
     }
   }
+
+  const ownMenu = computed(() => {
+    return menusStore.ownMenu(currentMenu.value, currentUserSotre.user)
+  })
 </script>
 
 <template>
@@ -46,8 +52,8 @@ import tokensService from '../../../services/tokensService';
             @menu-change="setMenu"
           />
 
-          <EditIcon @icon-click="editMenu" />
-          <DeleteIcon @icon-click="deleteMenu" />
+          <EditIcon v-if="ownMenu" @icon-click="editMenu" />
+          <DeleteIcon v-if="ownMenu" @icon-click="deleteMenu" />
         </div>
       </div>
     </div>
