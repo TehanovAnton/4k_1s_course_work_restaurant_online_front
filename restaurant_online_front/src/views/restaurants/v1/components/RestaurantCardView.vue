@@ -14,8 +14,8 @@ import { useMenusStore } from '../../../menus/stores/MenusStore';
     restaurantsStore.setRestaurant(props.restaurant)
 
     if (
-      restaurantsStore.currentRestaurant.menus.length > 0 &&
-      !menusStore.ownMenu(menusStore.currentMenu, currentUserSotre.user)  
+      restaurantsStore.currentRestaurant.menus.length > 0 && !menusStore.ownMenu(menusStore.currentMenu, currentUserSotre.user) ||
+      !!!menusStore.currentMenu
     )
       menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
 

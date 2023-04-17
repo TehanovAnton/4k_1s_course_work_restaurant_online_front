@@ -18,7 +18,6 @@ import { useRestaurantsStore } from '../../../restaurants/stores/RestaurantsStor
   const menus = computed(() => { return menusStore.menus })
 
   const currentMenu = computed(() => {
-    if (!!!menusStore.currentMenu)
     return menusStore.findMenu(menusStore.currentMenu)
   })
 
