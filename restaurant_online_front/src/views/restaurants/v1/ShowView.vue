@@ -13,9 +13,12 @@
   import { useContentsStore } from '../stores/ContentsStore';
   import MenuCreateView from '../../menus/CreateView.vue';
   import DeleteIcon from '../../icons/DeleteIcon.vue';
+import { useCurrentUserStore } from '../../../stores/users/currentUser';
 
   const restaurantStore = useRestaurantsStore();
   const contentsStore = useContentsStore()
+  const currentUserSotre = useCurrentUserStore()
+  
   const restaurant = computed(() => { return restaurantStore.currentRestaurant })
 
   const menusStore = useMenusStore();
@@ -30,6 +33,10 @@
       contentsStore.setContent('RestaurantsIndexView')
     }
   }
+
+  const ownRestaurant = computed(() => {
+    restaurantStore.ownRestaurant(restaurant.value, currentUserSotre.user)
+  })
 </script>
 
 <template>
@@ -43,8 +50,8 @@
             <p class="card-text">{{ restaurant.workingTime }}</p>
           </div>
 
-          <EditIcon @icon-click="editRestaurant" />
-          <DeleteIcon @icon-click="deleteRestaurant" />
+          <EditIcon v-if="ownRestaurant" @icon-click="editRestaurant" />
+          <DeleteIcon v-if="ownRestaurant" @icon-click="deleteRestaurant" />
         </div>
 
         <CurrentMenu v-if="menusStore.menusExists" />    

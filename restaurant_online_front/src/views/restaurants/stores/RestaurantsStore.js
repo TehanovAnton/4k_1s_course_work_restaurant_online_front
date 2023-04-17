@@ -3,10 +3,12 @@ import { computed, ref } from "vue"
 import restaurantService from '../../../views/services/restaurants/restaurant_service';
 import tokensService from "../../services/tokensService";
 import { useCurrentUserStore } from '../../../stores/users/currentUser'
+import { OwnService } from "../../services/owns/ownService";
 
 export const useRestaurantsStore = defineStore('restaurantsStore', () => {  
   const currentUserStore = useCurrentUserStore()
   const sessionObjectkey = 'restaurant'
+  const ownService = new OwnService()
 
   const sessionObject = (sessionData) => {
     return JSON.parse(sessionData)
@@ -90,10 +92,24 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
     }
   }
 
+  const userRestaurants = (user) => {
+    return restaurants.value.filter(r => {
+      return r.restaurants_admins.find(ra => {
+        return ra.user_id === user.id
+      })
+    })
+  }
+
+  const ownRestaurant = (restaurant, user) => {
+    debugger
+    return ownService.ownModel(restaurant, user, userRestaurants(user))
+  }
+
   return { 
     currentRestaurant, 
     restaurants,
     currentUserRestaurants,
+    ownRestaurant,
     findRestaurant,
     setRestaurant, 
     updateAndSetCurrent,
