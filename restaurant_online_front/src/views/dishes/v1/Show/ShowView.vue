@@ -10,9 +10,11 @@
   import dishApi from '../../../services/api/model_api';
   import tokensService from '../../../services/tokensService';
 import { useMenusStore } from '../../../menus/stores/MenusStore';
+import { useCurrentUserStore } from '../../../../stores/users/currentUser';
 
   const props = defineProps(['dish'])
 
+  const currentUserStore = useCurrentUserStore()
   const contentsStore = useContentsStore()
   const dishesStore = useDishesStore()
   const basketsStore = useBasketsStore()
@@ -67,6 +69,10 @@ import { useMenusStore } from '../../../menus/stores/MenusStore';
     for(let i = 0; i < times; ++i)
       addDishToBasket(dish.value);
   }
+
+  const ownDish = computed(() => {
+    return dishesStore.ownDish(dish.value, currentUserStore.user)
+  })
 </script>
 
 <template>
@@ -79,8 +85,8 @@ import { useMenusStore } from '../../../menus/stores/MenusStore';
       <div class="card-body">
         <h5 class="card-title">{{ dish.name }}</h5>
         <p class="card-text text-muted">{{ dish.description }}</p>
-        <EditIcon @icon-click="editDish" />
-        <DeleteIcon @icon-click="deleteDish" />
+        <EditIcon v-if="ownDish" @icon-click="editDish" />
+        <DeleteIcon v-if="ownDish" @icon-click="deleteDish" />
         <div class="input-group">
           <div class="input-group-prepend">
             <button class="btn btn-outline-secondary" type="button" @click="decrement(dish)">-</button>

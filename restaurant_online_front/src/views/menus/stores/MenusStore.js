@@ -96,14 +96,7 @@ export const useMenusStore = defineStore('menusStore', () => {
   })
 
   const ownMenu = (menu, user) => {
-    let userRestaurants = restaurantsStore.userRestaurants(user)
-
-    if (userRestaurants.length === 0)
-      return false
-
-    let restaurant = restaurantsStore.findRestaurant(userRestaurants, restaurantsStore.currentRestaurant)
-
-    if (!!!restaurant)
+    if (!ownService.ownModel(restaurantsStore.currentRestaurant, user))
       return false
 
     return ownService.ownModel(menu, user, menus.value)

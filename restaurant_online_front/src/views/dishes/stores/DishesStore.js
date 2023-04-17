@@ -3,8 +3,11 @@ import { computed, ref } from "vue"
 import dishApi from '../../services/api/model_api'
 import tokensService from "../../services/tokensService";
 import { useMenusStore } from '../../menus/stores/MenusStore';
+import { OwnService } from "../../services/owns/ownService";
 
 export const useDishesStore = defineStore('dishesStore', () => {  
+  const ownService = new OwnService()
+
   const currentDish = ref({})
   const menusStore = useMenusStore()
 
@@ -44,9 +47,17 @@ export const useDishesStore = defineStore('dishesStore', () => {
     }
   }
 
+  const ownDish = (dish, user) => {
+    if (!ownService.ownModel(currentMenu.value, user))
+      return false
+
+    return ownService.ownModel(dish, user, dishes)
+  }
+
   return { 
     currentDish, 
     dishes,
+    ownDish,
     setDish, 
     updateAndSetCurrent,
     fetchDishes
