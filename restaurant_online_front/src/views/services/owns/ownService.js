@@ -3,6 +3,10 @@ export class OwnService {
     
   }
 
+  isUserType(type, user) {
+    return user.type === type
+  }
+
   userModels (user, models) {
     return models.filter(r => {
       return r.models_admins.find(ra => {
