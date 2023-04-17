@@ -68,7 +68,9 @@ export const useMenusStore = defineStore('menusStore', () => {
   const updateAndSetCurrent = async (menu, options = {}) => {
     fetchMenus((response) => {
         let findedMenu = response.data.filter(m => m.id === menu.id)[0]
-        setMenu(findedMenu)
+
+        if (findedMenu)
+          setMenu(findedMenu)
       },
       options
     )

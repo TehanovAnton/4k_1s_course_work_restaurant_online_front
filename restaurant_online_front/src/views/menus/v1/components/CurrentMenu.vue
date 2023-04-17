@@ -9,13 +9,16 @@
   import DeleteIcon from '../../../icons/DeleteIcon.vue';
 import tokensService from '../../../services/tokensService';
 import { useCurrentUserStore } from '../../../../stores/users/currentUser';
+import { useRestaurantsStore } from '../../../restaurants/stores/RestaurantsStore';
 
   const menusStore = useMenusStore()
+  const restaurantsStore = useRestaurantsStore()
   const contentsStore = useContentsStore()
   const currentUserSotre = useCurrentUserStore()
   const menus = computed(() => { return menusStore.menus })
 
   const currentMenu = computed(() => {
+    if (!!!menusStore.currentMenu)
     return menusStore.findMenu(menusStore.currentMenu)
   })
 
@@ -31,7 +34,7 @@ import { useCurrentUserStore } from '../../../../stores/users/currentUser';
     } = await menu_service.apiDestroyMenu(tokensService.auth_headers(), currentMenu.value)
 
     if (isSuccessful) {
-      menusStore.updateAndSetCurrent(menusStore.menus[0])
+      menusStore.updateAndSetCurrent(menusStore.currentMenu)
       contentsStore.setContent('RestaurantShowView')
     }
   }
