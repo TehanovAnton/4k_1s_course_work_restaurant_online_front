@@ -16,7 +16,7 @@ import { useCurrentUserStore } from '../../../../stores/users/currentUser';
   const menus = computed(() => { return menusStore.menus })
 
   const currentMenu = computed(() => {
-    return menusStore.currentMenu
+    return menusStore.findMenu(menusStore.currentMenu)
   })
 
   const editMenu = () => contentsStore.setContent('MenuEditView')
@@ -37,7 +37,10 @@ import { useCurrentUserStore } from '../../../../stores/users/currentUser';
   }
 
   const ownMenu = computed(() => {
-    return menusStore.ownMenu(currentMenu.value, currentUserSotre.user)
+    if (currentMenu.value)
+      return menusStore.ownMenu(currentMenu.value, currentUserSotre.user)
+
+    return false
   })
 </script>
 

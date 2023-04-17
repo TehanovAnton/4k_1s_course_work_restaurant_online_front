@@ -17,10 +17,6 @@ export class OwnService {
 
   findModel (modelsCollection, model) {
     let foundedmodel = modelsCollection.find(r => r.id === model.id)
-
-    if (!!!foundedmodel)
-      foundedmodel = modelsCollection[0]
-
     return foundedmodel
   }
 

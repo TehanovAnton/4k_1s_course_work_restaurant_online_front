@@ -54,9 +54,13 @@ export const useMenusStore = defineStore('menusStore', () => {
     sessionStorage.setItem(sessionObjectkey, sessionObjectJsonData())
   }
 
+  const findMenu = (menu) => {
+    return menus.value.find((m) => m.id === menu.id)
+  }
+
   const setMenu = (menu) => {
     updateSessionObjectContent(() => {
-      let findedMenu = menus.value.find((m) => m.id === menu.id)
+      let findedMenu = findMenu(menu)
       currentMenu.value = findedMenu
     })
   }
@@ -95,8 +99,19 @@ export const useMenusStore = defineStore('menusStore', () => {
     return menus.value.length > 0
   })
 
+  const userMenus = (user) => {
+    let userRestaurants = restaurantsStore.userRestaurants(user),
+        userRestaurantsMenus = []
+
+    userRestaurants.forEach(restaurant => {
+      restaurant.menus.forEach(menu => userRestaurantsMenus.push(menu))
+    })
+  
+    return userRestaurantsMenus
+  }
+
   const ownMenu = (menu, user) => {
-    if (!ownService.ownModel(restaurantsStore.currentRestaurant, user))
+    if (!ownService.ownModel(restaurantsStore.currentRestaurant, user, restaurantsStore.userRestaurants(user)))
       return false
 
     return ownService.ownModel(menu, user, menus.value)
@@ -107,6 +122,8 @@ export const useMenusStore = defineStore('menusStore', () => {
     menus,
     allDishes,
     menusExists,
+    findMenu,
+    userMenus,
     ownMenu,
     setMenu, 
     updateAndSetCurrent,

@@ -1,18 +1,24 @@
 <script setup>
-  import { useMenusStore } from '../../../menus/stores/MenusStore';
+  import { useCurrentUserStore } from '../../../../stores/users/currentUser';
+import { useMenusStore } from '../../../menus/stores/MenusStore';
   import { useContentsStore } from '../../stores/ContentsStore';
   import { useRestaurantsStore } from '../../stores/RestaurantsStore';
 
   const props = defineProps(['restaurant'])
   const restaurantsStore = useRestaurantsStore()
-  const contentsStore = useContentsStore()
+  const contentsStore = useContentsStore()      
   const menusStore = useMenusStore()
+  const currentUserSotre = useCurrentUserStore()
 
   const showRestaurant = () => {
     restaurantsStore.setRestaurant(props.restaurant)
 
-    if (!!!menusStore.currentMenu.id && restaurantsStore.currentRestaurant.menus.length > 0)
-        menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
+    if (
+      restaurantsStore.currentRestaurant.menus.length > 0 &&
+      !menusStore.ownMenu(menusStore.currentMenu, currentUserSotre.user)  
+    )
+      menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
+
     contentsStore.setContent('RestaurantShowView')
   }
 </script>

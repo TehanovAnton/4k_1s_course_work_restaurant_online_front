@@ -48,10 +48,10 @@ export const useDishesStore = defineStore('dishesStore', () => {
   }
 
   const ownDish = (dish, user) => {
-    if (!ownService.ownModel(currentMenu.value, user))
+    if (!ownService.ownModel(currentMenu.value, user, menusStore.userMenus(user)))
       return false
 
-    return ownService.ownModel(dish, user, dishes)
+    return ownService.ownModel(dish, user, dishes.value)
   }
 
   return { 

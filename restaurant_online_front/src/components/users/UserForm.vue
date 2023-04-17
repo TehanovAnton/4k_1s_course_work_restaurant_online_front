@@ -20,7 +20,6 @@
 
     if (formUser.value.type === 'SuperAdmin') {
       let restaurant = restaurantsStore.findRestaurant(currentUserRestaurants.value, formUser.value.restaurants[0])
-      debugger
       return Object.assign({}, restaurant)
     }      
       
@@ -43,8 +42,6 @@
 
   const setAdditionalRestaurantAttributes = (formUser) => {
     if (formUser.type === 'Cook') {
-
-      debugger
       if (!!!formUser.restaurants_cook) {
         formUser.restaurants_cook_attributes = { restaurant_id: formRestaurant.value.id }
       } else {

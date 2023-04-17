@@ -13,7 +13,7 @@
   import { useContentsStore } from '../stores/ContentsStore';
   import MenuCreateView from '../../menus/CreateView.vue';
   import DeleteIcon from '../../icons/DeleteIcon.vue';
-import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import { useCurrentUserStore } from '../../../stores/users/currentUser';
 
   const restaurantStore = useRestaurantsStore();
   const contentsStore = useContentsStore()
@@ -35,7 +35,7 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
   }
 
   const ownRestaurant = computed(() => {
-    restaurantStore.ownRestaurant(restaurant.value, currentUserSotre.user)
+    return restaurantStore.ownRestaurant(restaurant.value, currentUserSotre.user)
   })
 </script>
 
@@ -57,9 +57,9 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
         <CurrentMenu v-if="menusStore.menusExists" />    
       </div>
 
-      <DishesIndexView v-if="menusStore.menusExists" />
+      <DishesIndexView v-if="ownRestaurant && menusStore.menusExists" />
 
-      <MenuCreateView v-if="!menusStore.menusExists" />
+      <MenuCreateView v-if="ownRestaurant && !menusStore.menusExists" />
     </div>
   </LoadRestaurants>
 </template>
