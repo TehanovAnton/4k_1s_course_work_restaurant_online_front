@@ -6,15 +6,22 @@
   import EditIcon from '../../icons/EditIcon.vue';
   import EditView from '../EditView.vue';
   import { useContentsStore } from '../../restaurants/stores/ContentsStore';
+import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
 
   const currentUserStore = useCurrentUserStore();  
   const contentsStore = useContentsStore()
+  const restaurantsStore = useRestaurantsStore()
+
   const currentUser = computed(() => currentUserStore.user)
   const user = ref({})
   const searchEmail = ref('');
 
   const setUser = (userValue) => {
     if (!!userValue) {
+      if (userValue.type === 'Cook') {
+        userValue.restaurant = restaurantsStore.findRestaurant(restaurantsStore.currentUserRestaurants, userValue.restaurant)
+      }
+
       if (currentUser.value.id === userValue.id)
         currentUserStore.setCurrentUser(userValue)  
 

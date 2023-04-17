@@ -28,7 +28,6 @@ import tokensService from '../../../services/tokensService';
       isSuccessful
     } = await menu_service.apiDestroyMenu(tokensService.auth_headers(), currentMenu.value)
 
-    debugger
     if (isSuccessful) {
       menusStore.updateAndSetCurrent(menusStore.menus[0])
       contentsStore.setContent('RestaurantShowView')

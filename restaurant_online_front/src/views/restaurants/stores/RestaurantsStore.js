@@ -1,9 +1,11 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import restaurantService from '../../../views/services/restaurants/restaurant_service';
 import tokensService from "../../services/tokensService";
+import { useCurrentUserStore } from '../../../stores/users/currentUser'
 
 export const useRestaurantsStore = defineStore('restaurantsStore', () => {  
+  const currentUserStore = useCurrentUserStore()
   const sessionObjectkey = 'restaurant'
 
   const sessionObject = (sessionData) => {
@@ -29,6 +31,14 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
   const currentRestaurant = ref(initObject())
   const restaurants = ref([])
 
+  const currentUserRestaurants = computed(() => {
+    return restaurants.value.filter(r => {
+      return r.restaurants_admins.find(ra => {
+        return ra.user_id === currentUserStore.user.id
+      })
+    })
+  })
+
   const currentObjectExists = () => {
     return !!currentRestaurant.value
   }
@@ -53,6 +63,15 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
     })
   }
 
+  const findRestaurant = (restaurantsCollection, restaurant) => {
+    let foundedRestaurant = restaurantsCollection.find(r => r.id === restaurant.id)
+
+    if (!!!foundedRestaurant)
+      foundedRestaurant = restaurantsCollection[0]
+
+    return foundedRestaurant
+  }
+
   const updateAndSetCurrent = async (restaurant) => {
     fetchRestaurants((response) => {
       let foundedRestaurant = response.data.filter(r => r.id === restaurant.id)[0]
@@ -73,7 +92,9 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
 
   return { 
     currentRestaurant, 
-    restaurants, 
+    restaurants,
+    currentUserRestaurants,
+    findRestaurant,
     setRestaurant, 
     updateAndSetCurrent,
     fetchRestaurants
