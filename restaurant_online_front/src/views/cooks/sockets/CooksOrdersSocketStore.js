@@ -9,8 +9,8 @@ export const useCooksOrdersSocketStore = defineStore('cooksOrdersSocketStore', (
   const socketService = new SocketService(
     ordersStore,
     'ws://localhost:3000/cable',
-    "OrdersChannel",
-    "orders_channel",
+    "CooksOrdersChannel",
+    "cooks_orders_channel",
     'order'
   )
 

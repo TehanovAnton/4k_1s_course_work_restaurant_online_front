@@ -5,7 +5,7 @@ import orders_service from '../../services/orders/order_service';
 import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
 import { useCurrentUserStore } from '../../../../src/stores/users/currentUser'
 
-export const useOrdersStore = defineStore('ordersStore', () => {  
+export const useOrdersStore = defineStore('ordersStore', () => {    
   const restaurantsStore = useRestaurantsStore()
   const currentUserStore = useCurrentUserStore()
 
@@ -47,10 +47,21 @@ export const useOrdersStore = defineStore('ordersStore', () => {
     return restaurantOrders(restaurantsStore.currentRestaurant)
   })
 
+  const updateModel = (updatedOrder) => {
+    orders.value = orders.value.map((order) => {
+      if (order.id === updatedOrder.id) {
+        return updatedOrder
+      }
+
+      return order
+    })
+  }
+
   return {
     orders,
     order,
     currentRestaurantOrders,
+    updateModel,
     restaurantOrders,
     setOrder,
     fetchOders,
