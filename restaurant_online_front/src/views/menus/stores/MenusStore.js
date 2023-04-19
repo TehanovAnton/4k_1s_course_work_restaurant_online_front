@@ -102,10 +102,10 @@ export const useMenusStore = defineStore('menusStore', () => {
   })
 
   const userMenus = (user) => {
-    let userRestaurants = restaurantsStore.userRestaurants(user),
+    let userModels = restaurantsStore.userModels(user),
         userRestaurantsMenus = []
 
-    userRestaurants.forEach(restaurant => {
+    userModels.forEach(restaurant => {
       restaurant.menus.forEach(menu => userRestaurantsMenus.push(menu))
     })
   
@@ -113,7 +113,7 @@ export const useMenusStore = defineStore('menusStore', () => {
   }
 
   const ownMenu = (menu, user) => {
-    if (!ownService.ownModel(restaurantsStore.currentRestaurant, user, restaurantsStore.userRestaurants(user)))
+    if (!ownService.ownModel(restaurantsStore.currentRestaurant, user, restaurantsStore.userModels(user)))
       return false
 
     return ownService.ownModel(menu, user, menus.value)

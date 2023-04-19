@@ -5,7 +5,7 @@ import RestaurantCard from './components/RestaurantCardView.vue';
 import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue';
 const restaurantStore = useRestaurantsStore();
 const restaurants = computed(() => restaurantStore.restaurants);
-const currentUserRestaurants = computed(() => restaurantStore.currentUserRestaurants)
+const currentUserRestaurants = computed(() => restaurantStore.currentUserModels)
 
 </script>
 
