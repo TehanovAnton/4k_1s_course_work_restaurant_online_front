@@ -43,7 +43,7 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
   }  
 
   const fetchModels = async (callback) => {
-    modelsStore.fetchModels(
+    await modelsStore.fetchModels(
       async () => restaurantService.apiIndexRestaurants(tokensService.auth_headers()),
       callback
     )
