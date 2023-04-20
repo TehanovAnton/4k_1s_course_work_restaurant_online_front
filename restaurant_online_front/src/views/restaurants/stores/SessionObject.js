@@ -20,14 +20,12 @@ export class SessionObject {
     return this.defaultSessionObject
   }
 
-  updateSessionObjectContent(modelsStore, callBack) {
-    let currentModelExists = modelsStore.currentModelExists()
+  updateSessionObjectContent(currentModelExists, currentModelJsonData, callBack) {
     if (!currentModelExists)
       return
 
     callBack()    
 
-    let currentModelJsonData = modelsStore.currentModelJsonData()
-    sessionStorage.setItem(this.sessionObjectKey, currentModelJsonData)
+    sessionStorage.setItem(this.sessionObjectKey, currentModelJsonData())
   }
 }

@@ -17,11 +17,13 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
   const modelsStore = new ModelsStoreHelper(restaurants, currentRestaurant)
 
   const userModels = (user) => {
-    return modelsStore.modelsFilter(r => {
+    let filter = (r) => {
       return r.restaurants_admins.find(ra => {
         return ra.user_id === user.id
       })
-    })
+    }
+
+    return modelsStore.modelsFilter(restaurants.value, filter)
   }
 
   const currentUserModels = computed(() => {
@@ -29,7 +31,11 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
   })
 
   const setModel = (model) => {
-    modelsStore.setModel(sessionObject, model)
+    sessionObject.updateSessionObjectContent(
+      modelsStore.currentModelExists(currentRestaurant.value),
+      () => modelsStore.currentModelJsonData(currentRestaurant.value),
+      () => currentRestaurant.value = model
+    )
   }
 
   const findRestaurant = (modelsCollection, model) => {
@@ -45,7 +51,9 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
 
   const updateAndSetCurrent = async (model) => {
     await fetchModels((response) => {
-      let foundModel = response.data.find(m => m.id === model.id)
+      restaurants.value = response.data
+
+      let foundModel = modelsStore.findModel(restaurants.value, model)
       setModel(foundModel)
     })
   }

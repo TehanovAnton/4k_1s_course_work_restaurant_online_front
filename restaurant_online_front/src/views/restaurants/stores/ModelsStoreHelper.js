@@ -1,21 +1,19 @@
 import tokensService from "../../services/tokensService";
 
 export class ModelsStoreHelper {
-  constructor (models, currentModel) {
-    this.models = models;
-    this.currentModel = currentModel;
+  constructor () {
   }
   
-  currentModelJsonData() {
-    return JSON.stringify(this.currentModel.value)
+  currentModelJsonData(currentModel) {
+    return JSON.stringify(currentModel)
   }
 
-  currentModelExists() {
-    return !!this.currentModel.value
+  currentModelExists(currentModel) {
+    return !!currentModel
   }
 
-  modelsFilter(filterCallBack) {
-    return this.models.value.filter(filterCallBack)
+  modelsFilter(models, filterCallBack) {
+    return models.filter(filterCallBack)
   }
 
   async fetchModels(fetchMethod, responseCallback) {
@@ -23,28 +21,17 @@ export class ModelsStoreHelper {
 
     if (isSuccessful) {
       tokensService.setAuthTokens(response.headers)
-      this.models.value = response.data
 
       responseCallback(response)
     }
   }
 
-  findModel(modelCollection, restaurant) {
-    let foundModel = modelCollection.find(r => r.id === restaurant.id)
+  findModel(modelCollection, model) {
+    let foundModel = modelCollection.find(r => r.id === model.id)
 
     if (!!!foundModel)
       foundModel = modelCollection[0]
 
     return foundModel
-  }
-
-  setModel(sessionObject, model) {
-    sessionObject.updateSessionObjectContent(
-      this,
-      () => {
-        let findedModel = this.models.value.find((m) => m.id === model.id)
-        this.currentModel.value = findedModel
-      }
-    )
   }
 }
