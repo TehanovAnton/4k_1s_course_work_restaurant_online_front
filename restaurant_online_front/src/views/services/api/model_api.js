@@ -91,18 +91,6 @@ const apiCanRequest = async (action, args) => {
   return apiResponseHandelr(response)
 }
 
-const apiResponseHandelr = (response) => {
-  if (!!!response)
-    return
-
-  let isSuccessfulReq = isSuccessful(response)
-  let headers = response.headers
-
-  setHeadersIfSuccessful(headers, isSuccessfulReq)
-
-  return { response: response, isSuccessful: isSuccessfulReq }
-}
-
 const urlOptionsEditor = (url, options) => {
   if (!!options['view'])
     url += `view=${options['view']}`

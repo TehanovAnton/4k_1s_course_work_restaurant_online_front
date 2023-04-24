@@ -4,86 +4,56 @@ import menuservice from '../../services/menus/menu_service';
 import tokensService from "../../services/tokensService";
 import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
 import { OwnService } from "../../services/owns/ownService";
+import { ModelsStoreHelper } from "../../restaurants/stores/ModelsStoreHelper";
+import { SessionObject } from "../../restaurants/stores/SessionObject";
 
 export const useMenusStore = defineStore('menusStore', () => {
   const ownService = new OwnService()
+  const sessionObject = new SessionObject('menu', {})
 
-  const sessionObjectkey = 'menu'
-
-  const sessionObject = (sessionData) => {
-    return JSON.parse(sessionData)
-  }
-
-  const sessionOBjectContent = () => {
-    return sessionStorage.getItem(sessionObjectkey)
-  }
-
-  const defaultSessionObject = () => {
-    return {}
-  }
-
-  const initObject = () => {
-    let sessionData = sessionOBjectContent()
-    if (!!sessionData)
-      return sessionObject(sessionData)
-
-    return defaultSessionObject()
-  }
-
-  const currentMenu = ref(initObject())
+  const currentMenu = ref(sessionObject.initObject())
   const restaurantsStore = useRestaurantsStore()
+  const modelsStore = new ModelsStoreHelper()
 
   const menus = computed(() => {
     return restaurantsStore.currentRestaurant.menus
   })
 
-  const currentObjectExists = () => {
-    return !!currentMenu.value
-  }
-
-  const sessionObjectJsonData = () => {
-    return JSON.stringify(currentMenu.value)
-  }
-
-  const updateSessionObjectContent = (callBack) => {
-    if (!currentObjectExists())
-      return
-
-    callBack()
-    
-    sessionStorage.setItem(sessionObjectkey, sessionObjectJsonData())
-  }
-
   const findMenu = (menu) => {
-    return menus.value.find((m) => m.id === menu.id)
+    return modelsStore.findModel(menus.value, menu)
+  }
+
+  const fetchMenus = async (callback, options = {}) => {
+    await modelsStore.fetchModels(
+      async () => {
+        return await menuservice.apiIndexMenus(
+          tokensService.auth_headers(),
+          restaurantsStore.currentRestaurant.id,
+          options
+        )
+      },
+      (response) => callback(response)
+    )
   }
 
   const setMenu = (menu) => {
-    updateSessionObjectContent(() => {
-      let findedMenu = findMenu(menu)
-      currentMenu.value = findedMenu
-    })
+    sessionObject.updateSessionObjectContent(
+      modelsStore.currentModelExists(currentMenu.value),
+      () => modelsStore.currentModelJsonData(currentMenu.value),
+      () => currentMenu.value = menu
+    )
   }
 
   const updateAndSetCurrent = async (menu, options = {}) => {
     fetchMenus((response) => {
-        let findedMenu = response.data.filter(m => m.id === menu.id)[0]
+        restaurantsStore.currentRestaurant.menus = response.data
+        restaurantsStore.setModel(restaurantsStore.currentRestaurant)
+
+        let findedMenu = modelsStore.findModel(menus.value, menu)
         setMenu(findedMenu)
       },
       options
     )
-  }
-
-  const fetchMenus = async (callback, options = {}) => {
-    let { response, isSuccessful } = await menuservice.apiIndexMenus(tokensService.auth_headers(),
-                                                                     restaurantsStore.currentRestaurant.id,
-                                                                     options)
-    if (isSuccessful) {
-      tokensService.setAuthTokens(response.headers)
-      restaurantsStore.currentRestaurant.menus = response.data
-
-      callback(response)
-    }
   }
 
   const allDishes = computed(() => {
@@ -100,10 +70,10 @@ export const useMenusStore = defineStore('menusStore', () => {
   })
 
   const userMenus = (user) => {
-    let userRestaurants = restaurantsStore.userRestaurants(user),
+    let userModels = restaurantsStore.userModels(user),
         userRestaurantsMenus = []
 
-    userRestaurants.forEach(restaurant => {
+    userModels.forEach(restaurant => {
       restaurant.menus.forEach(menu => userRestaurantsMenus.push(menu))
     })
   
@@ -111,7 +81,7 @@ export const useMenusStore = defineStore('menusStore', () => {
   }
 
   const ownMenu = (menu, user) => {
-    if (!ownService.ownModel(restaurantsStore.currentRestaurant, user, restaurantsStore.userRestaurants(user)))
+    if (!ownService.ownModel(restaurantsStore.currentRestaurant, user, restaurantsStore.userModels(user)))
       return false
 
     return ownService.ownModel(menu, user, menus.value)

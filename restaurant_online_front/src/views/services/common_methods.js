@@ -34,12 +34,23 @@ const processableErrors = (response) => {
   return [422, 400].includes(response.status)
 }
 
+const apiResponseHandelr = (response) => {
+  if (!!!response)
+    return
 
+  let isSuccessfulReq = isSuccessful(response)
+  let headers = response.headers
+
+  setHeadersIfSuccessful(headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
 
 export {
   isSuccessful,
   errorshandler,
   setHeadersIfSuccessful,
   responseHandler,
-  processableErrors
+  processableErrors,
+  apiResponseHandelr
 }

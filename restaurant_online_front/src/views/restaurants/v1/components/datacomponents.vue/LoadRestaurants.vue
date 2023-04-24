@@ -7,7 +7,8 @@
   const restaurantsStore = useRestaurantsStore()
 
   onBeforeMount(async () => {
-    await restaurantsStore.fetchRestaurants((_response) => {
+    await restaurantsStore.fetchModels((response) => {
+      restaurantsStore.restaurants = response.data
       dataReady.value = true
     })      
   })

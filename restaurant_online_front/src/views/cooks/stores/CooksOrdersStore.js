@@ -34,10 +34,15 @@ export const useCooksOrdersStore = defineStore('cooksOrdersStore', () => {
     })
   }
 
+  const updateModel = (model) => {
+    return updateOrder(model)
+  }
+
   return {
     orders,
     fetchOders,
     updateOrders,
-    updateOrder
+    updateOrder,
+    updateModel
   }
 })

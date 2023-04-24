@@ -22,14 +22,36 @@ import { OwnService } from '../../../services/owns/ownService';
   const isUserType = (type) => {
     return ownService.isUserType(type, currentUserStore.user)
   }
+
+  const signOut = async () => {
+    await currentUserStore.apiSignOut()
+  }
 </script>
 
 <template>
-  <div class="r-header" :on-click="createWelcome">
-    <button @click="setContentView('SearchIndexView')">Search</button>
-    <button @click="setContentView('UserShowView')">Profile</button>
-    <button @click="setContentView('RestaurantsIndexView')">Restaurants</button>
-    <button @click="setContentView('OrdersIndexView')">Orders</button>
+  <div class="r-header" :on-click="createWelcome">  
+    <button
+      v-if="[isUserType('Customer'), isUserType('SuperAdmin')].includes(true)"
+      @click="setContentView('SearchIndexView')">
+      Search
+    </button>
+
+    <button
+      @click="setContentView('UserShowView')">
+      Profile
+    </button>
+
+    <button
+      v-if="[isUserType('Customer'), isUserType('SuperAdmin')].includes(true)"
+      @click="setContentView('RestaurantsIndexView')">
+      Restaurants
+    </button>
+
+    <button
+      v-if="[isUserType('Customer'), isUserType('SuperAdmin')].includes(true)"
+      @click="setContentView('OrdersIndexView')">
+      Orders
+    </button>
 
     <button 
       v-if="[isUserType('Cook'), isUserType('SuperAdmin')].includes(true)"
@@ -37,12 +59,21 @@ import { OwnService } from '../../../services/owns/ownService';
       Cooks Orders
     </button>
 
-    <button @click="setContentView('BasketShowView')">Basket</button>
+    <button
+      v-if="[isUserType('Customer'), isUserType('SuperAdmin')].includes(true)"
+      @click="setContentView('BasketShowView')">
+      Basket
+    </button>
 
     <button
       v-if="[isUserType('SuperAdmin')].includes(true)"
       @click="createWelcome">
       Create
+    </button>
+
+    <button
+      @click="signOut">
+      Sign Out
     </button>
   </div>
 </template>

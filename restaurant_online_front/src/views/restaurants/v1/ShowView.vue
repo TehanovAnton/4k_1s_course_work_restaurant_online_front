@@ -57,7 +57,7 @@
         <CurrentMenu v-if="menusStore.menusExists" />    
       </div>
 
-      <DishesIndexView v-if="ownRestaurant && menusStore.menusExists" />
+      <DishesIndexView v-if="menusStore.menusExists" />
 
       <MenuCreateView v-if="ownRestaurant && !menusStore.menusExists" />
     </div>

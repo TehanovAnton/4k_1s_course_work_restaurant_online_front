@@ -11,11 +11,11 @@ import { useMenusStore } from '../../../menus/stores/MenusStore';
   const currentUserSotre = useCurrentUserStore()
 
   const showRestaurant = () => {
-    restaurantsStore.setRestaurant(props.restaurant)
+    restaurantsStore.setModel(props.restaurant)
 
     if (
-      restaurantsStore.currentRestaurant.menus.length > 0 &&
-      !menusStore.ownMenu(menusStore.currentMenu, currentUserSotre.user)  
+      restaurantsStore.currentRestaurant.menus.length > 0 && !menusStore.ownMenu(menusStore.currentMenu, currentUserSotre.user) ||
+      !!!menusStore.currentMenu
     )
       menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
 
