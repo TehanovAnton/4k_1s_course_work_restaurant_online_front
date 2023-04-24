@@ -12,7 +12,6 @@ export class AuthenticationApi {
       this.args['data'],
       this.args['requestOptions']
     ).catch((errors) => {
-      debugger
       let errsArr = [ { error: 'Something went wrong'} ],
           response = errors.response
 
