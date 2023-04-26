@@ -1,5 +1,6 @@
 <script setup>
-  import { reactive, computed } from 'vue';
+
+  import { computed } from 'vue';
   import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue'
   import DishesIndexView from '../../dishes/v1/IndexView.vue';
   import CurrentMenu from '../../menus/v1/components/CurrentMenu.vue';
@@ -7,13 +8,12 @@
   import restaurant_service from '../../services/restaurants/restaurant_service';
   import tokensService from '../../services/tokensService';
   import { useRestaurantsStore } from '../stores/RestaurantsStore';
-  import { useMenusStore } from '../../menus/stores/MenusStore';
-  import { useDishesStore } from '../../dishes/stores/DishesStore';
-  import { useBasketsStore } from '../../baskets/stores/BasketsStore';  
+  import { useMenusStore } from '../../menus/stores/MenusStore';  
   import { useContentsStore } from '../stores/ContentsStore';
   import MenuCreateView from '../../menus/CreateView.vue';
   import DeleteIcon from '../../icons/DeleteIcon.vue';
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import CreateCookAccount from '../../../components/users/forms/CreateCookAccount.vue';
 
   const restaurantStore = useRestaurantsStore();
   const contentsStore = useContentsStore()
@@ -57,9 +57,18 @@
         <CurrentMenu v-if="menusStore.menusExists" />    
       </div>
 
-      <DishesIndexView v-if="menusStore.menusExists" />
+      <tabs>
+        <tab name="Menu">
+          <DishesIndexView v-if="menusStore.menusExists" />
 
-      <MenuCreateView v-if="ownRestaurant && !menusStore.menusExists" />
+          <MenuCreateView v-if="ownRestaurant && !menusStore.menusExists" />
+        </tab>
+
+
+        <tab name="Team">
+          <CreateCookAccount />
+        </tab>
+      </tabs>
     </div>
   </LoadRestaurants>
 </template>

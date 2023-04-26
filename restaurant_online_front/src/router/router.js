@@ -25,6 +25,7 @@ const router = createRouter({
         }
       }
     },
+
     {
       path: '/sign_in',
       name: 'sign_in',
@@ -34,6 +35,12 @@ const router = createRouter({
           router.back()
         }
       }
+    },
+
+    {
+      path: '/reset_password_instructions',
+      name: 'reset_password_instructions',
+      component: () => import('../views/users/reset_password/ResetPasswordInstructionsView.vue')
     },
 
     {
@@ -83,7 +90,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   let public_pathes = ['sign_in', 'sign_up']
-  if (to.name == 'reset_password')
+  if (['reset_password', 'reset_password_instructions'].includes(to.name))
     if (sessionStorage.getItem('current-user') == null)
       return
     else
