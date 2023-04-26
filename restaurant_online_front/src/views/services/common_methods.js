@@ -1,6 +1,7 @@
 import router from '../../router/router';
 import auth_service from '../services/auth_service'
 import tokensService from './tokensService';
+import axios from 'axios';
 
 const isSuccessful = (response) => {
   return response && response.status === 200
@@ -46,7 +47,15 @@ const apiResponseHandelr = (response) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const axiosMethods = {
+  get: axios.get,
+  post: axios.post,
+  put: axios.put,
+  delete: axios.delete
+}
+
 export {
+  axiosMethods,
   isSuccessful,
   errorshandler,
   setHeadersIfSuccessful,

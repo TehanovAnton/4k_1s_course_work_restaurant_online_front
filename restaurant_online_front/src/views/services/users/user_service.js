@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { errorshandler, isSuccessful } from '../common_methods';
+import { errorshandler, isSuccessful, axiosMethods, processableErrors } from '../common_methods';
 import tokensService from '../../services/tokensService';
 
 const apiShowUser = async (authHeaders, user_id) => {
@@ -128,7 +128,28 @@ const can = async (action, public_actions, record) => {
   return false
 }
 
+const requestBase = async (args, requestMethod, errorsStore, successCallback) => {
+  let response = await axiosMethods[requestMethod](
+    args['url'], 
+    args['data'],
+    args['requestOptions']
+  ).catch((errors) => {
+    let errsArr = [ { error: 'Something went wrong'} ],
+        response = errors.response
+
+    if (processableErrors(response)) {
+      errsArr = response.data.errors
+    }
+    
+    errorsStore.setErrors(errsArr)
+  })
+
+  if (!!response)
+    successCallback(response)
+}
+
 export default {
+  requestBase,
   apiShowUser,
   apiIndexUsers,
   apiUpdateUser,

@@ -1,12 +1,5 @@
 import axios from "axios"
-import { processableErrors } from "../common_methods"
-
-const axiosMethods = {
-  get: axios.get,
-  post: axios.post,
-  put: axios.put,
-  delete: axios.delete
-}
+import { processableErrors, axiosMethods } from "../common_methods"
 
 export class AuthenticationApi {
   constructor(args) {
