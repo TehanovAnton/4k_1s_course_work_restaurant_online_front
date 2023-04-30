@@ -50,7 +50,7 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
 
     cookUserBinding.value.cook_user_binding_attributes.user_id = bindingUser.value.id
     formUser.value.cook_user_binding_attributes = cookUserBinding.value.cook_user_binding_attributes
-
+    
     const requester = new AuthenticationApi({
       url: `http://localhost:3000/users/${currentUserStore.user.id}/create_cook`,
       data: { user: formUser.value },

@@ -138,7 +138,10 @@ const requestBase = async (args, requestMethod, errorsStore, successCallback) =>
         response = errors.response
 
     if (processableErrors(response)) {
-      errsArr = response.data.errors
+      errsArr = response.data
+
+      if (response.data.errors)
+        errsArr = response.data.errors 
     }
     
     errorsStore.setErrors(errsArr)
