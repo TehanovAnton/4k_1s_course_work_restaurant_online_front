@@ -14,6 +14,8 @@
   import DeleteIcon from '../../icons/DeleteIcon.vue';
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
   import CreateCookAccount from '../../../components/users/forms/CreateCookAccount.vue';
+import { Tabs } from 'vue3-tabs-component';
+import CommandStructureView from './team/CommandStructureView.vue';
 
   const restaurantStore = useRestaurantsStore();
   const contentsStore = useContentsStore()
@@ -66,7 +68,15 @@
 
 
         <tab name="Team">
-          <CreateCookAccount />
+          <tabs>
+            <tab name="Add Cook Account">
+              <CreateCookAccount />
+            </tab>
+
+            <tab name="Team">
+              <CommandStructureView />
+            </tab>
+          </tabs>
         </tab>
       </tabs>
     </div>

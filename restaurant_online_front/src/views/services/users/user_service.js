@@ -136,7 +136,7 @@ const requestBase = async (args, requestMethod, errorsStore, successCallback) =>
   ).catch((errors) => {
     let errsArr = [ { error: 'Something went wrong'} ],
         response = errors.response
-
+      
     if (processableErrors(response)) {
       errsArr = response.data
 

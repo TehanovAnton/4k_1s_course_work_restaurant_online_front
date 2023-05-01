@@ -2,15 +2,15 @@
 
   // import router from '../../router/router'
   import { ref } from 'vue'
-  import Errors from '../../errors/Errors.vue'
+  import ErrorsShift from '../../errors/ErrorsShift.vue';
+  import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';  
+  import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import { useFormErrorsStore } from '../../../stores/FormErrorsStore'
   import { AuthenticationApi } from '../../../views/services/api/authentication/AuthenticationApi'
   import user_service from '../../../views/services/users/user_service';
-  import { useCreateCookAccountFormErrorsStore } from './CreateCookAccountFormErrorsStore'
-import tokensService from '../../../views/services/tokensService';
-import { useCurrentUserStore } from '../../../stores/users/currentUser';
-import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
-
-  const createCookAccountFormErrorsStore = useCreateCookAccountFormErrorsStore()
+  import tokensService from '../../../views/services/tokensService';
+  
+  const formErrorStore = useFormErrorsStore()
   const currentUserStore = useCurrentUserStore()
 
   const formUser = ref({
@@ -40,7 +40,7 @@ import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
         }
       },
       'get',
-      createCookAccountFormErrorsStore,
+      formErrorStore,
       (response) => {
         bindingUser.value = response.data
       }
@@ -61,9 +61,9 @@ import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
     })
 
     await requester.postCreateUser(
-      createCookAccountFormErrorsStore, 
+      formErrorStore, 
       (response) => {
-        createCookAccountFormErrorsStore.errors.value.push('User created')
+        formErrorStore.errors.value.push('User created')
         formUser.value = {} 
       }
     )
@@ -71,7 +71,7 @@ import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
 </script>
 
 <template>
-  <Errors :errors-store="createCookAccountFormErrorsStore" />
+  <ErrorsShift :errors-store="formErrorStore" />
 
   <RegularFormStyle>
     <form id="cook-form" class="form">
