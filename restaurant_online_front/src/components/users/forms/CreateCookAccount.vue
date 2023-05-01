@@ -3,11 +3,12 @@
   // import router from '../../router/router'
   import { ref } from 'vue'
   import Errors from '../../errors/Errors.vue'
-  import { AuthenticationApi } from '../../../views/services/authentication/AuthenticationApi';
+  import { AuthenticationApi } from '../../../views/services/api/authentication/AuthenticationApi'
   import user_service from '../../../views/services/users/user_service';
   import { useCreateCookAccountFormErrorsStore } from './CreateCookAccountFormErrorsStore'
 import tokensService from '../../../views/services/tokensService';
 import { useCurrentUserStore } from '../../../stores/users/currentUser';
+import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
 
   const createCookAccountFormErrorsStore = useCreateCookAccountFormErrorsStore()
   const currentUserStore = useCurrentUserStore()
@@ -72,55 +73,30 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
 <template>
   <Errors :errors-store="createCookAccountFormErrorsStore" />
 
-  <form class="sign-up-form centrenize-content-row">
-    <div class="form-elements centrenize-content-column">
-      <input type="text" class="form-element" v-model="formUser.name" />
+  <RegularFormStyle>
+    <form id="cook-form" class="form">
+      <label for="cook-form">Create Cook</label>
 
-      <input type="text" class="form-element" v-model="formUser.email" />
+      <div class="form__content">
+        <label for="cook-name">Name</label>
+        <input id="cook-name" type="text" class="text-input" v-model="formUser.name" />
 
-      <input type="text" class="form-element" v-model="bindingUser.email" />
+        <label for="cook-email">Email</label>
+        <input id="cook-name" type="text" class="text-input" v-model="formUser.email" />
 
-      <input type="text" class="form-element" v-model="formUser.password" />
+        <label for="cook-dind-user-email">Bind User Email</label>
+        <input id="cook-dind-user-email" type="text" class="text-input" v-model="bindingUser.email" />
 
-      <input type="text" class="form-element" v-model="formUser.password_confirmation" />
-      
-      <div>
-        <button type="button" class="form-element" @click="sign_up">Create Cook</button>
+        <label for="cook-password">Password</label>
+        <input id="cook-password" type="text" class="text-input" v-model="formUser.password" />
+
+        <label for="cook-password-confirmation">Password Confirmation</label>
+        <input id="cook-password-confirmation" type="text" class="text-input" v-model="formUser.password_confirmation" />
       </div>
-    </div>
-  </form>
+      
+      <div class="form__actions">
+        <button type="button" @click="sign_up">Create Cook</button>
+      </div>
+    </form>
+  </RegularFormStyle>
 </template>
-
-<style>
-  .block {
-    border: 3px solid black;
-    padding: 3px;
-  }
-
-  .centrenize-content-column {
-    display: flex;
-    justify-content: space-around;        
-    flex-direction: column;
-  }
-
-  .centrenize-content-row {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;        
-  }
-
-  .form-elements {
-    width: 20%;
-    height: 100%;        
-  }
-
-  .form-element {
-    margin: 7% 10% 7% 10%;
-    flex: 1;
-    font-size: 25px;
-  }
-
-  .sign-up-form {
-    height: 35em;
-  }
-</style>
