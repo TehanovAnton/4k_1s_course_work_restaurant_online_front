@@ -1,16 +1,23 @@
 <script setup>
 
   // import router from '../../router/router'
-  import { ref } from 'vue'
-  import Errors from '../../errors/Errors.vue'
-  import { AuthenticationApi } from '../../../views/services/authentication/AuthenticationApi';
+  import { computed, ref } from 'vue'
+  import ErrorsShift from '../../errors/ErrorsShift.vue';
+  import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';  
+  import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import { useFormErrorsStore } from '../../../stores/FormErrorsStore'
+  import { AuthenticationApi } from '../../../views/services/api/authentication/AuthenticationApi'
   import user_service from '../../../views/services/users/user_service';
-  import { useCreateCookAccountFormErrorsStore } from './CreateCookAccountFormErrorsStore'
-import tokensService from '../../../views/services/tokensService';
-import { useCurrentUserStore } from '../../../stores/users/currentUser';
-
-  const createCookAccountFormErrorsStore = useCreateCookAccountFormErrorsStore()
+  import tokensService from '../../../views/services/tokensService';
+  import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';
+  import { useTeammatesStore } from '../../../views/restaurants/v1/team/stores/teammatesStore';
+  import { FormErrorsStoreHelper } from '../../../views/services/FormErrorsStoreHelper';
+  
+  const formErrorStore = useFormErrorsStore()
   const currentUserStore = useCurrentUserStore()
+  const restaurantStore = useRestaurantsStore()
+  const teammatesStore = useTeammatesStore()
+  const currentRestaurant = computed(() => restaurantStore.currentRestaurant)
 
   const formUser = ref({
     name: 'clone3',
@@ -18,6 +25,7 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
     password: 'ewqqwe',
     password_confirmation: 'ewqqwe',
     confirm_success_url: '/',
+    restaurants_cook_attributes: { restaurant_id: currentRestaurant.id },
     type: 'Cook'
   })
 
@@ -29,7 +37,6 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
   const bindingUser = ref({ email: '' })
 
   const sign_up = async () => {
-
     await user_service.requestBase(
       {
         url: `http://localhost:3000/users/show_by_email`,
@@ -39,7 +46,7 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
         }
       },
       'get',
-      createCookAccountFormErrorsStore,
+      formErrorStore,
       (response) => {
         bindingUser.value = response.data
       }
@@ -50,9 +57,10 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
 
     cookUserBinding.value.cook_user_binding_attributes.user_id = bindingUser.value.id
     formUser.value.cook_user_binding_attributes = cookUserBinding.value.cook_user_binding_attributes
-
+    formUser.value.restaurants_cook_attributes = { restaurant_id: currentRestaurant.value.id }
+    
     const requester = new AuthenticationApi({
-      url: `http://localhost:3000/users/${currentUserStore.user.id}/create_cook`,
+      url: `http://localhost:3000/restaurants_teams/restaurants/${currentRestaurant.value.id}/create_cook`,
       data: { user: formUser.value },
       requestOptions: {
         headers: tokensService.auth_headers()
@@ -60,67 +68,44 @@ import { useCurrentUserStore } from '../../../stores/users/currentUser';
     })
 
     await requester.postCreateUser(
-      createCookAccountFormErrorsStore, 
-      (response) => {
-        createCookAccountFormErrorsStore.errors.value.push('User created')
-        formUser.value = {} 
+      formErrorStore, 
+      async (response) => {
+        formErrorStore.setErrors(['User created'])
+        await teammatesStore.fetchTeammates()
+        formUser.value = {}
       }
     )
   }
 </script>
 
 <template>
-  <Errors :errors-store="createCookAccountFormErrorsStore" />
 
-  <form class="sign-up-form centrenize-content-row">
-    <div class="form-elements centrenize-content-column">
-      <input type="text" class="form-element" v-model="formUser.name" />
+  <RegularFormStyle>
+    <form id="cook-form" class="form">      
+      <ErrorsShift :errors-store="formErrorStore" />
 
-      <input type="text" class="form-element" v-model="formUser.email" />
+      <label for="cook-form">Create Cook</label>
 
-      <input type="text" class="form-element" v-model="bindingUser.email" />
+      <div class="form__content">
+        <label for="cook-name">Name</label>
+        <input id="cook-name" type="text" class="text-input" v-model="formUser.name" />
 
-      <input type="text" class="form-element" v-model="formUser.password" />
+        <label for="cook-email">Email</label>
+        <input id="cook-name" type="text" class="text-input" v-model="formUser.email" />
 
-      <input type="text" class="form-element" v-model="formUser.password_confirmation" />
-      
-      <div>
-        <button type="button" class="form-element" @click="sign_up">Create Cook</button>
+        <label for="cook-dind-user-email">Bind User Email</label>
+        <input id="cook-dind-user-email" type="text" class="text-input" v-model="bindingUser.email" />
+
+        <label for="cook-password">Password</label>
+        <input id="cook-password" type="text" class="text-input" v-model="formUser.password" />
+
+        <label for="cook-password-confirmation">Password Confirmation</label>
+        <input id="cook-password-confirmation" type="text" class="text-input" v-model="formUser.password_confirmation" />
       </div>
-    </div>
-  </form>
+      
+      <div class="form__actions">
+        <button type="button" @click="sign_up">Create Cook</button>
+      </div>
+    </form>
+  </RegularFormStyle>
 </template>
-
-<style>
-  .block {
-    border: 3px solid black;
-    padding: 3px;
-  }
-
-  .centrenize-content-column {
-    display: flex;
-    justify-content: space-around;        
-    flex-direction: column;
-  }
-
-  .centrenize-content-row {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;        
-  }
-
-  .form-elements {
-    width: 20%;
-    height: 100%;        
-  }
-
-  .form-element {
-    margin: 7% 10% 7% 10%;
-    flex: 1;
-    font-size: 25px;
-  }
-
-  .sign-up-form {
-    height: 35em;
-  }
-</style>

@@ -1,6 +1,19 @@
 import axios from 'axios';
 import { errorshandler, isSuccessful, setHeadersIfSuccessful, processableErrors } from '../common_methods';
 import tokensService from '../../services/tokensService';
+import { BaseApi } from '../api/baseApi';
+
+const apiRestaurantTeam = async (restaurantId, errorsStore, successCallback) => {
+  let args = {
+    url: `http://localhost:3000/restaurants_teams/restaurants/${restaurantId}/team`,
+    requestOptions: {
+      headers: tokensService.auth_headers()
+    }
+  }
+  const requester = new BaseApi(args)
+  
+  await requester.requestBase('get', errorsStore, successCallback)
+} 
 
 const apiIndexRestaurants = async (authHeaders) => {
   let response = await axios.get('http://localhost:3000/restaurants?resataurant_view=normal',
@@ -155,6 +168,7 @@ const can = async (action, public_actions, record) => {
 }
 
 export default {
+  apiRestaurantTeam,
   apiIndexRestaurants,
   apiGetRestaurant,
   apiUpdateRestaurants,
