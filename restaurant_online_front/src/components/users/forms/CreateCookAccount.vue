@@ -1,7 +1,7 @@
 <script setup>
 
   // import router from '../../router/router'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import ErrorsShift from '../../errors/ErrorsShift.vue';
   import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';  
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
@@ -70,7 +70,7 @@
     await requester.postCreateUser(
       formErrorStore, 
       async (response) => {
-        formErrorStore.errors.value.push('User created')
+        formErrorStore.setErrors(['User created'])
         await teammatesStore.fetchTeammates()
         formUser.value = {}
       }
