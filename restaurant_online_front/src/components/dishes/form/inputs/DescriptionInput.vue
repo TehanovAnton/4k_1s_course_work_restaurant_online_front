@@ -12,8 +12,10 @@
 </script>
 
 <template>
-  <label for="d-description">Description: </label>
-  <textarea id='d-description' class="text-input desc-size" v-model="description.description" @change="setDescription" />
+  <div class="form-floating mb-3">
+    <textarea v-model="description.description" @change="setDescription" class="form-control" id="dish-description"></textarea>
+    <label for="dish-description">Description</label>
+  </div>
 </template>
 
 <style lang="scss">

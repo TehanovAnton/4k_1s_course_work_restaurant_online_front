@@ -44,39 +44,34 @@ import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
 </script>
 
 <template>
-  <RegularFormStyle>
-    <div class="form">
-      <div class="form__image">
-        <ImageInput
-          :init-value="dish.image"
-          @img-change="inlcudeAttribute"
+  <form>
+    <div class="row bg-light">
+      <div class="col-lg-6">
+        <NameInput :init-value="dish.name" @name-change="inlcudeAttribute" />
+        <PriceInput :init-value="dish.price_cents" @price-change="inlcudeAttribute" />
+        <MenuSelectInput
+          :init-value="menusStore.currentMenu"
+          :menus="menusStore.menus"
+          @menu-change="includeMenuAttribute" 
         />
+        <DescriptionInput :init-value="dish.description" @description-change="inlcudeAttribute" />
       </div>
 
-      <div class="form__content">
-        <div class="left-column-inputs">
-          <NameInput :init-value="dish.name" @name-change="inlcudeAttribute" />
-          <PriceInput :init-value="dish.price_cents" @price-change="inlcudeAttribute" />
-          <MenuSelectInput
-            :init-value="menusStore.currentMenu"
-            :menus="menusStore.menus"
-            @menu-change="includeMenuAttribute" 
-          />
-        </div>
-
-        <div class="right-column-inputs">
-          <DescriptionInput :init-value="dish.description" @description-change="inlcudeAttribute" />
-        </div>
+      <div class="col-lg-6">
+        <ImageInput :init-value="dish.image" @img-change="inlcudeAttribute" />
       </div>
+    </div>
 
-      <div class="form__actions">
-        <button class="btn btn-primary" @click="onFormSubmit">
+    <div class="row bg-light">
+      <div class="d-flex justify-content-around">
+        <button class="btn btn-outline-success" @click="onFormSubmit">
           {{ props.actionName }}
         </button>
-        <button class="btn btn-secondary" @click="onCancel">
+
+        <button class="btn btn-outline-dark" @click="onCancel">
           Cancel
         </button>
       </div>
     </div>
-  </RegularFormStyle>
+  </form>
 </template>

@@ -44,7 +44,7 @@
 <template>
   <Errors :errors-store="dishFormErrorsStore" />
 
-  <div class="create-container">response
+  <div class="create-container">
     <DishForm action-name="create" :dish="dish"
               @form-submit="createDish"
               @cancel="showRestaurant" />

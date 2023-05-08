@@ -12,6 +12,8 @@
 </script>
 
 <template>
-  <label for="d-price">Price</label>
-  <input id='d-price' class="text-input" v-model="price.price" @change="setPrice" />
+  <div class="form-floating mb-3">
+    <input v-model="price.price" @change="setPrice" type="text" class="form-control" id="dish-price" placeholder="0.00" />
+    <label for="dish-price">Price $</label> 
+  </div>
 </template>
