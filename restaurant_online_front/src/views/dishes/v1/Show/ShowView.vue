@@ -9,8 +9,8 @@
   import { useBasketsStore } from '../../../baskets/stores/BasketsStore';
   import dishApi from '../../../services/api/model_api';
   import tokensService from '../../../services/tokensService';
-import { useMenusStore } from '../../../menus/stores/MenusStore';
-import { useCurrentUserStore } from '../../../../stores/users/currentUser';
+  import { useMenusStore } from '../../../menus/stores/MenusStore';
+  import { useCurrentUserStore } from '../../../../stores/users/currentUser';
 
   const props = defineProps(['dish'])
 
@@ -18,10 +18,10 @@ import { useCurrentUserStore } from '../../../../stores/users/currentUser';
   const contentsStore = useContentsStore()
   const dishesStore = useDishesStore()
   const basketsStore = useBasketsStore()
-  const dish = computed(() => props.dish)
+  const dish = computed(() => {
+    return props.dish
+  })
   const menusStore = useMenusStore()
-
-  const selectedDishCount = ref(basketsStore.basketDishCount(dish.value))
 
   const editDish = () => {
     dishesStore.setDish(dish.value)
@@ -52,101 +52,34 @@ import { useCurrentUserStore } from '../../../../stores/users/currentUser';
       basketsStore.decrementBasketDishCount(dish)
   }
 
-  const increment = (dish) => {
-    addDishToBasket(dish);
-    selectedDishCount.value++
-  };
-
-  const decrement = (dish) => {
-    removeDishFromBasket(dish);
-    selectedDishCount.value--
-  }; 
-
-  const selectDishCount = () => {
-    basketsStore.removeDish(dish.value)
-    let times = selectedDishCount.value
-
-    for(let i = 0; i < times; ++i)
-      addDishToBasket(dish.value);
-  }
-
   const ownDish = computed(() => {
     return dishesStore.ownDish(dish.value, currentUserStore.user)
+  })
+
+  const dishPresentInBasket = computed(() => {
+    return basketsStore.basketDishCount(dish.value) !== 0
   })
 </script>
 
 <template>
   <div class="dish-card">
     <div class="card">
-      <div class="card-img-top-container">
-        <img src="https://c.ndtvimg.com/2022-06/gp4k2jro_burgers_625x300_20_June_22.jpg?im=FeatureCrop,algorithm=dnn,width=620,height=350" class="card-img-top" alt="...">
-      </div>
+      <img class="card-img-top" alt="..." v-bind:src="dish.image">
 
       <div class="card-body">
         <h5 class="card-title">{{ dish.name }}</h5>
-        <p class="card-text text-muted">{{ dish.description }}</p>
-        <EditIcon v-if="ownDish" @icon-click="editDish" />
-        <DeleteIcon v-if="ownDish" @icon-click="deleteDish" />
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <button class="btn btn-outline-secondary" type="button" @click="decrement(dish)">-</button>
-          </div>
-          {{ selectedDishCount }}
-          <select class="form-select" v-model="selectedDishCount" @change="selectDishCount(dish)">
-            <option v-for="i in 11" :value="i-1">{{ i-1 }}</option>
-          </select>
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @click="increment(dish)">+</button>
-          </div>
+
+        <p class="card-text text-muted">
+          {{ dish.description }}
+        </p>
+
+        <div class="input-group d-flex d-flex justify-content-center">
+          <button  v-if="ownDish" @click="deleteDish" class="btn btn-outline-danger btn-md" type="button">Destroy</button>
+          <button  v-if="ownDish" @click="editDish" class="btn btn-outline-secondary btn-md" type="button" >Edit</button>
+          <button v-if="!dishPresentInBasket" @click="addDishToBasket(dish)" class="btn btn-outline-success btn-md" type="button">Add to basket</button>
+          <button v-if="dishPresentInBasket" @click="removeDishFromBasket(dish)" class="btn btn-outline-success btn-md" type="button">Remove from basket</button>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style lang="scss">
-  .dish-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-    .dish-card {
-    flex-basis: calc(33.33% - 10px);
-    margin-bottom: 20px;
-      
-      .card {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      overflow: hidden;
-
-        .card-img-top-wrapper {
-        height: 150px;
-        position: relative;
-        }
-
-        .card-img-top {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        }
-
-        .card-title {
-        font-weight: bold;
-        font-size: 20px;
-        margin: 10px;
-        }
-
-        .card-text {
-        padding: 0 10px;
-        margin-bottom: 10px;
-        color: #666;
-        }
-
-        .price {
-        font-weight: bold;
-        margin: 10px;
-        } 
-      }
-    }
-  }
-</style>
