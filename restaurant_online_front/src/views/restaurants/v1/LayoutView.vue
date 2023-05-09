@@ -1,5 +1,5 @@
 <script setup>
-import HeaderView from './components/HeaderView.vue';
+import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/FooterView.vue';
 import { useContentsStore } from '../stores/ContentsStore';
 
