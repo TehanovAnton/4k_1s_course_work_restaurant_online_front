@@ -20,9 +20,3 @@
     </option>
   </select>
 </template>
-
-<style>
-  .menu-select {
-    background: none;
-  }
-</style>

@@ -44,19 +44,32 @@ import CommandStructureView from './team/CommandStructureView.vue';
 <template>
   <LoadRestaurants>
     <div class="container">
-      <div class="menu-container">
-        <div class="card border">
-          <div class="card-body">
-            <h1 class="card-title">{{ restaurant.name }}</h1>
-            <p class="card-text">{{ restaurant.address }}</p>
-            <p class="card-text">{{ restaurant.workingTime }}</p>
-          </div>
+      <div class="row bg-transparent d-flex justify-content-around">
 
-          <EditIcon v-if="ownRestaurant" @icon-click="editRestaurant" />
-          <DeleteIcon v-if="ownRestaurant" @icon-click="deleteRestaurant" />
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h1 class="card-title d-flex justify-content-around">{{ restaurant.name }}</h1>
+              <h5 class="card-title d-flex justify-content-around">{{ restaurant.address }}</h5>
+            </div>
+
+            <div class="row bg-transparent">
+              <div class="d-flex justify-content-around">
+                <button class="btn btn-outline-success" @click="editRestaurant">
+                  Edit
+                </button>
+
+                <button class="btn btn-outline-dark" @click="deleteRestaurant">
+                  Destroy
+                </button>             
+              </div>
+            </div>
+          </div>
         </div>
 
-        <CurrentMenu v-if="menusStore.menusExists" />    
+        <div class="col">
+          <CurrentMenu v-if="menusStore.menusExists" />
+        </div>
       </div>
 
       <tabs>
@@ -82,27 +95,3 @@ import CommandStructureView from './team/CommandStructureView.vue';
     </div>
   </LoadRestaurants>
 </template>
-
-<style lang="scss">
-  .menu-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-
-  .border {
-    border: none;
-    border-right: 1px solid #ddd;
-    border-radius: 0;
-  }
-
-  .sub-card {
-    margin-top: 1rem;
-  }
-
-  .card {
-    margin: 0;
-  }
-</style>

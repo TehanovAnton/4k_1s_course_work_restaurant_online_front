@@ -16,7 +16,7 @@
 </script>
 
 <template>
-  <select id="menu-slect" class="menu-select" v-model="choosenMenu" @change="setMenu">
+  <select id="menu-slect" class="form-select form-select-lg mb-3" v-model="choosenMenu" @change="setMenu">
     <option v-for="menu in menus" v-bind:value="menu">
       {{ menu.name }}
     </option>
