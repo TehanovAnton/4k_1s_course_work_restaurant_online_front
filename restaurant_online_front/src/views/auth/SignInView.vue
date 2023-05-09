@@ -49,7 +49,6 @@ import DefaultForm from '../../components/forms/DefaultForm.vue';
       @primaryBtnClick="sign_in" @secondaryBtnClick="sign_up"
     >
       <div class="col-lg-6">
-
         <div class="form-floating mb-3">
           <input v-model="customer.email" type="email" class="form-control" id="customer-email" placeholder="name@example.com" />
           <label for="customer-email">Email</label>
