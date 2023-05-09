@@ -44,15 +44,6 @@
 <template>
   <Errors :errors-store="restaurantFormErrorsStore" />
 
-  <div class="create-rest">
-    <RestaurantForm action-name="Create" :restaurant="restaurant" label="New Restaurant"
+  <RestaurantForm action-name="Create" :restaurant="restaurant" label="New Restaurant"
                   @form-submit="createRestaurant" @cancel="showRestaurants" />
-  </div>
 </template>
-
-<style>
-.create-rest {
-  display: flex;
-  justify-content: space-around;
-}
-</style>

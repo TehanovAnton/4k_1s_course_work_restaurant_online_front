@@ -24,6 +24,6 @@
 <template>
   <div class="block">
     Edit Restaurant:
-    <RestaurantForm :restaurant="restaurant" action-name="update" @form-submit="updatRestaurant"/>
+    <RestaurantForm :reRestaurantFostaurant="restaurant" action-name="update" @form-suRestaurantFobmit="updatRestaurant"/>
   </div>
 </template>

@@ -36,10 +36,10 @@
           @nav-click="setContentView('UserShowView')"
         />
 
-        <NavLi v-if="[isUserType('Customer'), isUserType('SuperAdmin')].includes(true)"
-          label="Restaurants"
-          @nav-click="setContentView('RestaurantsIndexView')"
-        />
+        <NavDropDown label="Restaurants">
+          <li><a class="dropdown-item" @click="setContentView('RestaurantShowView')">Chossen restaurant</a></li>
+          <li><a class="dropdown-item" @click="setContentView('RestaurantsIndexView')">All restaurants</a></li>
+        </NavDropDown>
 
         <NavLi v-if="[isUserType('Customer'), isUserType('SuperAdmin')].includes(true)"
           label="Orders"
