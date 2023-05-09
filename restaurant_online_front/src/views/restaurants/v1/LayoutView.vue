@@ -49,10 +49,8 @@ const contents = {
 <template>
   <HeaderView />
   
-  <div class="overview-container">
-    <div class="oc-width">
-      <component :is="contents[contentsStore.currentContent]" />
-    </div>
+  <div class="container">
+    <component :is="contents[contentsStore.currentContent]" />
   </div>
 
   <FooterView />

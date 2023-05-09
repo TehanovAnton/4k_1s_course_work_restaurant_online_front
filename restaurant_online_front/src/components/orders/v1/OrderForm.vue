@@ -4,6 +4,7 @@
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';
   import moment from 'moment-timezone';
+import DefaultForm from '../../forms/DefaultForm.vue';
 
   const props = defineProps(['pOrder', 'actionName'])
   const emits = defineEmits(['formSubmit', 'cancle'])
@@ -73,53 +74,40 @@
 </script>
 
 <template>
-  <form>
-    <div class="row bg-light">
-      <div class="col-lg-6">
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="dish-name" placeholder="name@example.com" :value="orderPrice" readonly/>
-          <label for="dish-name">Price</label>
-        </div>
+  <DefaultForm
+    form-label="Order" :primary-button="actionName" secondary-button="Cancel"
+    @primaryBtnClick="onFormSubmit" @secondaryBtnClick="onCancel"
+  >
+    <div class="col-lg-6">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="dish-name" placeholder="name@example.com" :value="orderPrice" readonly/>
+        <label for="dish-name">Price</label>
+      </div>
 
-        <div class="mb-3">
-          <label for="order-start-at">Start at</label>
-          <input v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" class="form-control" type="datetime-local" id="order-start-at">
-        </div>
+      <div class="mb-3">
+        <label for="order-start-at">Start at</label>
+        <input v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" class="form-control" type="datetime-local" id="order-start-at">
+      </div>
 
-        <div v-if="isOrderType('inside')" class="mb-3">
-          <label for="order-start-at">End at</label>
-          <input v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" class="form-control" type="datetime-local" id="order-start-at">
-        </div>
+      <div v-if="isOrderType('inside')" class="mb-3">
+        <label for="order-start-at">End at</label>
+        <input v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" class="form-control" type="datetime-local" id="order-start-at">
+      </div>
 
-        <div v-if="isOrderType('inside')" class="mb-3">
-          <label for="order-table">Table</label>
-          <select v-model="pOrder.reservation.table_id" @change="inlcudeAttribute('table_id', 'table_id', pOrder.reservation)" id="order-table" class="form-select">
-            <option v-for="table in tables" v-bind:value="table.id">{{ table.number }}</option>
-          </select>
-        </div>
+      <div v-if="isOrderType('inside')" class="mb-3">
+        <label for="order-table">Table</label>
+        <select v-model="pOrder.reservation.table_id" @change="inlcudeAttribute('table_id', 'table_id', pOrder.reservation)" id="order-table" class="form-select">
+          <option v-for="table in tables" v-bind:value="table.id">{{ table.number }}</option>
+        </select>
+      </div>
 
-        <div class="mb-3">
-          <label for="order-place">Place</label>
-          <select v-model="pOrder.reservation.place_type" @change="inlcudeAttribute('place_type', 'place_type', pOrder.reservation)" id="order-place" class="form-select">
-            <option value="outside">Outside</option>
-            <option value="inside">Inside</option>
-          </select>
-        </div>
+      <div class="mb-3">
+        <label for="order-place">Place</label>
+        <select v-model="pOrder.reservation.place_type" @change="inlcudeAttribute('place_type', 'place_type', pOrder.reservation)" id="order-place" class="form-select">
+          <option value="outside">Outside</option>
+          <option value="inside">Inside</option>
+        </select>
       </div>
     </div>
-
-    <div class="row bg-light">
-      <div class="col-lg-6">
-        <div class="d-flex justify-content-around">
-          <button class="btn btn-outline-success" @click="onFormSubmit">
-            {{ props.actionName }}
-          </button>
-
-          <button class="btn btn-outline-dark" @click="onCancel">
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  </form>
+  </DefaultForm>
 </template>

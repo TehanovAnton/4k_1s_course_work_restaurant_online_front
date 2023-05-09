@@ -35,7 +35,7 @@
   }
 
   const showBasket = () => {
-    contentsStore.setContent('BasketShowView')
+    contentsStore.setContent('RestaurantShowView')
   }
 </script>
 

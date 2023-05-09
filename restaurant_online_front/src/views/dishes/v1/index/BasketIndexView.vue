@@ -19,15 +19,17 @@
 </script>
 
 <template>
-  <div class="backet-show-view">
-    <div v-if="basketsStore.dishes.length == 0">
-      <h1>Basket is empty!</h1>
+  <div class="container">
+    <div class="col">
+      <div v-if="basketsStore.dishes.length == 0">
+        <h1>Basket is empty!</h1>
+      </div>
+
+      <DishesGrid>
+        <ShowView v-for="dish in dishes" :dish="dish" />
+      </DishesGrid>
+
+      <CreateView />
     </div>
-
-    <DishesGrid>
-      <ShowView v-for="dish in dishes" :dish="dish" />
-    </DishesGrid>
-
-    <CreateView />
   </div>
 </template>
