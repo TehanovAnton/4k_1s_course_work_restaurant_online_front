@@ -12,21 +12,6 @@
   const restaurantsStore = useRestaurantsStore()
   const basketsStore = useBasketsStore();  
 
-  const chosenDishes = computed(() => {
-    return props.pOrder.dishes
-  });
-
-  const creatingOrder = () => {
-    return !!!props.pOrder.id
-  }
-
-  const initOrderResrvation = () => {
-    return {
-      id: props.pOrder.reservation.id,
-      place_type: props.pOrder.reservation.place_type
-    }
-  }
-
   const order = ref({
     id: props.pOrder.id,
     user_id: props.pOrder.user_id,
@@ -34,12 +19,16 @@
       restaurant_id: props.pOrder.restaurant_id,
       user_id: props.pOrder.user_id,
       order_dishes_attributes: props.pOrder.order_dishes_attributes,
-      reservation_attributes: initOrderResrvation()
+      reservation_attributes: {
+        id: props.pOrder.reservation.id,
+        place_type: props.pOrder.reservation.place_type
+      }
     }
   })
 
-  const insideOrder = ref(props.pOrder.reservation.place_type === 'inside');
-  const placeType = ref({ type: 'outside' })
+  const isOrderType = (type) => {
+    return order.value.attributes.reservation_attributes.place_type == type
+  }
 
   const formatDate = (time) => {
     return moment(time).tz(moment.tz.guess()).format('YYYY-MM-DDTHH:mm')
@@ -61,16 +50,12 @@
     return restaurantsStore.currentRestaurant.tables
   })
 
-  const setPlaceType  = () => {
-    placeType.value.type = insideOrder.value ? 'inside' : 'outside'
-    return placeType.value.type
-  }
+  const orderPrice = computed(() => {
+    return basketsStore.basketDishesPrice
+  })
 
   const inlcudeAttribute = (attr, sourceObjectAttr = attr, sourceObject = props.pOrder) => {
     let sourceObjectAttrValue = sourceObject[sourceObjectAttr]
-
-    if (attr === 'place_type')
-      sourceObjectAttrValue = setPlaceType()
 
     if (['start_at', 'end_at'].includes(attr))
       sourceObjectAttrValue = formatDateWithTimeZone(sourceObjectAttrValue)
@@ -88,114 +73,53 @@
 </script>
 
 <template>
-  <div class="order-form">
-    <h2>Order Form</h2>
-    <div class="chosen-dishes">
-      <h3>Chosen Dishes:</h3>
-      <ul>
-        <li v-for="dish in chosenDishes" :key="dish.id">{{ dish.name }}</li>
-      </ul>
-    </div>
-    <div class="order-details">
-      <h3>Order Details:</h3>
+  <form>
+    <div class="row bg-light">
+      <div class="col-lg-6">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="dish-name" placeholder="name@example.com" :value="orderPrice" readonly/>
+          <label for="dish-name">Price</label>
+        </div>
 
-      <div class="input-group">
-        <label for="start-date">Start Date:</label>
-        <input type="datetime-local" id="start-date" v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" />
+        <div class="mb-3">
+          <label for="order-start-at">Start at</label>
+          <input v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" class="form-control" type="datetime-local" id="order-start-at">
+        </div>
+
+        <div v-if="isOrderType('inside')" class="mb-3">
+          <label for="order-start-at">End at</label>
+          <input v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" class="form-control" type="datetime-local" id="order-start-at">
+        </div>
+
+        <div v-if="isOrderType('inside')" class="mb-3">
+          <label for="order-table">Table</label>
+          <select v-model="pOrder.reservation.table_id" @change="inlcudeAttribute('table_id', 'table_id', pOrder.reservation)" id="order-table" class="form-select">
+            <option v-for="table in tables" v-bind:value="table.id">{{ table.number }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="order-place">Place</label>
+          <select v-model="pOrder.reservation.place_type" @change="inlcudeAttribute('place_type', 'place_type', pOrder.reservation)" id="order-place" class="form-select">
+            <option value="outside">Outside</option>
+            <option value="inside">Inside</option>
+          </select>
+        </div>
       </div>
-
-      <div class="input-group">
-        <label for="inside-order">Inside Order:</label>
-        <input type="checkbox" id="inside-order" v-model="insideOrder" @change="inlcudeAttribute('place_type', 'type', placeType)" />
-      </div>
-
-      <div v-if="insideOrder" class="input-group">
-        <label for="end-date">End Date:</label>
-        <input type="datetime-local" id="end-date" v-model="reservationTimes.end_at" @change="inlcudeAttribute('end_at', 'end_at', reservationTimes)" />
-      </div>
-
-      <div v-if="insideOrder" class="input-group">
-        <label for="menu-slect">Table</label>
-        <select id="menu-slect" class="text-input menu-select" v-model="pOrder.reservation.table_id" @change="inlcudeAttribute('table_id', 'table_id', pOrder.reservation)">
-          <option v-for="table in tables" v-bind:value="table.id">
-            {{ table.number }}
-          </option>
-        </select>
-      </div>      
     </div>
-    <div class="dish-form__actions">
-      <button class="btn btn-primary" @click="onFormSubmit">
-        {{ props.actionName }}
-      </button>
-      <button class="btn btn-secondary" @click="onCancel">
-        Cancel
-      </button>
+
+    <div class="row bg-light">
+      <div class="col-lg-6">
+        <div class="d-flex justify-content-around">
+          <button class="btn btn-outline-success" @click="onFormSubmit">
+            {{ props.actionName }}
+          </button>
+
+          <button class="btn btn-outline-dark" @click="onCancel">
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
+  </form>
 </template>
-
-<style scoped>
-.order-form {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px;
-}
-
-.chosen-dishes {
-  margin-bottom: 10px;
-}
-
-.chosen-dishes ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.order-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.input-group label {
-  margin-right: 10px;
-}
-
-.dish-form__actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.btn {
-  cursor: pointer;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-}
-
-.btn-primary {
-  background-color: #007bff;
-}
-
-.btn-primary:hover {
-  background-color: #0069d9;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  margin-left: 10px;
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-}
-</style>

@@ -2,7 +2,7 @@
 
   import { computed } from 'vue';
   import LoadRestaurants from './components/datacomponents.vue/LoadRestaurants.vue'
-  import DishesIndexView from '../../dishes/v1/IndexView.vue';
+  import DishesIndexView from '../../dishes/v1/index/IndexView.vue';
   import CurrentMenu from '../../menus/v1/components/CurrentMenu.vue';
   import EditIcon from '../../icons/EditIcon.vue';
   import restaurant_service from '../../services/restaurants/restaurant_service';

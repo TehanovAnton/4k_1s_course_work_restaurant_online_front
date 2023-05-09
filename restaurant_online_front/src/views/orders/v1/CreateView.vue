@@ -5,8 +5,8 @@
   import { useBasketsStore } from '../../baskets/stores/BasketsStore';
   import { useContentsStore } from '../../restaurants/stores/ContentsStore';
   import { useOrdersStore } from '../stores/OrdersStore';
-import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
-import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
+  import { useCurrentUserStore } from '../../../stores/users/currentUser';
 
   const basketsStore = useBasketsStore()
   const contentsStore = useContentsStore()

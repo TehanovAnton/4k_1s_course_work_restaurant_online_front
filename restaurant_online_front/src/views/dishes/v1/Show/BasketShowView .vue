@@ -23,42 +23,13 @@
   })
   const menusStore = useMenusStore()
 
-  const editDish = () => {
-    dishesStore.setDish(dish.value)
-    contentsStore.setContent('DishEditView')
+  const incBasketDishCount = (dish) => {
+    basketsStore.incBasketDishCount(dish)
   }
 
-  const deleteDish = async () => {
-    let args = {
-      deleteUrl: `http://localhost:3000/dishes/${props.dish.id}`,
-      requestOptions: { headers: tokensService.auth_headers() },
-    }
-
-    let {
-      isSuccessful
-    } = await dishApi.apiDeletModel(args)
-
-    if (isSuccessful) {
-      menusStore.updateAndSetCurrent(menusStore.currentMenu)
-      contentsStore.setContent('RestaurantShowView')
-    }
-  }
-
-  const addDishToBasket = (dish) => {
-      basketsStore.incBasketDishCount(dish)
-  }
-
-  const removeDishFromBasket = (dish) => {
-      basketsStore.decrementBasketDishCount(dish)
-  }
-
-  const ownDish = computed(() => {
-    return dishesStore.ownDish(dish.value, currentUserStore.user)
-  })
-
-  const dishPresentInBasket = computed(() => {
-    return basketsStore.basketDishCount(dish.value) !== 0
-  })
+  const decrementBasketDishCount = (dish) => {
+    basketsStore.decrementBasketDishCount(dish)
+  }  
 </script>
 
 <template>
@@ -77,10 +48,9 @@
         </p>
 
         <div class="input-group d-flex d-flex justify-content-center">
-          <button  v-if="ownDish" @click="deleteDish" class="btn btn-outline-danger btn-md" type="button">Destroy</button>
-          <button  v-if="ownDish" @click="editDish" class="btn btn-outline-secondary btn-md" type="button" >Edit</button>
-          <button v-if="!dishPresentInBasket" @click="addDishToBasket(dish)" class="btn btn-outline-success btn-md" type="button">Add to basket</button>
-          <button v-if="dishPresentInBasket" @click="removeDishFromBasket(dish)" class="btn btn-outline-success btn-md" type="button">Remove from basket</button>
+          <button @click="incBasketDishCount(dish)" class="btn btn-outline-success btn-md" type="button">+</button>
+          <button class="btn btn-outline-secondary btn-md" type="button">{{ basketsStore.basketDishCount(dish) }}</button>
+          <button @click="decrementBasketDishCount(dish)" class="btn btn-outline-danger btn-md" type="button">-</button>
         </div>
       </div>
     </div>

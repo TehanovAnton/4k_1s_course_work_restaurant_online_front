@@ -13,7 +13,7 @@ import DishCreateView from '../../dishes/CreateView.vue';
 import CreateWelcomeView from '../../CreateWelcomeView.vue';
 import MenuCreateView from '../../menus/CreateView.vue';
 import MenuIndexView from '../../../components/menus/v1/IndexView.vue';
-import BasketShowView from '../../dishes/v1/Show/BasketShowView.vue';
+import BasketShowView from '../../dishes/v1/index/BasketIndexView.vue';
 import OrderCreateView from '../../orders/v1/CreateView.vue';
 import OrdersIndexView from '../../orders/v1/IndexView.vue';
 import OrderEditView from '../../orders/EditView.vue';

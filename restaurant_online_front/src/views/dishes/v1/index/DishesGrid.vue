@@ -1,28 +1,10 @@
 <script setup>
-  import { computed } from 'vue';
-  import { useDishesStore } from '../stores/DishesStore';
-  import { useBasketsStore } from '../../baskets/stores/BasketsStore';
-  import DishShowView from './Show/ShowView.vue';
-  import DishCreateView from '../CreateView.vue';
-
-  const dishesStore = useDishesStore()
-  const basketsStore = useBasketsStore()
-
-  const dishes = computed(() => { return dishesStore.dishes })
-  const dishesExists = computed(() => {
-    if (!!!dishes.value)
-      return false
-
-    return dishes.value.length > 0
-  })
 </script>
 
 <template>
-  <div class="dish-grid" v-if="dishesExists">
-    <DishShowView v-for="dish in dishes" :dish="dish" />
+  <div class="dish-grid">
+    <slot />
   </div>
-
-  <DishCreateView v-if="!dishesExists" />
 </template>
 
 <style lang="scss">

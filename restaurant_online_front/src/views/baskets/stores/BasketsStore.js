@@ -35,6 +35,16 @@ export const useBasketsStore = defineStore('basketsStore', () => {
     return baketDishes
   })
 
+  const basketDishesPrice = computed(() => {
+    let price = 0
+
+    dishes.value.forEach(dish => {
+      price += parseInt(dish.price_cents) * basketDishCount(dish)
+    })
+
+    return price
+  })
+
   const updateSessionBaskets = (callBack) => {
     if (!!!currentRestaurantId.value)
       return
@@ -114,6 +124,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
     baskets,
     dishes,
     currentBasket,
+    basketDishesPrice,
     clearBasket,
     addDish,
     removeDish,
