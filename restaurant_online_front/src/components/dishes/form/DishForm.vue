@@ -7,11 +7,13 @@
   import PriceInput from './inputs/PriceInput.vue';
   import DescriptionInput from './inputs/DescriptionInput.vue';
   import MenuSelectInput from './inputs/MenuSelectInput.vue';
-import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
+  import DefaultForm from '../../forms/DefaultForm.vue';
+  import { useDishFormErrorsStore } from '../../../views/dishes/stores/dishFormErrorsStore';
 
   const props = defineProps(['dish', 'actionName']);
   const emits = defineEmits(['formSubmit', 'cancel']);
 
+  const dishFormErrorsStore = useDishFormErrorsStore()
   const menusStore = useMenusStore();
   const modefiedDish = ref({
     id: props.dish.id,
@@ -20,7 +22,7 @@ import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
       image_file: null,
       image_url: props.dish.image_url,
       name: props.dish.name,
-      price: props.dish.price,
+      price_cents: props.dish.price,
       description: props.dish.description,
     },
   });
@@ -44,34 +46,23 @@ import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';
 </script>
 
 <template>
-  <form>
-    <div class="row bg-light">
-      <div class="col-lg-6">
-        <NameInput :init-value="dish.name" @name-change="inlcudeAttribute" />
-        <PriceInput :init-value="dish.price_cents" @price-change="inlcudeAttribute" />
-        <MenuSelectInput
-          :init-value="menusStore.currentMenu"
-          :menus="menusStore.menus"
-          @menu-change="includeMenuAttribute" 
-        />
-        <DescriptionInput :init-value="dish.description" @description-change="inlcudeAttribute" />
-      </div>
-
-      <div class="col-lg-6">
-        <ImageInput :init-value="dish.image" @img-change="inlcudeAttribute" />
-      </div>
+  <DefaultForm
+    form-label="Dish" :primary-button="actionName" secondary-button="Cancel" :errors-store="dishFormErrorsStore"
+    @primaryBtnClick="onFormSubmit" @secondaryBtnClick="onCancel"
+  >
+    <div class="col-lg-6">
+      <NameInput :init-value="dish.name" @name-change="inlcudeAttribute" />
+      <PriceInput :init-value="dish.price_cents" @price-change="inlcudeAttribute" />
+      <MenuSelectInput
+        :init-value="menusStore.currentMenu"
+        :menus="menusStore.menus"
+        @menu-change="includeMenuAttribute" 
+      />
+      <DescriptionInput :init-value="dish.description" @description-change="inlcudeAttribute" />
     </div>
 
-    <div class="row bg-light">
-      <div class="d-flex justify-content-around">
-        <button class="btn btn-outline-success" @click="onFormSubmit">
-          {{ props.actionName }}
-        </button>
-
-        <button class="btn btn-outline-dark" @click="onCancel">
-          Cancel
-        </button>
-      </div>
+    <div class="col-lg-6">
+      <ImageInput :init-value="dish.image" @img-change="inlcudeAttribute" />
     </div>
-  </form>
+  </DefaultForm>
 </template>

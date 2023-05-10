@@ -40,19 +40,8 @@
 </script>
 
 <template>
-  <Errors :errors-store="dishFormErrorsStore" />
-
-  <div class="edit-container">
-    <DishForm :dish="currentDishCopy" action-name="update"
-              @form-submit="updateDish" @cancel="showRestaurant"/>
-  </div>
+  <DishForm
+    :dish="currentDishCopy" action-name="update"
+    @form-submit="updateDish" @cancel="showRestaurant"
+  />
 </template>
-
-<style lang="scss">
-  .edit-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 50px;
-  }
-</style>

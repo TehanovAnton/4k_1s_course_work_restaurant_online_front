@@ -1,5 +1,7 @@
 <script setup>
-  const props = defineProps(['formLabel', 'primaryButton', 'secondaryButton'])
+  import Errors from '../errors/Errors.vue';
+
+  const props = defineProps(['formLabel', 'primaryButton', 'secondaryButton', 'errorsStore'])
   const emits = defineEmits(['primaryBtnClick', 'secondaryBtnClick'])
 </script>
 
@@ -8,6 +10,7 @@
     <div class="row bg-light d-flex justify-content-around">
       <div class="col-lg-6">
         <div class="row bg-light">
+          <Errors :errors-store="errorsStore" />
 
           <div class="row bg-light mt-3 d-flex justify-content-center">
             <h5 class="col-lg-6 d-flex justify-content-center">{{ formLabel }}</h5>

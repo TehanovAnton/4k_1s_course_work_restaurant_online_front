@@ -4,7 +4,7 @@
   const props = defineProps(['initValue'])
   const emits = defineEmits(['priceChange'])
 
-  const price = ref({ price:props.initValue })
+  const price = ref({ price: props.initValue })
 
   const setPrice = () => {    
     emits('priceChange', 'price_cents', 'price', price.value)

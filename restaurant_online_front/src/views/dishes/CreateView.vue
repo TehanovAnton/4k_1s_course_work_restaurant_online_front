@@ -1,7 +1,6 @@
 <script setup>
   import { computed, ref } from 'vue';
   import DishForm from '../../components/dishes/form/DishForm.vue';
-  import Errors from '../../components/errors/Errors.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
   import dishCreateService from '../services/modelCreateServices/modelCreateService'
@@ -16,7 +15,12 @@
   const currentMenu = computed(() => menusStore.currentMenu)
   const contentsStore = useContentsStore()
   const dishFormErrorsStore = useDishFormErrorsStore()
-  const dish = ref({ name:'', menu_id: currentMenu.value.id })
+  const dish = ref({
+    name:'',
+    description: '',
+    price_cents: 0,
+    menu_id: currentMenu.value.id
+  })
 
   const createDish = async (modefiedDish) => {
     let args = {
@@ -26,12 +30,16 @@
         headers:''
       }
     }
-    args = args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
-
-    await dishCreateService.createModel(dishApi, args, dishFormErrorsStore, (_response) => {
-      menusStore.updateAndSetCurrent(currentMenu.value, { view:'with_dishes' })
-      contentsStore.setContent('RestaurantShowView')
-    })
+    args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
+  
+    await dishCreateService.createModel(
+      dishApi, 
+      args,
+      dishFormErrorsStore, 
+      (_response) => {
+        menusStore.updateAndSetCurrent(currentMenu.value, { view:'with_dishes' })
+        contentsStore.setContent('RestaurantShowView')
+      })
   }
 
   const showRestaurant = () => {
@@ -42,20 +50,8 @@
 </script>
 
 <template>
-  <Errors :errors-store="dishFormErrorsStore" />
-
-  <div class="create-container">
-    <DishForm action-name="create" :dish="dish"
-              @form-submit="createDish"
-              @cancel="showRestaurant" />
-  </div>
+  <DishForm
+    action-name="create" :dish="dish"
+    @form-submit="createDish" @cancel="showRestaurant"
+  />
 </template>
-
-<style lang="scss">
-  .create-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 50px;
-  }
-</style>
