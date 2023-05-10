@@ -53,7 +53,7 @@
               <h5 class="card-title d-flex justify-content-around">{{ restaurant.address }}</h5>
             </div>
 
-            <div class="row bg-transparent">
+            <div v-if="ownRestaurant" class="row bg-transparent">
               <div class="d-flex justify-content-around">
                 <button class="btn btn-outline-success" @click="editRestaurant">
                   Edit

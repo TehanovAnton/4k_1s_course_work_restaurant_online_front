@@ -56,7 +56,7 @@ import { useRestaurantsStore } from '../../../restaurants/stores/RestaurantsStor
       />
     </div>
 
-    <div class="row bg-transparent">
+    <div v-if="ownMenu" class="row bg-transparent">
       <div class="d-flex justify-content-around">
         <button class="btn btn-outline-success" @click="editMenu">
           Edit

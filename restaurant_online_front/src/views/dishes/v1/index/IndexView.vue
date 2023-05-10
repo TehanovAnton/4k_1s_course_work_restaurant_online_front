@@ -5,9 +5,12 @@
   import DishShowView from './../Show/ShowView.vue';
   import DishCreateView from '../../CreateView.vue';
   import DishesGrid from './DishesGrid.vue';
+  import { useMenusStore } from '../../../menus/stores/MenusStore';
+  import { useCurrentUserStore } from '../../../../stores/users/currentUser';
 
+  const currentUserSotre = useCurrentUserStore()
+  const menusStore = useMenusStore()
   const dishesStore = useDishesStore()
-  const basketsStore = useBasketsStore()
 
   const dishes = computed(() => { return dishesStore.dishes })
   const dishesExists = computed(() => {
@@ -16,6 +19,10 @@
 
     return dishes.value.length > 0
   })
+
+  const ownMenu = (menu) => {
+    return menusStore.ownMenu(menu, currentUserSotre.user)
+  }
 </script>
 
 <template>
@@ -23,6 +30,6 @@
     <DishShowView v-for="dish in dishes" :dish="dish" />
   </DishesGrid>
 
-  <DishCreateView v-if="!dishesExists" />
+  <DishCreateView v-if="ownMenu(menusStore.currentMenu) &&!dishesExists" />
 </template>
 
