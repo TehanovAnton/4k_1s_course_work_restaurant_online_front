@@ -1,9 +1,5 @@
 <script setup>
   import { computed, ref } from 'vue';
-  import EditIcon from '../../../icons/EditIcon.vue';
-  import DeleteIcon from '../../../icons/DeleteIcon.vue';
-  import AddToBasketIcon from '../../../icons/AddIcon.vue';
-  import RemoveFromBasketIcon from '../../../icons/RemoveIcon.vue';
   import { useContentsStore } from '../../../restaurants/stores/ContentsStore';
   import { useDishesStore } from '../../stores/DishesStore';
   import { useBasketsStore } from '../../../baskets/stores/BasketsStore';

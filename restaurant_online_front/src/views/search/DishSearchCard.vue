@@ -1,84 +1,28 @@
 <script setup>
   import { computed } from 'vue';
-  import { useMenusStore } from '../menus/stores/MenusStore';
-  import { useContentsStore } from '../restaurants/stores/ContentsStore';
-  import { useRestaurantsStore } from '../restaurants/stores/RestaurantsStore';
 
-  const props = defineProps(['model'])
-  const restaurantsStore = useRestaurantsStore()
-  const contentsStore = useContentsStore()
-  const menusStore = useMenusStore()
-
-  const dish = computed(() => props.model)
-  const dishMenu = computed(() => dish.value.menu)
-  const restaurant = computed(() => dishMenu.value.restaurant)
-
-  const showRestaurant = () => {
-    restaurantsStore.setModel(restaurant.value)
-    menusStore.setMenu(dishMenu.value)
-    contentsStore.setContent('RestaurantShowView')
-  }
-
-  const dishMenuClass = (menu) => {
-    if (menu.id === dishMenu.value.id)
-      return 'highlight-menu'
-
-    return ''
-  }
+  const props = defineProps(['dish'])
+  const emits = defineEmits(['dishClick'])
+  const dish = computed(() => {
+    return props.dish
+  })
 </script>
 
 <template>
-  <div class="restaurant-card" @click="showRestaurant">
-    <h2>{{ restaurant.name }}</h2>
-    <div class="restaurant-info">
-      <p><strong>Email:</strong> {{ restaurant.email }}</p>
-      <p><strong>Address:</strong> {{ restaurant.address }}</p>
-      <p><strong>Phone:</strong> {{ restaurant.phone }}</p>
-    </div>
-    <div class="menu-list">
-      <h3>Menus:</h3>
-      <ul>
-        <li v-for="menu in restaurant.menus"
-            v-bind:class="dishMenuClass(menu)"
-            :key="menu.id">
-          {{ menu.name }}
-        </li>
-      </ul>
+  <div class="dish-card" @click="$emit('dishClick')">
+    <div class="card">
+      <img class="card-img-top" alt="..." v-bind:src="dish.image">
+
+      <div class="card-body">
+        <div class="d-flex justify-content-around">
+          <h5 class="card-title">{{ dish.name }}</h5>
+          <h6 class="card-subtitle m-3 text-muted">{{ dish.price_cents }}$</h6>
+        </div>
+
+        <p class="card-text text-muted">
+          {{ dish.description }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-  .highlight-menu {
-    background-color: gray;
-  }
-
-  .restaurant-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #f2f2f2;
-    }
-
-    .restaurant-info {
-      margin-bottom: 10px;
-    }
-
-    .menu-list {
-      margin-top: 10px;
-
-      ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-
-        li {
-          margin-bottom: 5px;
-        }
-      }
-    }
-  }
-</style>

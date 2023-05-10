@@ -38,8 +38,13 @@ export const useMenusStore = defineStore('menusStore', () => {
 
   const setMenu = (menu) => {
     sessionObject.updateSessionObjectContent(
-      modelsStore.currentModelExists(currentMenu.value),
-      () => modelsStore.currentModelJsonData(currentMenu.value),
+      null,
+      () => {
+        if (!!currentMenu.value)
+          return modelsStore.currentModelJsonData(currentMenu.value)
+        else
+          return modelsStore.currentModelJsonData(sessionObject.initObject())
+      },
       () => currentMenu.value = menu
     )
   }

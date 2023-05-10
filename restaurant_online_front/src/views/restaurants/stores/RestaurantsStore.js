@@ -40,7 +40,14 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
 
   const findRestaurant = (modelsCollection, model) => {
     return modelsStore.findModel(modelsCollection, model)
-  }  
+  }
+  
+  const findByMenuId = (modelsCollection, menuId) => {
+    return modelsStore.find(
+      modelsCollection,
+      (m) => !!m.menus.find(menu => menu.id === menuId )
+    )
+  }
 
   const fetchModels = async (callback) => {
     await modelsStore.fetchModels(
@@ -66,6 +73,7 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
     currentRestaurant, 
     restaurants,
     currentUserModels,
+    findByMenuId,
     userModels,
     ownRestaurant,
     findRestaurant,

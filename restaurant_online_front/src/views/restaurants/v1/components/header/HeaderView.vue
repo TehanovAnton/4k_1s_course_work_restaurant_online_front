@@ -26,11 +26,6 @@
   <div class="container rounded bg-dark">
     <div class="row m-3 bg-transparent">
       <ul class="nav nav-pills nav-fill">
-        <NavLi v-if="[isUserType('Customer'), isUserType('SuperAdmin')].includes(true)"
-          label="Search"
-          @nav-click="setContentView('SearchIndexView')"
-        />
-
         <NavLi
           label="Profile"
           @nav-click="setContentView('UserShowView')"

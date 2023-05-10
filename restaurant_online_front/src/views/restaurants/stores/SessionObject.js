@@ -21,11 +21,14 @@ export class SessionObject {
   }
 
   updateSessionObjectContent(currentModelExists, currentModelJsonData, callBack) {
-    if (!currentModelExists)
-      return
+    callBack() 
 
-    callBack()    
+    let jsonData = currentModelJsonData()
 
-    sessionStorage.setItem(this.sessionObjectKey, currentModelJsonData())
+    if (!!jsonData)
+      sessionStorage.setItem(this.sessionObjectKey, jsonData)
+    else {      
+      sessionStorage.setItem(this.sessionObjectKey, this.initObject())
+    }
   }
 }

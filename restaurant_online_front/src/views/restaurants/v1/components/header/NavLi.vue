@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <li class="nav-item btn-outline-primary">
+  <li class="nav-item">
     <a 
       class="nav-link" aria-current="page" href="#"
       @click="$emit('navClick')"

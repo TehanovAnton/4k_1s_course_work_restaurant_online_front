@@ -6,7 +6,7 @@ import { useContentsStore } from '../stores/ContentsStore';
 import RestaurantShowView from './ShowView.vue';
 import RestaurantEditView from '../v1/EditView.vue'
 import RestaurantCreateView from '../../../components/restaurants/v1/CreateView.vue';
-import RestaurantsIndexView from './IndexView.vue';
+import RestaurantsIndexView from './index/IndexView.vue';
 import MenuEditView from  '../../menus/EditView.vue'
 import DishEditView from '../../dishes/EditView.vue'
 import DishCreateView from '../../dishes/CreateView.vue';
@@ -20,12 +20,10 @@ import OrderEditView from '../../orders/EditView.vue';
 import UserShowView from '../../users/v1/ShowView.vue';
 import UserEditView from '../../users/EditView.vue';
 import CooksOrdersView from '../../cooks/OrdersView.vue';
-import SearchIndexView from '../../search/IndexView.vue';
 
 
 const contentsStore = useContentsStore()
 const contents = {
-  SearchIndexView,
   CooksOrdersView,
   RestaurantShowView,
   RestaurantEditView,
