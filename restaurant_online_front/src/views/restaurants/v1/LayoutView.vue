@@ -17,7 +17,7 @@ import BasketShowView from '../../dishes/v1/index/BasketIndexView.vue';
 import OrderCreateView from '../../orders/v1/CreateView.vue';
 import OrdersIndexView from '../../orders/v1/IndexView.vue';
 import OrderEditView from '../../orders/EditView.vue';
-import UserShowView from '../../users/v1/ShowView.vue';
+import UserShowView from '../../users/v1/show/ShowView.vue';
 import UserEditView from '../../users/EditView.vue';
 import CooksOrdersView from '../../cooks/OrdersView.vue';
 
