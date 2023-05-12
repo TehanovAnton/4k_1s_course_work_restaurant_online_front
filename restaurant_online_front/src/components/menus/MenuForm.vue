@@ -1,10 +1,13 @@
 <script setup>
   import { ref } from 'vue';
-import DefaultForm from '../forms/DefaultForm.vue';
-import FloatLabelInput from '../forms/FloatLabelInput.vue';
+  import DefaultForm from '../forms/DefaultForm.vue';
+  import FloatLabelInput from '../forms/FloatLabelInput.vue';
+  import { useMenuFormErrorsStore } from '../../views/menus/stores/MenuFormErrorsStore';
 
   const props = defineProps(['menu', 'actionName', 'fromLabel'])
   const emits = defineEmits(['formSubmit', 'cancel'])
+
+  const menuFormErrorsStore = useMenuFormErrorsStore()
 
   const modefiedMenu = ref({ 
     id: props.menu.id,
@@ -12,6 +15,7 @@ import FloatLabelInput from '../forms/FloatLabelInput.vue';
       restaurant_id: props.menu.restaurant_id,
     }
   })
+  
 
   const inlcudeAttribute = (attr) => {
     modefiedMenu.value.attributes[attr] = props.menu[attr]
@@ -20,7 +24,7 @@ import FloatLabelInput from '../forms/FloatLabelInput.vue';
 
 <template>
   <DefaultForm
-    :form-label="fromLabel" :primary-button="actionName" secondary-button="Cancel"
+    :form-label="fromLabel" :primary-button="actionName" :errors-store="menuFormErrorsStore" secondary-button="Cancel"
     @primaryBtnClick="$emit('formSubmit', modefiedMenu)" @secondaryBtnClick="$emit('cancel')"
   >
     <div class="col-lg-6">
