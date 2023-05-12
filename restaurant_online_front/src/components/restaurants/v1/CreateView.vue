@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import RestaurantForm from '../../RestaurantForm.vue';
   import Errors from '../../errors/Errors.vue';
   import restaurant_service from '../../../views/services/restaurants/restaurant_service';
@@ -14,11 +14,16 @@
   const currentUserStore = useCurrentUserStore()
   const restaurantFormErrorsStore = useRestaurantFormErrorsStore()
 
+  const currentUser = computed(() => {
+    return currentUserStore.user
+  })
+
   const restaurant = ref({
     id: '',
     email: '',
     address: '',
-    phone: ''
+    phone: '',
+    companies_restaurant_attributes: { company_id: currentUser.value.company_id }
   })
 
   const createRestaurant = async (restaurant) => {

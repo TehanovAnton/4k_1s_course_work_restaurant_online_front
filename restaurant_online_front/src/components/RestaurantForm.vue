@@ -7,7 +7,9 @@
   const emits = defineEmits(['formSubmit', 'cancel'])
   const modefiedRestaurant = ref({ 
     id: props.restaurant.id,
-    updateAttributes: {}
+    updateAttributes: {
+      companies_restaurant_attributes: props.restaurant.companies_restaurant_attributes
+    }
   })
 
   const inlcudeAttribute = (attr) => {
