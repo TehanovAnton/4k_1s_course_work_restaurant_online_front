@@ -4,13 +4,15 @@
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';
   import moment from 'moment-timezone';
-import DefaultForm from '../../forms/DefaultForm.vue';
+  import DefaultForm from '../../forms/DefaultForm.vue';
+import { useOrderFormErrorsStore } from './stores/OrderFormErrorsStore';
 
   const props = defineProps(['pOrder', 'actionName'])
   const emits = defineEmits(['formSubmit', 'cancle'])
 
   const currentUserStore = useCurrentUserStore()
   const restaurantsStore = useRestaurantsStore()
+  const orderFormErrosStore = useOrderFormErrorsStore()
   const basketsStore = useBasketsStore();  
 
   const order = ref({
@@ -19,7 +21,7 @@ import DefaultForm from '../../forms/DefaultForm.vue';
     attributes: {
       restaurant_id: props.pOrder.restaurant_id,
       user_id: props.pOrder.user_id,
-      order_dishes_attributes: props.pOrder.order_dishes_attributes,
+      orders_dishes_attributes: props.pOrder.order_dishes_attributes,
       reservation_attributes: {
         id: props.pOrder.reservation.id,
         place_type: props.pOrder.reservation.place_type
@@ -75,7 +77,7 @@ import DefaultForm from '../../forms/DefaultForm.vue';
 
 <template>
   <DefaultForm
-    form-label="Order" :primary-button="actionName" secondary-button="Cancel"
+    form-label="Order" :primary-button="actionName" secondary-button="Cancel" :errors-store="orderFormErrosStore"
     @primaryBtnClick="onFormSubmit" @secondaryBtnClick="onCancel"
   >
     <div class="col-lg-6">

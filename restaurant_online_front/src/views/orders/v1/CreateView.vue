@@ -7,12 +7,14 @@
   import { useOrdersStore } from '../stores/OrdersStore';
   import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore';
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import { useOrderFormErrorsStore } from '../../../components/orders/v1/stores/OrderFormErrorsStore';
 
   const basketsStore = useBasketsStore()
   const contentsStore = useContentsStore()
   const ordersStore = useOrdersStore()
   const restaurantsStore = useRestaurantsStore()
   const currentUserStore = useCurrentUserStore()
+  const orderFormErrosStore = useOrderFormErrorsStore()
 
   const order = ref({
     id: '',
@@ -24,14 +26,15 @@
   })
 
   const createOrder = async (order) => {
-
-    let { isSuccessful } = await order_service.apiCreateOrder(order)
-
-    if (isSuccessful) {
-      basketsStore.clearBasket()
-      ordersStore.updateOrders()
-      contentsStore.setContent('OrdersIndexView')
-    }
+    await order_service.apiCreateOrder(
+      order,
+      orderFormErrosStore,
+      (_response) => {
+        basketsStore.clearBasket()
+        ordersStore.updateOrders()
+        contentsStore.setContent('OrdersIndexView')
+      }
+    )
   }
 
   const showBasket = () => {

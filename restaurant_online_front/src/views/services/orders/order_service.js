@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../../services/common_methods';
 import tokensService from '../../services/tokensService';
+import { BaseApi } from '../api/baseApi'
 
 const apiIndexOrders = async (userId) => {
   let response = await axios.get(`http://localhost:3000/users/${userId}/orders`,
@@ -35,20 +36,21 @@ const apiGetOrder = async (orderId) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
-const apiCreateOrder = async (order) => {
-  let createUrl = `http://localhost:3000/users/${order.user_id}/orders`
-  let data = { order: order.attributes }
+const apiCreateOrder = async (order, errorsStore, successCallback) => {
+  let args = {
+    url: `http://localhost:3000/users/${order.user_id}/orders`,
+    data: { order: order.attributes },
+    requestOptions: {
+      headers: tokensService.auth_headers()
+    }
+  }
+  const requester = new BaseApi(args)
 
-  let response = await axios.post(
-    createUrl,
-    data,
-    { headers: tokensService.auth_headers() }
-  ).catch(errorshandler)
-  
-  let isSuccessfulReq = isSuccessful(response)
-  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
-
-  return { response: response, isSuccessful: isSuccessfulReq }
+  await requester.requestBase(
+    'post',
+    errorsStore,
+    successCallback
+  )
 }
 
 const apiCreateRating = async (orderId, rating) => {
