@@ -31,7 +31,9 @@
           @nav-click="setContentView('UserShowView')"
         />
 
-        <NavDropDown label="Restaurants">
+        <NavDropDown v-if="[isUserType('Customer'), isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
+          label="Restaurants"
+        >
           <li><a class="dropdown-item" @click="setContentView('RestaurantShowView')">Chossen restaurant</a></li>
           <li><a class="dropdown-item" @click="setContentView('RestaurantsIndexView')">All restaurants</a></li>
         </NavDropDown>
@@ -51,13 +53,15 @@
           @nav-click="setContentView('BasketShowView')"
         />
 
-        <NavDropDown label="Create">
+        <NavDropDown v-if="[isUserType('Customer'), isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
+          label="Create"
+        >
           <li><a class="dropdown-item" @click="setContentView('RestaurantCreateView')">Restaurant</a></li>
           <li><a class="dropdown-item" @click="setContentView('MenuCreateView')">Menu</a></li>
           <li><a class="dropdown-item" @click="setContentView('DishCreateView')">Dish</a></li>        
         </NavDropDown>
 
-        <NavLi v-if="[isUserType('SuperAdmin')].includes(true)"
+        <NavLi
           label="Sign out"
           @nav-click="signOut"
         />

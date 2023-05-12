@@ -61,7 +61,7 @@
       <DescriptionInput :init-value="dish.description" @description-change="inlcudeAttribute" />
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-6 ms-3">
       <ImageInput :init-value="dish.image" @img-change="inlcudeAttribute" />
     </div>
   </DefaultForm>
