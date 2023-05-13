@@ -5,6 +5,10 @@
   import { ref } from 'vue'
   import DefaultForm from '../../components/forms/DefaultForm.vue';
   import TextInput from '../../components/forms/FloatLabelInput.vue';
+  import { BaseApi } from '../services/api/baseApi';
+  import { useSignUpFormErrorStore } from './stores/SignUpFormErrorStore'
+
+  const signUpFormErrorStore = useSignUpFormErrorStore()
 
   const customer = ref({
       name: 'clone3',
@@ -17,14 +21,20 @@
   const errors = ref([])
 
   const sign_up = async () => {
-      let response = await axios.post('http://localhost:3000/auth', customer.value)
-      .catch((error) => {
-          errors.value = error.response.data.errors.full_messages;
-      })
+    let args = {
+      url: 'http://localhost:3000/auth',
+      data: customer.value,
+      requestOptions: {}
+    }
+    let requester = new BaseApi(args)
 
-      if (response && response.status === 200) {
-      router.push({ name: 'sign_in' })
+    await requester.requestBase(
+      'post',
+      signUpFormErrorStore,
+      (_response) => {
+        router.push({ name: 'sign_in' })
       }
+    )
   }
 
   const sign_in = () => {
@@ -33,9 +43,9 @@
 </script>   
 
 <template>
-    <ErrorsVue :errors="errors"/>
     <DefaultForm
       form-label="Registration" primary-button="Sign up" secondary-button="Sign in"
+      :errors-store="signUpFormErrorStore"
       @primaryBtnClick="sign_up" @secondaryBtnClick="sign_in"
     >
       <div class="col-lg-6">
