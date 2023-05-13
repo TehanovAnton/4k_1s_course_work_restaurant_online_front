@@ -9,6 +9,9 @@
 </script>
 
 <template>
+  <h1 v-if="restaurants.length === 0">
+    No result
+  </h1>
   <div v-for="restaurant in restaurants" :key="restaurant.id">
     <RestaurantCard :restaurant="restaurant" />
   </div>
