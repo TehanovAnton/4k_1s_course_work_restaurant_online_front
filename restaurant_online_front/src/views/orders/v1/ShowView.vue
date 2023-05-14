@@ -6,20 +6,41 @@
   import order_service from '../../services/orders/order_service';
   import ModelShowWrap from '../../../components/stylecomponents/ModelShowWrap.vue';
   import { OrderBasket } from '../../baskets/OrderBasket'
+  import OrderRate from './components/OrderRate.vue';
 
   const props = defineProps(['order'])
 
   const orderBasket = new OrderBasket(props.order.dishes)
-  const primaryButton = ref({
-    enable: true,
-    label: 'Edit',
-    callBack: () => {}
+  const primaryButton = computed(() => {
+    if (!['ready', 'finished'].includes(orderState.value.aasm_state)) {
+      return {
+        enable: true,
+        label: 'Edit',
+        callBack: () => {}
+      }
+    } else {
+      return {
+        enable: false,
+        label: '',
+        callBack: () => {}
+      }
+    }
   })
 
-  const secondaryButton = ref({
-    enable: true,
-    label: 'Destroy',
-    callBack: () => {}
+  const secondaryButton = computed(() => {
+    if (!['ready', 'finished'].includes(orderState.value.aasm_state)) {
+      return {
+        enable: true,
+        label: 'Destroy',
+        callBack: async () => await deleteOrder()
+      }
+    } else {
+      return {
+        enable: false,
+        label: '',
+        callBack: () => {}
+      }
+    }
   })
 
   const contentsStore = useContentsStore()
@@ -84,20 +105,6 @@
     }
   }
 
-  const submitFinish = async () => {
-    let {
-      isSuccessful
-    } = await order_service.apiUpdateOrderState(orderState.value.id, { transition: 'transition_finished' })
-    
-    if (isSuccessful) {
-      ordersStore.updateOrders()
-      hideRatingForm()
-    }
-  }
-
-  const rating = ref(null)
-  const ratingText = ref(null)
-
   const orderType = (type) => {
     return type === reservation.value.place_type
   }
@@ -135,6 +142,8 @@
           </a>
         </div>
       </div>
+
+      <OrderRate :order="order" />
     </div>
   </ModelShowWrap>
 </template>

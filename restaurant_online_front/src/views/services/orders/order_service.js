@@ -69,6 +69,20 @@ const apiCreateRating = async (orderId, rating) => {
   return { response: response, isSuccessful: isSuccessfulReq }
 }
 
+const apiDestroyRating = async (rating) => {
+  let destroyUrl = `http://localhost:3000//ratings/${rating.id}`
+
+  let response = await axios.delete(
+    destroyUrl,
+    { headers: tokensService.auth_headers() }
+  ).catch(errorshandler)
+  
+  let isSuccessfulReq = isSuccessful(response)
+  setHeadersIfSuccessful(response.headers, isSuccessfulReq)
+
+  return { response: response, isSuccessful: isSuccessfulReq }
+}
+
 const apiUpdateOrderState = async (orderStateId, orderState) => {
   let udpateUrl = `http://localhost:3000/cooks/order_states/${orderStateId}/transition`
   let data = orderState
@@ -198,6 +212,7 @@ export default {
   apiCreateOrder,
   apiUpdateOrder,
   apiDestroyOrder,
+  apiDestroyRating,
   apiCancelOrder,
   apiCreateRating,
   apiUpdateOrderState,

@@ -6,10 +6,10 @@
   import { useContentsStore } from '../../../restaurants/stores/ContentsStore';
   import { useRestaurantsStore } from '../../../restaurants/stores/RestaurantsStore';
   import { useProfileUserFormErrorsStore } from '../show/stores/ProfileUserFormErrorsStore'
-  import DefaultForm from '../../../../components/forms/DefaultForm.vue';
   import TextField from './fields/TextField.vue';
   import SearchInput from './fields/SearchInput.vue';
   import { BaseApi } from '../../../services/api/baseApi';
+  import FormSettableButtons from '../../../../components/forms/FormSettableButtons.vue';
 
   const currentUserStore = useCurrentUserStore();  
   const restaurantsStore = useRestaurantsStore()
@@ -22,19 +22,31 @@
 
   const currentUser = computed(() => currentUserStore.user)
   const primaryButton = computed(() => {
-    if (readOnlyForm.value){
-      return { label: 'Edit', callback: editUserSwitch }
+    let button = { label: 'Edit', callback: editUserSwitch, enable: true }
+
+    if (!readOnlyForm.value){
+      button['label'] = 'Update'
+      button['callback'] = async () => await updateUser()
+    }
+    
+    if (user.value.id !== currentUser.value.id) {
+      button['label'] = ''
+      button['enable'] = false
+      button['callback'] = () => {}  
     }
 
-    return { label: 'Update', callback: () => console.log('hello') }
+    return button
   })
 
   const secondaryButton = computed(() => {
-    if (readOnlyForm.value){
-      return { label: 'Search', callback: searchUserByEmail }
+    let button = { label: 'Search', callback: searchUserByEmail, enable: true }
+    
+    if (!readOnlyForm.value){
+      button['label'] = 'Cancel'
+      button['callback'] = editUserSwitch
     }
 
-    return { label: 'Cancel', callback: editUserSwitch }
+    return button
   })
 
   const setSeachText = (text) => {
@@ -73,7 +85,7 @@
 
   const updateUser = async () => {
     let args = {
-      url: '',
+      url: `http://localhost:3000/users/${currentUser.value.id}`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -91,9 +103,9 @@
 </script>
 
 <template>
-  <DefaultForm
+  <FormSettableButtons
     form-label="User"
-    :primary-button="primaryButton.label" :secondary-button="secondaryButton.label" :errors-store="profileUserFormErrorsStore"
+    :primary-button="primaryButton" :secondary-button="secondaryButton" :errors-store="profileUserFormErrorsStore"
     @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
   >
     <div class="col-lg-6">
@@ -120,7 +132,7 @@
         @text-change="setSeachText"
       />
     </div>
-  </DefaultForm>
+  </FormSettableButtons>
 </template>
 
 <style>
