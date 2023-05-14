@@ -1,5 +1,6 @@
 import axios from "axios"
 import { processableErrors, axiosMethods } from "../common_methods"
+import auth_service from '../auth_service'
 
 
 export class BaseApi {
@@ -18,6 +19,8 @@ export class BaseApi {
 
         if (response.data.errors)
           errsArr = response.data.errors 
+      } else if (response.status === 401 && response.data.errors[0] === "You need to sign in or sign up before continuing.") {
+        return auth_service.destroySession()
       }
       
       errorsStore.setErrors(errsArr)

@@ -19,6 +19,12 @@ const apiSignOut = async () => {
   }
 }
 
+const destroySession = () => {
+  sessionStorage.clear()
+  router.push({ name:'sign_in' })
+}
+
 export default {
-  apiSignOut
+  apiSignOut,
+  destroySession
 }
