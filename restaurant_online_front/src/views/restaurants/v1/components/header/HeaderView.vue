@@ -34,7 +34,8 @@
         <NavDropDown v-if="[isUserType('Customer'), isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
           label="Restaurants"
         >
-          <li><a class="dropdown-item" @click="setContentView('RestaurantShowView')">Chossen restaurant</a></li>
+          <li><a class="dropdown-item" @click="setContentView('RestaurantShowView')">Restaurant</a></li>
+          <li><a class="dropdown-item" @click="setContentView('RestaurantTeamShowView')">Team</a></li>
           <li><a class="dropdown-item" @click="setContentView('RestaurantsIndexView')">All restaurants</a></li>
         </NavDropDown>
 

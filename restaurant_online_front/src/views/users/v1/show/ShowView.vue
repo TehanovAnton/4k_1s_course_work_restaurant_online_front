@@ -10,6 +10,8 @@
   import SearchInput from './fields/SearchInput.vue';
   import { BaseApi } from '../../../services/api/baseApi';
   import FormSettableButtons from '../../../../components/forms/FormSettableButtons.vue';
+import { ButtonSetting } from '../../../services/buttons/ButtonSetting';
+import FloatLabelInput from '../../../../components/forms/FloatLabelInput.vue';
 
   const currentUserStore = useCurrentUserStore();  
   const restaurantsStore = useRestaurantsStore()
@@ -22,28 +24,28 @@
 
   const currentUser = computed(() => currentUserStore.user)
   const primaryButton = computed(() => {
-    let button = { label: 'Edit', callback: editUserSwitch, enable: true }
+    const button = new ButtonSetting('Edit', true,  editUserSwitch)
 
     if (!readOnlyForm.value){
-      button['label'] = 'Update'
-      button['callback'] = async () => await updateUser()
+      button.setAttribute('label', 'Update')
+      button.setAttribute('callback', async () => await updateUser())
     }
     
     if (user.value.id !== currentUser.value.id) {
-      button['label'] = ''
-      button['enable'] = false
-      button['callback'] = () => {}  
+      button.setAttribute('enable', false)
+      button.setAttribute('label', '')
+      button.setAttribute('callback', () => {})
     }
 
     return button
   })
 
   const secondaryButton = computed(() => {
-    let button = { label: 'Search', callback: searchUserByEmail, enable: true }
+    const button = new ButtonSetting('Search', true, searchUserByEmail)
     
-    if (!readOnlyForm.value){
-      button['label'] = 'Cancel'
-      button['callback'] = editUserSwitch
+    if (!readOnlyForm.value) {
+      button.setAttribute('label', 'Cancel')
+      button.setAttribute('callback', editUserSwitch)
     }
 
     return button
@@ -86,6 +88,7 @@
   const updateUser = async () => {
     let args = {
       url: `http://localhost:3000/users/${currentUser.value.id}`,
+      data: { user: user.value },
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -97,6 +100,7 @@
       profileUserFormErrorsStore,
       (response) => {
         currentUserStore.setCurrentUser(response.data)
+        editUserSwitch()
       }
     )
   }
@@ -109,20 +113,26 @@
     @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
   >
     <div class="col-lg-6">
-      <TextField
-        label="Name" label-id="user-name"
-        :text="user.name" :read-only="readOnlyForm"
-      />
+      <FloatLabelInput label="Name" label-id="user-name">
+        <input
+          type="text" id="user-name" class="form-control"
+          v-model="user.name" v-bind:readonly="readOnlyForm" v-bind:disabled="readOnlyForm"
+        />
+      </FloatLabelInput>
 
-      <TextField
-        label="Email" label-id="user-email"
-        :text="user.email" :read-only="readOnlyForm"
-      />
+      <FloatLabelInput label="Email" label-id="user-email">
+        <input
+          type="text" id="user-email" class="form-control"
+          v-model="user.email" v-bind:readonly="readOnlyForm" v-bind:disabled="readOnlyForm"
+        />
+      </FloatLabelInput>
 
-      <TextField
-        label="Role" label-id="user-type"
-        :text="user.type" :read-only="true"
-      />
+      <FloatLabelInput label="Role" label-id="user-type">
+        <input
+          type="text" id="user-type" class="form-control"
+          v-model="user.type" v-bind:readonly="true" v-bind:disabled="true"
+        />
+      </FloatLabelInput>
     </div>
 
     <div class="">

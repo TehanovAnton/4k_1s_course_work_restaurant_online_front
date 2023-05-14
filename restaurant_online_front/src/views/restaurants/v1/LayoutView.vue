@@ -3,6 +3,7 @@ import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/FooterView.vue';
 import { useContentsStore } from '../stores/ContentsStore';
 
+import RestaurantTeamShowView from './team/CommandStructureView.vue'; 
 import RestaurantShowView from './ShowView.vue';
 import RestaurantEditView from '../v1/EditView.vue'
 import RestaurantCreateView from '../../../components/restaurants/v1/CreateView.vue';
@@ -25,6 +26,7 @@ import CooksOrdersView from '../../cooks/OrdersView.vue';
 const contentsStore = useContentsStore()
 const contents = {
   CooksOrdersView,
+  RestaurantTeamShowView,
   RestaurantShowView,
   RestaurantEditView,
   RestaurantCreateView,
