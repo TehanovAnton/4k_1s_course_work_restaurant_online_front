@@ -1,79 +1,57 @@
 <script setup>
-  import Errors from '../../../components/errors/Errors.vue';
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import router from '../../../router/router';
-  import { AuthenticationApi } from '../../../views/services/authentication/AuthenticationApi';
+  import { AuthenticationApi } from '../../../views/services/api/authentication/AuthenticationApi';
   import { useResetPasswordInstructionsFormErrorsStore } from './stores/ResetPasswordInstructionsFormErrorsStore'
+  import FormSettableButtons from '../../../components/forms/FormSettableButtons.vue';
+  import { ButtonSetting } from '../../services/buttons/ButtonSetting';
+  import FloatLabelInput from '../../../components/forms/FloatLabelInput.vue';
 
   const errorsStore = useResetPasswordInstructionsFormErrorsStore()
+
+  const primaryButton = computed(() => {
+    const button = new ButtonSetting('Send Instructions', true,  async () => await sendResetPasswordInstructions())
+    return button
+  })
+
+  const secondaryButton = computed(() => {
+    const button = new ButtonSetting('Sign In', true, signIn)
+    
+    return button
+  })
+
 
   const customer = ref({
       email: 'anton@gmail.com'
   })
+  
+  const signIn = () => {
+    router.push({name: 'sign_in'})
+  }
 
   const sendResetPasswordInstructions = async () => {
-    const requester = new AuthenticationApi({
+    let args = {
       url: 'http://localhost:3000/users/send_reset_password',
-      data: { 
+      requestOptions: {
         params: { reset_password: { email: customer.value.email } }
-      },
-      options: {}
-    })
-
-    await requester.requestBase(
-      'get',
-      errorsStore,
-      () => {
-        router.push({name: 'sign_in'})
       }
-    )
+    }
+    const requester = new AuthenticationApi(args)
+
+    await requester.requestBase('get', errorsStore, signIn)
   }
+  
 </script>
 
 <template>
-    <Errors :errors-store="errorsStore" />
-    
-    <form class="sign-in-form centrenize-content-row">
-      <div class="form-elements centrenize-content-column">
-        <input type="text" class="form-element" v-model="customer.email" />
-        
-        <div>
-            <button type="button" class="form-element" @click="sendResetPasswordInstructions">Send Instructions</button>    
-        </div>
-      </div>        
-    </form>
+  <FormSettableButtons
+    :primary-button="primaryButton" :secondary-button="secondaryButton" :errors-store="errorsStore"
+    @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
+  >
+    <div class="col-lg-6">
+      <FloatLabelInput label="Emait" label-id="customer-email">
+        <input type="text" id="customer-email" class="form-control" v-model="customer.email" />
+      </FloatLabelInput>
+    </div>
+  </FormSettableButtons>
 </template>
-
-<style>
-    .block {
-        border: 3px solid black;
-        padding: 3px;
-    }
-
-    .centrenize-content-column {
-        display: flex;
-        justify-content: space-around;        
-        flex-direction: column;
-    }
-
-    .centrenize-content-row {
-        display: flex;
-        justify-content: space-around;
-        flex-direction: row;        
-    }
-
-    .form-elements {
-        width: 20%;
-        height: 100%;        
-    }
-
-    .form-element {
-        margin: 7% 10% 7% 10%;
-        flex: 1;
-        font-size: 25px;
-    }
-
-    .sign-in-form {
-        height: 20em;
-    }
-</style>

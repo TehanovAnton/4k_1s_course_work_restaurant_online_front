@@ -1,11 +1,6 @@
 <script setup>
-
-  // import router from '../../router/router'
   import { computed, ref } from 'vue'
-  import ErrorsShift from '../../errors/ErrorsShift.vue';
-  import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';  
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
-  import { useFormErrorsStore } from '../../../stores/FormErrorsStore'
   import { AuthenticationApi } from '../../../views/services/api/authentication/AuthenticationApi'
   import user_service from '../../../views/services/users/user_service';
   import tokensService from '../../../views/services/tokensService';

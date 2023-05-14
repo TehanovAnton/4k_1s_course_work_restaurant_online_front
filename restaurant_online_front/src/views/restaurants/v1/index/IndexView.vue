@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, ref } from 'vue';
+  import { computed, onBeforeMount, ref } from 'vue';
   import { useRestaurantsStore } from '../../stores/RestaurantsStore';
   import LoadRestaurants from '../components/datacomponents.vue/LoadRestaurants.vue';
   import AllRestaurants from './AllRestaurants.vue';
@@ -7,9 +7,17 @@
   import FoundedDishes from './FoundedDishes.vue';
   import NavLi from '../components/header/NavLi.vue';
   import { useSearchModelsStore } from '../../../search/stores/SearchModelsStore';
+  import { useCurrentUserStore } from '../../../../stores/users/currentUser';
+
+  onBeforeMount(() => {
+    if (currentUserStore.user.type === 'Cook') {
+      setContent('CooksOrdersView')
+    }
+  })
 
   const restaurantStore = useRestaurantsStore();
   const modelsSearchStore = useSearchModelsStore()
+  const currentUserStore = useCurrentUserStore()
   const currentUserRestaurants = computed(() => restaurantStore.currentUserModels)
 
   const searchText = ref('')

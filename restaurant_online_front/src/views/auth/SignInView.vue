@@ -7,7 +7,7 @@
   import userService from '../services/users/user_service'
 
   import { useCurrentUserStore } from '../../stores/users/currentUser';
-import DefaultForm from '../../components/forms/DefaultForm.vue';
+  import DefaultForm from '../../components/forms/DefaultForm.vue';
   const currentUserStore = useCurrentUserStore()
 
   const customer = ref({
@@ -39,6 +39,10 @@ import DefaultForm from '../../components/forms/DefaultForm.vue';
   const sign_up = () => {
     router.push({ name:'sign_up' })
   }
+
+  const resetPassword = () => {
+    router.push({ name:'reset_password_instructions' })
+  }
 </script>
 
 <template>
@@ -58,6 +62,8 @@ import DefaultForm from '../../components/forms/DefaultForm.vue';
           <input v-model="customer.password" type="text" class="form-control" id="customer-password" />
           <label for="customer-password">Password</label>
         </div>
+
+        <a href="#" @click="resetPassword">Forget password</a>
       </div>
     </DefaultForm>
 </template>
