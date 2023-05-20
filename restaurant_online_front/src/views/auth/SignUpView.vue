@@ -5,6 +5,7 @@
   import { ref } from 'vue'
   import DefaultForm from '../../components/forms/DefaultForm.vue';
   import TextInput from '../../components/forms/FloatLabelInput.vue';
+  import RoleSelect from './inputs/RoleSelect.vue'
   import { BaseApi } from '../services/api/baseApi';
   import { useSignUpFormErrorStore } from './stores/SignUpFormErrorStore'
 
@@ -19,6 +20,14 @@
       type: 'Customer'
   })
   const errors = ref([])
+  const roles = ref([
+    { name: 'Customer', role: 'Customer' },
+    { name: 'Admin', role: 'SuperAdmin' }
+  ])
+
+  const setRole = (role) => {
+    customer.value.type = role
+  }
 
   const sign_up = async () => {
     let args = {
@@ -56,6 +65,10 @@
         <TextInput label-id="customer-email" label="Email">
           <input type="text" id="customer-email" class="form-control" v-model="customer.email" />
         </TextInput>
+
+        <RoleSelect
+          :init-value="roles[0]" :roles="roles" @role-change="setRole"
+        />
 
         <TextInput label-id="customer-password" label="Password">
           <input type="text" id="customer-password" class="form-control" v-model="customer.password" />
