@@ -57,6 +57,7 @@
         <NavDropDown v-if="[isUserType('Customer'), isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
           label="Create"
         >
+          <li><a class="dropdown-item" @click="setContentView('CompanyCreateView')">Company</a></li>
           <li><a class="dropdown-item" @click="setContentView('RestaurantCreateView')">Restaurant</a></li>
           <li><a class="dropdown-item" @click="setContentView('MenuCreateView')">Menu</a></li>
           <li><a class="dropdown-item" @click="setContentView('DishCreateView')">Dish</a></li>        

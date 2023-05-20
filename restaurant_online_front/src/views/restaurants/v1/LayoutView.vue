@@ -21,10 +21,12 @@ import OrderEditView from '../../orders/EditView.vue';
 import UserShowView from '../../users/v1/show/ShowView.vue';
 import UserEditView from '../../users/EditView.vue';
 import CooksOrdersView from '../../cooks/OrdersView.vue';
+import CompanyCreateView from '../../companies/CreateView.vue';
 
 
 const contentsStore = useContentsStore()
 const contents = {
+  CompanyCreateView,
   CooksOrdersView,
   RestaurantTeamShowView,
   RestaurantShowView,
