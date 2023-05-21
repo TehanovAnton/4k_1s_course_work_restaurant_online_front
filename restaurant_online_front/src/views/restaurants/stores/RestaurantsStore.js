@@ -69,10 +69,15 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
     return ownService.ownModel(restaurant, user, userModels(user))
   }
 
+  const company = computed(() => {
+    return currentRestaurant.value.company
+  })
+
   return { 
     currentRestaurant, 
     restaurants,
     currentUserModels,
+    company,
     findByMenuId,
     userModels,
     ownRestaurant,

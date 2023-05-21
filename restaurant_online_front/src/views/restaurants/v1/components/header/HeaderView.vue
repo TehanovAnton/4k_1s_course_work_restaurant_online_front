@@ -2,11 +2,13 @@
   import { useCurrentUserStore } from '../../../../../stores/users/currentUser';
   import { OwnService } from '../../../../services/owns/ownService';
   import { useContentsStore } from '../../../stores/ContentsStore';
+  import { useRestaurantsStore } from '../../../stores/RestaurantsStore'
   import NavDropDown from './NavDropDown.vue';
   import NavLi from './NavLi.vue';
 
   const contentsStore = useContentsStore()
   const currentUserStore = useCurrentUserStore()
+  const restaurantsStore = useRestaurantsStore()
   const ownService = new OwnService()
 
   const setContentView = (content) => {
@@ -19,6 +21,10 @@
 
   const signOut = async () => {
     await currentUserStore.apiSignOut()
+  }
+
+  const isCompany = () => {
+    return currentUserStore.user.company_id
   }
 </script>
 
@@ -54,13 +60,21 @@
           @nav-click="setContentView('BasketShowView')"
         />
 
-        <NavDropDown v-if="[isUserType('Customer'), isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
+        <NavLi v-if="[isUserType('SuperAdmin')].includes(true)"
+          label="Company"
+          @nav-click="setContentView('CompanyShowView')"
+        />
+
+        <NavDropDown v-if="[isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
           label="Create"
         >
-          <li><a class="dropdown-item" @click="setContentView('CompanyCreateView')">Company</a></li>
-          <li><a class="dropdown-item" @click="setContentView('RestaurantCreateView')">Restaurant</a></li>
-          <li><a class="dropdown-item" @click="setContentView('MenuCreateView')">Menu</a></li>
-          <li><a class="dropdown-item" @click="setContentView('DishCreateView')">Dish</a></li>        
+          <li v-if="[isUserType('SuperAdmin')].includes(true) && !isCompany()">
+            <a class="dropdown-item" @click="setContentView('CompanyCreateView')">Company</a>
+          </li>
+
+          <li v-if="isCompany()"><a class="dropdown-item" @click="setContentView('RestaurantCreateView')">Restaurant</a></li>
+          <li v-if="isCompany()"><a class="dropdown-item" @click="setContentView('MenuCreateView')">Menu</a></li>
+          <li v-if="isCompany()"><a class="dropdown-item" @click="setContentView('DishCreateView')">Dish</a></li>        
         </NavDropDown>
 
         <NavLi
