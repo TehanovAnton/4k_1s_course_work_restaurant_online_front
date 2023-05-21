@@ -4,11 +4,17 @@
   import { ButtonSetting } from '../services/buttons/ButtonSetting';
   import FormSettableButtons from '../../components/forms/FormSettableButtons.vue';
   import { useRestaurantsStore } from '../restaurants/stores/RestaurantsStore';
+  import { useCurrentUserStore } from '../../stores/users/currentUser';
+  import tokensService from '../services/tokensService';
+  import { BaseApi } from '../services/api/baseApi';
+  import { useCompanyFormErrorsStore } from './stores/CompanyFormErrorsStore';
 
   const restaurantsStore = useRestaurantsStore()
+  const currentUserStore = useCurrentUserStore()
+  const formErrorsStore = useCompanyFormErrorsStore()
 
   onBeforeMount(() => {
-    Object.assign(formObject.value, restaurantsStore.company)
+    Object.assign(formObject.value, currentUserStore.user.company)
   })
 
   const emits = defineEmits(['formSubmit'])
@@ -49,7 +55,7 @@
       button.setAttribute('enable', true)
       button.setAttribute('callback', () => {
         setPageMode('show') 
-        formObject.value = restaurantsStore.company
+        formObject.value = currentUserStore.user.company
       })
     }
 
@@ -57,7 +63,24 @@
   })
 
   const updateCompany = async () => {
-    console.log(formObject.value)
+    let args = {
+      url: `http://localhost:3000/companies/${currentUserStore.user.company.id}`,
+      data: { company: formObject.value },
+      requestOptions: {
+        headers: tokensService.auth_headers()
+      }      
+    }
+
+    const requester = new BaseApi(args)
+    await requester.requestBase(
+      'put',
+      formErrorsStore,
+      async (response) => {        
+        restaurantsStore.updateAndSetCurrent(restaurantsStore.currentRestaurant)
+        await currentUserStore.updateUser()
+        setPageMode('show')
+      }
+    )
   }
 </script>
 
@@ -69,7 +92,6 @@
    @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
   >
     <div class="col-lg-6">
-      {{ restaurantsStore.company }}
       <FloatLabelInput label="Name" label-id="company-name">
         <input
           type="text" id="company-name" class="form-control"

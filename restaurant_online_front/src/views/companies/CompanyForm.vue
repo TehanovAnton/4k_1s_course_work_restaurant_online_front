@@ -3,14 +3,21 @@
   import FloatLabelInput from '../../components/forms/FloatLabelInput.vue';
   import { ButtonSetting } from '../services/buttons/ButtonSetting';
   import FormSettableButtons from '../../components/forms/FormSettableButtons.vue';
+  import { useCompanyFormErrorsStore } from './stores/CompanyFormErrorsStore';
 
   const props = defineProps(['company'])
   const emits = defineEmits(['formSubmit'])
 
-  const formObject = ref({
-    name: '',
-    email: ''
-  })
+  const formErrorsStore = useCompanyFormErrorsStore()
+
+  const initFormObject = () => {
+    let copyCompany = {}
+    Object.assign(copyCompany, props.company)
+
+    return copyCompany
+  }
+
+  const formObject = ref(initFormObject())
 
   const primaryButton = computed(() => {
     const button = new ButtonSetting('Create', true, emitSubmit)
@@ -35,7 +42,7 @@
 <template>
   <FormSettableButtons
    form-label="Company"
-   :primary-button="primaryButton" :secondary-button="secondaryButton"
+   :primary-button="primaryButton" :secondary-button="secondaryButton" :errors-store="formErrorsStore"
    @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
   >
     <div class="col-lg-6">
@@ -44,7 +51,7 @@
       </FloatLabelInput>
 
       <FloatLabelInput label="Email" label-id="company-email">
-        <input type="text" id="company-email" class="form-control" v-model="company.email" :on-change="inlcudeAttribute('name')" />
+        <input type="text" id="company-email" class="form-control" v-model="company.email" :on-change="inlcudeAttribute('email')" />
       </FloatLabelInput>
     </div>
   </FormSettableButtons>

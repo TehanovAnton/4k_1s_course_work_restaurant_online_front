@@ -40,6 +40,6 @@ export class BaseApi {
     }
 
     if (!!response)
-      successCallback(response)
+      await successCallback(response)
   }
 }

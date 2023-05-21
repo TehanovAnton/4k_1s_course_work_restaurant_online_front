@@ -1,4 +1,5 @@
 <script setup>
+  import { computed } from 'vue';
   import { useCurrentUserStore } from '../../../../../stores/users/currentUser';
   import { OwnService } from '../../../../services/owns/ownService';
   import { useContentsStore } from '../../../stores/ContentsStore';
@@ -23,9 +24,9 @@
     await currentUserStore.apiSignOut()
   }
 
-  const isCompany = () => {
-    return currentUserStore.user.company_id
-  }
+  const isCompany = computed(() => {
+    return currentUserStore.user.company
+  })
 </script>
 
 <template>
@@ -68,13 +69,13 @@
         <NavDropDown v-if="[isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
           label="Create"
         >
-          <li v-if="[isUserType('SuperAdmin')].includes(true) && !isCompany()">
+          <li v-if="[isUserType('SuperAdmin')].includes(true) && !isCompany">
             <a class="dropdown-item" @click="setContentView('CompanyCreateView')">Company</a>
           </li>
 
-          <li v-if="isCompany()"><a class="dropdown-item" @click="setContentView('RestaurantCreateView')">Restaurant</a></li>
-          <li v-if="isCompany()"><a class="dropdown-item" @click="setContentView('MenuCreateView')">Menu</a></li>
-          <li v-if="isCompany()"><a class="dropdown-item" @click="setContentView('DishCreateView')">Dish</a></li>        
+          <li v-if="isCompany"><a class="dropdown-item" @click="setContentView('RestaurantCreateView')">Restaurant</a></li>
+          <li v-if="isCompany"><a class="dropdown-item" @click="setContentView('MenuCreateView')">Menu</a></li>
+          <li v-if="isCompany"><a class="dropdown-item" @click="setContentView('DishCreateView')">Dish</a></li>        
         </NavDropDown>
 
         <NavLi

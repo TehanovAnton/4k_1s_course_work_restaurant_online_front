@@ -73,11 +73,16 @@ export const useRestaurantsStore = defineStore('restaurantsStore', () => {
     return currentRestaurant.value.company
   })
 
+  const setCompany = (newCompany) =>{
+    currentRestaurant.value.company = newCompany
+  }
+
   return { 
     currentRestaurant, 
     restaurants,
     currentUserModels,
     company,
+    setCompany,
     findByMenuId,
     userModels,
     ownRestaurant,
