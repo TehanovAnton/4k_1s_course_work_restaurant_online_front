@@ -56,8 +56,6 @@ const contents = {
   <div class="container">
     <component :is="contents[contentsStore.currentContent]" />
   </div>
-
-  <FooterView />
 </template>
 
 <style>
