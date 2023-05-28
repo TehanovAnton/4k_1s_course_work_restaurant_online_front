@@ -8,6 +8,7 @@
   import { useContentsStore } from '../../../views/restaurants/stores/ContentsStore';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';  
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import { cacncelToRestaurant } from '../../../views/services/cancele/cancelToRrestaurant';
 
   const contentsStore = useContentsStore()
   const restaurantsStore = useRestaurantsStore()
@@ -42,7 +43,7 @@
   }
 
   const showRestaurants = () => {
-    contentsStore.setContent('RestaurantsIndexView')
+    new cacncelToRestaurant().cancel()
   }
 </script>
 

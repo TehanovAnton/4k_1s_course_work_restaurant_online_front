@@ -22,5 +22,5 @@
 
 <template>  
   <RestaurantForm :restaurant="newRestaurant" action-name="create" label="Restaurant"
-                    @form-submit="createRestaurant"/>New 
+                    @form-submit="createRestaurant"/>
 </template>
