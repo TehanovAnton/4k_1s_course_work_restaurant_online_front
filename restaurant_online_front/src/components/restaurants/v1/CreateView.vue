@@ -8,7 +8,7 @@
   import { useContentsStore } from '../../../views/restaurants/stores/ContentsStore';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';  
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
-  import { cacncelToRestaurant } from '../../../views/services/cancele/cancelToRrestaurant';
+  import { CacncelToRestaurant } from '../../../views/services/cancele/CancelToRestaurant';
 
   const contentsStore = useContentsStore()
   const restaurantsStore = useRestaurantsStore()
@@ -43,7 +43,7 @@
   }
 
   const showRestaurants = () => {
-    new cacncelToRestaurant().cancel()
+    new CacncelToRestaurant().cancel()
   }
 </script>
 

@@ -1,7 +1,7 @@
 import { Base } from "./baseCancel";
 import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore'
 
-export class cacncelToRestaurant extends Base {
+export class CacncelToRestaurant extends Base {
   constructor() {
     super()
 

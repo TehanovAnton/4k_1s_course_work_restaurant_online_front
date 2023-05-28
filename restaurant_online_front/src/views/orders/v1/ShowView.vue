@@ -16,7 +16,7 @@
       return {
         enable: true,
         label: 'Edit',
-        callBack: () => {}
+        callBack: editOrderView
       }
     } else {
       return {
@@ -64,7 +64,7 @@
 
   const showRatingForm = ref(false)
 
-  const editOrder = () => {
+  const editOrderView = () => {
     ordersStore.setOrder(props.order)
     contentsStore.setContent('OrderEditView')
   }

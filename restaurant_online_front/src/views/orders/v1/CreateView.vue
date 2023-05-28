@@ -58,7 +58,7 @@
 
 <template>
   <OrderForm
-    v-if="basketsStore.currentBasket"
+    v-if="basketsStore.dishes.length != 0"
     action-name="Create" :pOrder="order"
     @form-submit="createOrder" @cancle="showBasket"
   />

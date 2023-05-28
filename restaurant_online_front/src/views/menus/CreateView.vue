@@ -9,7 +9,7 @@
   import { useMenusStore } from './stores/MenusStore';
   import { useMenuFormErrorsStore } from './stores/MenuFormErrorsStore';
   import { BaseApi } from '../services/api/baseApi';
-  import { cacncelToRestaurant } from '../services/cancele/cancelToRrestaurant';
+  import { CacncelToRestaurant } from '../services/cancele/CancelToRestaurant';
 
   const props = defineProps(['restaurant'])
   const emits = defineEmits(['data-change'])
@@ -44,7 +44,7 @@
   }
 
   const restaurantShow = () => {
-    new cacncelToRestaurant().cancel()
+    new CacncelToRestaurant().cancel()
   }
 
 </script>

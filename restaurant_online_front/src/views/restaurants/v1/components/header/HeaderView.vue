@@ -6,7 +6,7 @@
   import { useRestaurantsStore } from '../../../stores/RestaurantsStore'
   import NavDropDown from './NavDropDown.vue';
   import NavLi from './NavLi.vue';
-import { cacncelToRestaurant } from '../../../../services/cancele/cancelToRrestaurant';
+import { CacncelToRestaurant } from '../../../../services/cancele/CancelToRestaurant';
 
   const contentsStore = useContentsStore()
   const currentUserStore = useCurrentUserStore()
@@ -30,7 +30,7 @@ import { cacncelToRestaurant } from '../../../../services/cancele/cancelToRresta
   })
 
   const currentRestaurantView = () => {
-    new cacncelToRestaurant().cancel()
+    new CacncelToRestaurant().cancel()
   }
 </script>
 

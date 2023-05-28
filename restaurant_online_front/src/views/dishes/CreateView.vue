@@ -7,7 +7,7 @@
   import { useMenusStore } from '../menus/stores/MenusStore';
   import { useContentsStore } from '../restaurants/stores/ContentsStore';
   import { useDishFormErrorsStore } from './stores/dishFormErrorsStore';
-  import { cacncelToRestaurant } from '../services/cancele/cancelToRrestaurant';
+  import { CacncelToRestaurant } from '../services/cancele/CancelToRestaurant';
 
   const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
@@ -45,7 +45,7 @@
 
   const showRestaurant = () => {
     dishFormErrorsStore.clearErrors()
-    new cacncelToRestaurant().cancel()
+    new CacncelToRestaurant().cancel()
   }
 
 </script>
