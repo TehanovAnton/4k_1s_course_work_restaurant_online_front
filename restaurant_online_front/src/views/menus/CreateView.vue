@@ -9,6 +9,7 @@
   import { useMenusStore } from './stores/MenusStore';
   import { useMenuFormErrorsStore } from './stores/MenuFormErrorsStore';
   import { BaseApi } from '../services/api/baseApi';
+  import { cacncelToRestaurant } from '../services/cancele/cancelToRrestaurant';
 
   const props = defineProps(['restaurant'])
   const emits = defineEmits(['data-change'])
@@ -43,7 +44,7 @@
   }
 
   const restaurantShow = () => {
-    contentsStore.setContent('RestaurantShowView')
+    new cacncelToRestaurant().cancel()
   }
 
 </script>

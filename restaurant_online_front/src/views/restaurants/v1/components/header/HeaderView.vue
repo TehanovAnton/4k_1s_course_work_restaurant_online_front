@@ -6,6 +6,7 @@
   import { useRestaurantsStore } from '../../../stores/RestaurantsStore'
   import NavDropDown from './NavDropDown.vue';
   import NavLi from './NavLi.vue';
+import { cacncelToRestaurant } from '../../../../services/cancele/cancelToRrestaurant';
 
   const contentsStore = useContentsStore()
   const currentUserStore = useCurrentUserStore()
@@ -27,6 +28,10 @@
   const isCompany = computed(() => {
     return currentUserStore.user.company
   })
+
+  const currentRestaurantView = () => {
+    new cacncelToRestaurant().cancel()
+  }
 </script>
 
 <template>
@@ -41,7 +46,7 @@
         <NavDropDown v-if="[isUserType('Customer'), isUserType('SuperAdmin'), isUserType('Admin')].includes(true)"
           label="Restaurants"
         >
-          <li><a class="dropdown-item" @click="setContentView('RestaurantShowView')">Restaurant</a></li>
+          <li><a class="dropdown-item" @click="currentRestaurantView()">Restaurant</a></li>
           <li><a class="dropdown-item" @click="setContentView('RestaurantTeamShowView')">Team</a></li>
           <li><a class="dropdown-item" @click="setContentView('RestaurantsIndexView')">All restaurants</a></li>
         </NavDropDown>

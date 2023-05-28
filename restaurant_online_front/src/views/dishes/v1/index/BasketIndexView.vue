@@ -21,10 +21,6 @@
 <template>
   <div class="container">
     <div class="col">
-      <div v-if="basketsStore.dishes.length == 0">
-        <h1>Basket is empty!</h1>
-      </div>
-
       <DishesGrid>
         <ShowView v-for="dish in dishes" :dish="dish" />
       </DishesGrid>
