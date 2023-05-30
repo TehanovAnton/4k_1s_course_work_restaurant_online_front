@@ -12,7 +12,7 @@
   import { useMenusStore } from '../../../menus/stores/MenusStore';
   import { useCurrentUserStore } from '../../../../stores/users/currentUser';
 
-  const props = defineProps(['dish'])
+  const props = defineProps(['dish', 'editable'])
 
   const currentUserStore = useCurrentUserStore()
   const contentsStore = useContentsStore()
@@ -47,7 +47,7 @@
           {{ dish.description }}
         </p>
 
-        <div class="input-group d-flex d-flex justify-content-center">
+        <div v-if="editable" class="input-group d-flex d-flex justify-content-center">
           <button @click="incBasketDishCount(dish)" class="btn btn-outline-success btn-md" type="button">+</button>
           <button class="btn btn-outline-secondary btn-md" type="button">{{ basketsStore.basketDishCount(dish) }}</button>
           <button @click="decrementBasketDishCount(dish)" class="btn btn-outline-danger btn-md" type="button">-</button>

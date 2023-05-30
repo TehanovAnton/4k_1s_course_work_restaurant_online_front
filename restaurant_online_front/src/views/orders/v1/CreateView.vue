@@ -32,6 +32,7 @@
   const order = ref({})
 
   const createOrder = async (order) => {
+    debugger
     await order_service.apiCreateOrder(
       order,
       orderFormErrosStore,
@@ -59,6 +60,7 @@
 <template>
   <OrderForm
     v-if="basketsStore.dishes.length != 0"
+    :baskets-store="basketsStore"
     action-name="Create" :pOrder="order"
     @form-submit="createOrder" @cancle="showBasket"
   />

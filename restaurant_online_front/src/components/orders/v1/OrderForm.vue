@@ -1,19 +1,18 @@
 <script setup>
   import { computed, ref } from '@vue/reactivity';
-  import { useBasketsStore } from '../../../views/baskets/stores/BasketsStore';
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';
   import moment from 'moment-timezone';
   import DefaultForm from '../../forms/DefaultForm.vue';
-import { useOrderFormErrorsStore } from './stores/OrderFormErrorsStore';
+  import { useOrderFormErrorsStore } from './stores/OrderFormErrorsStore';
 
-  const props = defineProps(['pOrder', 'actionName'])
+  const props = defineProps(['pOrder', 'actionName', 'basketsStore'])
   const emits = defineEmits(['formSubmit', 'cancle'])
 
   const currentUserStore = useCurrentUserStore()
   const restaurantsStore = useRestaurantsStore()
   const orderFormErrosStore = useOrderFormErrorsStore()
-  const basketsStore = useBasketsStore();  
+  const basketsStore = props.basketsStore
 
   const order = ref({
     id: props.pOrder.id,
@@ -81,6 +80,7 @@ import { useOrderFormErrorsStore } from './stores/OrderFormErrorsStore';
     @primaryBtnClick="onFormSubmit" @secondaryBtnClick="onCancel"
   >
     <div class="col-lg-6">
+      {{ order.attributes }}
       <div class="form-floating mb-3">
         <input type="text" class="form-control" id="dish-name" placeholder="name@example.com" :value="orderPrice" readonly/>
         <label for="dish-name">Price</label>

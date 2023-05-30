@@ -22,7 +22,11 @@
   <div class="container">
     <div class="col">
       <DishesGrid>
-        <ShowView v-for="dish in dishes" :dish="dish" />
+        <ShowView
+          v-for="dish in dishes"
+          :dish="dish"
+          :editable="true"
+        />
       </DishesGrid>
 
       <CreateView />
