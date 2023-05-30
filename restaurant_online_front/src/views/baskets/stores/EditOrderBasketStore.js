@@ -2,12 +2,21 @@ import { defineStore } from "pinia"
 import { computed, ref } from "vue"
 import { useRestaurantsStore } from '../../restaurants/stores/RestaurantsStore'
 import { useMenusStore } from "../../menus/stores/MenusStore"
+import { useOrdersStore } from "../../orders/stores/OrdersStore"
 
-
-export const useBasketsStore = defineStore('basketsStore', () => {
+export const useEditBasketsStore = defineStore('editBasketsStore', () => {
   const restaurantsStore = useRestaurantsStore()
   const menusStore = useMenusStore()
-  const currentRestaurantId = computed(() => restaurantsStore.currentRestaurant.id)
+  const ordersSotre = useOrdersStore()
+
+  const orderRestaurantId = computed(() => {
+    let orderRestaurant = restaurantsStore.findRestaurant(
+      restaurantsStore.restaurants,
+      { id: ordersSotre.order.restaurant_id }
+    )
+
+    return orderRestaurant.id
+  })
 
   const initBaskets = () => {
     let sessionBaskets = sessionStorage.getItem('baskets')
@@ -19,7 +28,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
   const baskets = ref(initBaskets())
 
   const currentBasket = computed(() => {
-    let basket = baskets.value.filter(basket => basket.restaurantId === currentRestaurantId.value)[0]
+    let basket = baskets.value.filter(basket => basket.restaurantId === orderRestaurantId.value)[0]
     if (!!basket)
       return basket
 
@@ -50,7 +59,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
   })
 
   const updateSessionBaskets = (callBack) => {
-    if (!!!currentRestaurantId.value)
+    if (!!!orderRestaurantId.value)
       return
 
     callBack()
@@ -60,7 +69,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
 
   const currentBasketUpdate = (callBack) => {
     baskets.value = baskets.value.map(basket => {
-      if (basket.restaurantId === currentRestaurantId.value)
+      if (basket.restaurantId === orderRestaurantId.value)
         callBack(basket)
 
       return basket
@@ -71,7 +80,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
     updateSessionBaskets(() => {
       if (baskets.value.length == 0) {
         let initBasket = {
-          restaurantId: currentRestaurantId.value,
+          restaurantId: orderRestaurantId.value,
           dishes: [{ dish_id: dish.id }]
         }
 
@@ -80,6 +89,23 @@ export const useBasketsStore = defineStore('basketsStore', () => {
 
       currentBasketUpdate((basket) => {
         basket.dishes.push({ dish_id: dish.id })
+      })
+    })
+  }
+
+  const addOrderDish = (orderDish) => {
+    updateSessionBaskets(() => {
+      if (baskets.value.length == 0) {
+        let initBasket = {
+          restaurantId: orderRestaurantId.value,
+          dishes: [{ id: orderDish.id,  dish_id: orderDish.dish.id }]
+        }
+
+        return baskets.value.push(initBasket)
+      }
+
+      currentBasketUpdate((basket) => {
+        basket.dishes.push({ id: orderDish.id, dish_id: orderDish.dish.id })
       })
     })
   }
@@ -131,6 +157,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
     basketDishesPrice,
     clearBasket,
     addDish,
+    addOrderDish,
     removeDish,
     basketDishCount,
     incBasketDishCount,
