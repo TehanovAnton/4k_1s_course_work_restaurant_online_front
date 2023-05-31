@@ -8,6 +8,7 @@
   import tokensService from '../services/tokensService';
   import { BaseApi } from '../services/api/baseApi';
   import { useCompanyFormErrorsStore } from './stores/CompanyFormErrorsStore';
+  import CompanyRestaurants from '../restaurants/v1/index/CompanyRestaurants.vue';
 
   const restaurantsStore = useRestaurantsStore()
   const currentUserStore = useCurrentUserStore()
@@ -86,25 +87,31 @@
 
 
 <template>
-  <FormSettableButtons
-   form-label="Company"
-   :primary-button="primaryButton" :secondary-button="secondaryButton"
-   @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
-  >
-    <div class="col-lg-6">
-      <FloatLabelInput label="Name" label-id="company-name">
-        <input
-          type="text" id="company-name" class="form-control"
-          v-model="formObject.name" v-bind:readonly="isReadOnly" v-bind:disabled="isReadOnly"
-        />
-      </FloatLabelInput>
+  <div class="row bg-light">
+    <FormSettableButtons
+      form-label="Company"
+      :primary-button="primaryButton" :secondary-button="secondaryButton"
+      @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
+    >
+      <div class="col-lg-6">
+        <FloatLabelInput label="Name" label-id="company-name">
+          <input
+            type="text" id="company-name" class="form-control"
+            v-model="formObject.name" v-bind:readonly="isReadOnly" v-bind:disabled="isReadOnly"
+          />
+        </FloatLabelInput>
 
-      <FloatLabelInput label="Email" label-id="company-email">
-        <input
-          type="text" id="company-email" class="form-control"
-          v-model="formObject.email" v-bind:readonly="isReadOnly" v-bind:disabled="isReadOnly"
-        />
-      </FloatLabelInput>
-    </div>
-  </FormSettableButtons>
+        <FloatLabelInput label="Email" label-id="company-email">
+          <input
+            type="text" id="company-email" class="form-control"
+            v-model="formObject.email" v-bind:readonly="isReadOnly" v-bind:disabled="isReadOnly"
+          />
+        </FloatLabelInput>
+      </div>
+    </FormSettableButtons>
+  </div>
+
+  <div class="row bg-light">
+    <CompanyRestaurants />
+  </div>
 </template>

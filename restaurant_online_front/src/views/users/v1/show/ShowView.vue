@@ -62,7 +62,7 @@
   const setUser = (userValue) => {
     if (!!userValue) {
       if (userValue.type === 'Cook') {
-        userValue.restaurant = restaurantsStore.findRestaurant(restaurantsStore.currentUserRestaurants, userValue.restaurant)
+        userValue.restaurant = restaurantsStore.findRestaurant(restaurantsStore.restaurants, userValue.restaurant)
       }
 
       if (currentUser.value.id === userValue.id)
