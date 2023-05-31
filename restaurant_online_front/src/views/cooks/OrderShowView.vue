@@ -12,6 +12,14 @@
 
   const orderBasket = new OrderBasket(props.order.dishes)
   const primaryButton = computed(() => {
+    if (orderState.value.aasm_state === 'ready') {
+      return {
+        enable: false,
+        label: '',
+        callBack: () => {}
+      }
+    }
+
     return {
       enable: true,
       label: nextTransition.value ? nextTransition.value.name : "",
@@ -34,7 +42,7 @@
 
   const statusesTransitions = {
     created: { transition: 'transition_in_progress', name: 'In Progress' },
-    in_progress: { transition: 'transition_ready', name: 'Ready' }
+    in_progress: { transition: 'transition_ready', name: 'Ready' },
   }
 
   const reservation = computed(() => {
@@ -92,7 +100,7 @@
       <div class="col d-flex justify-content-around">
         <div class="list-group">
           <a
-            v-for="dish in order.dishes"
+            v-for="dish in orderBasket.baskeDishes()"
             class="list-group-item list-group-item-action"
           >
             {{ dish.name }} x{{ orderBasket.basketDishCount(dish) }}

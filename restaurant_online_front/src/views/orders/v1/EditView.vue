@@ -24,15 +24,15 @@
   const errorsStore = useOrderFormErrorsStore()
 
   onBeforeMount(() => {
-    if (!!!ordersStore.order)
-      contentsStore.setContent('OrdersIndexView')
+    if (!!!ordersStore.order.id)
+      return contentsStore.setContent('OrdersIndexView')
 
     let orderRestaurant = restaurantsStore.findRestaurant(
       restaurantsStore.restaurants,
       { id: ordersStore.order.restaurant_id }
     )    
 
-    restaurantsStore.setModel(orderRestaurant)    
+    restaurantsStore.setModel(orderRestaurant)  
 
     ordersStore.order.orders_dishes.forEach(orderDish => {
       editOrderBasketStore.addOrderDish(orderDish)
@@ -49,7 +49,8 @@
           id: ordersStore.order.reservation.id, 
           place_type: ordersStore.order.reservation.place_type, 
           start_at: ordersStore.order.reservation.start_at, 
-          table_id: ordersStore.order.reservation.end_at
+          end_at: ordersStore.order.reservation.end_at, 
+          table_id: ordersStore.order.reservation.table_id
         }
       }
   })

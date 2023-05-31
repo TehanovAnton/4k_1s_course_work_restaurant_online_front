@@ -10,8 +10,9 @@
   import SearchInput from './fields/SearchInput.vue';
   import { BaseApi } from '../../../services/api/baseApi';
   import FormSettableButtons from '../../../../components/forms/FormSettableButtons.vue';
-import { ButtonSetting } from '../../../services/buttons/ButtonSetting';
-import FloatLabelInput from '../../../../components/forms/FloatLabelInput.vue';
+  import { ButtonSetting } from '../../../services/buttons/ButtonSetting';
+  import FloatLabelInput from '../../../../components/forms/FloatLabelInput.vue';
+  import { CacncelToRestaurant } from '../../../services/cancele/CancelToRestaurant';
 
   const currentUserStore = useCurrentUserStore();  
   const restaurantsStore = useRestaurantsStore()
@@ -46,6 +47,9 @@ import FloatLabelInput from '../../../../components/forms/FloatLabelInput.vue';
     if (!readOnlyForm.value) {
       button.setAttribute('label', 'Cancel')
       button.setAttribute('callback', editUserSwitch)
+    } else if (readOnlyForm.value && currentUser.value.type === 'Customer') {
+      button.setAttribute('label', 'Cancel')
+      button.setAttribute('callback', () => new CacncelToRestaurant().cancel() )
     }
 
     return button
@@ -135,7 +139,7 @@ import FloatLabelInput from '../../../../components/forms/FloatLabelInput.vue';
       </FloatLabelInput>
     </div>
 
-    <div class="">
+    <div v-if="currentUser.type != 'Customer'">
       <SearchInput
         label="Search" label-id="search-input"
         :read-only="searchAble"

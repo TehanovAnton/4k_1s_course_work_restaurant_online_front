@@ -135,7 +135,7 @@
       <div class="col d-flex justify-content-around">
         <div class="list-group">
           <a
-            v-for="dish in order.dishes"
+            v-for="dish in orderBasket.baskeDishes()"
             class="list-group-item list-group-item-action"
           >
             {{ dish.name }} x{{ orderBasket.basketDishCount(dish) }}

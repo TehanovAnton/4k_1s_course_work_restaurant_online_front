@@ -1,9 +1,15 @@
+import _ from "underscore"
+
 export class OrderBasket {
   constructor(dishes) {
     this.dishes = dishes
   }
 
-  basketDishCount = (dish) => {
+  baskeDishes() {
+    return _.uniq(this.dishes, (d) => d.id)
+  }
+
+  basketDishCount(dish) {
     if (!!!this.dishes)
       return 0
   

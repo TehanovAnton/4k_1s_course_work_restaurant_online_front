@@ -80,7 +80,6 @@
     @primaryBtnClick="onFormSubmit" @secondaryBtnClick="onCancel"
   >
     <div class="col-lg-6">
-      {{ order.attributes }}
       <div class="form-floating mb-3">
         <input type="text" class="form-control" id="dish-name" placeholder="name@example.com" :value="orderPrice" readonly/>
         <label for="dish-name">Price</label>
@@ -93,7 +92,7 @@
 
       <div v-if="isOrderType('inside')" class="mb-3">
         <label for="order-start-at">End at</label>
-        <input v-model="reservationTimes.start_at" @change="inlcudeAttribute('start_at', 'start_at', reservationTimes)" class="form-control" type="datetime-local" id="order-start-at">
+        <input v-model="reservationTimes.end_at" @change="inlcudeAttribute('end_at', 'end_at', reservationTimes)" class="form-control" type="datetime-local" id="order-end_at">
       </div>
 
       <div v-if="isOrderType('inside')" class="mb-3">

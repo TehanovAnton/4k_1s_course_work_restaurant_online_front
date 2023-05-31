@@ -32,12 +32,13 @@
   const order = ref({})
 
   const createOrder = async (order) => {
-    debugger
+
     await order_service.apiCreateOrder(
       order,
       orderFormErrosStore,
       (_response) => {
         basketsStore.clearBasket()
+        orderFormErrosStore.clearErrors()
         ordersStore.updateOrders()
         contentsStore.setContent('OrdersIndexView')
       }

@@ -11,8 +11,7 @@ export const useSearchModelsStore = defineStore('SearchModelsStore', () => {
     return searchedModels.value
   })
 
-  const restaurants = computed(() => {
-    debugger
+  const restaurants = computed(() => {    
     return models.value.filter(m => m.type === 'Restaurant')
   })
 
