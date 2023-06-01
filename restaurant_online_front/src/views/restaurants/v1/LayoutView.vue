@@ -1,32 +1,36 @@
 <script setup>
-import HeaderView from './components/HeaderView.vue';
+import HeaderView from './components/header/HeaderView.vue';
 import FooterView from './components/FooterView.vue';
 import { useContentsStore } from '../stores/ContentsStore';
 
+import RestaurantTeamShowView from './team/CommandStructureView.vue'; 
 import RestaurantShowView from './ShowView.vue';
 import RestaurantEditView from '../v1/EditView.vue'
 import RestaurantCreateView from '../../../components/restaurants/v1/CreateView.vue';
-import RestaurantsIndexView from './IndexView.vue';
+import RestaurantsIndexView from './index/IndexView.vue';
 import MenuEditView from  '../../menus/EditView.vue'
 import DishEditView from '../../dishes/EditView.vue'
 import DishCreateView from '../../dishes/CreateView.vue';
 import CreateWelcomeView from '../../CreateWelcomeView.vue';
 import MenuCreateView from '../../menus/CreateView.vue';
 import MenuIndexView from '../../../components/menus/v1/IndexView.vue';
-import BasketShowView from '../../dishes/v1/Show/BasketShowView.vue';
+import BasketShowView from '../../dishes/v1/index/BasketIndexView.vue';
 import OrderCreateView from '../../orders/v1/CreateView.vue';
+import OrderEditView from '../../orders/v1/EditView.vue';
 import OrdersIndexView from '../../orders/v1/IndexView.vue';
-import OrderEditView from '../../orders/EditView.vue';
-import UserShowView from '../../users/v1/ShowView.vue';
+import UserShowView from '../../users/v1/show/ShowView.vue';
 import UserEditView from '../../users/EditView.vue';
 import CooksOrdersView from '../../cooks/OrdersView.vue';
-import SearchIndexView from '../../search/IndexView.vue';
+import CompanyCreateView from '../../companies/CreateView.vue';
+import CompanyShowView from '../../companies/ShowView.vue';
 
 
 const contentsStore = useContentsStore()
 const contents = {
-  SearchIndexView,
+  CompanyCreateView,
+  CompanyShowView,
   CooksOrdersView,
+  RestaurantTeamShowView,
   RestaurantShowView,
   RestaurantEditView,
   RestaurantCreateView,
@@ -49,13 +53,9 @@ const contents = {
 <template>
   <HeaderView />
   
-  <div class="overview-container">
-    <div class="oc-width">
-      <component :is="contents[contentsStore.currentContent]" />
-    </div>
+  <div class="container">
+    <component :is="contents[contentsStore.currentContent]" />
   </div>
-
-  <FooterView />
 </template>
 
 <style>

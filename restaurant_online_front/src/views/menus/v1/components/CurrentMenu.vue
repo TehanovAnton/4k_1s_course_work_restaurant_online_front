@@ -47,23 +47,25 @@ import { useRestaurantsStore } from '../../../restaurants/stores/RestaurantsStor
 </script>
 
 <template>
-  <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">Current Menu</h2>
-        <div class="sub-card">
-          <MenuSelect
-            :init-value="currentMenu"
-            :menus="menusStore.menus"
-            @menu-change="setMenu"
-          />
+  <div class="card ">
+    <div class="card-body">
+      <MenuSelect
+        :init-value="currentMenu"
+        :menus="menusStore.menus"
+        @menu-change="setMenu"
+      />
+    </div>
 
-          <EditIcon v-if="ownMenu" @icon-click="editMenu" />
-          <DeleteIcon v-if="ownMenu" @icon-click="deleteMenu" />
-        </div>
+    <div v-if="ownMenu" class="row bg-transparent">
+      <div class="d-flex justify-content-around">
+        <button class="btn btn-outline-success" @click="editMenu">
+          Edit
+        </button>
+
+        <button class="btn btn-outline-dark" @click="deleteMenu">
+          Destroy
+        </button>             
       </div>
     </div>
+  </div>
 </template>
-
-<style>
-  
-</style>

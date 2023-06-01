@@ -1,19 +1,18 @@
 <script setup>
-
-  // import router from '../../router/router'
   import { computed, ref } from 'vue'
-  import ErrorsShift from '../../errors/ErrorsShift.vue';
-  import RegularFormStyle from '../../stylecomponents/RegularFormStyle.vue';  
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
-  import { useFormErrorsStore } from '../../../stores/FormErrorsStore'
   import { AuthenticationApi } from '../../../views/services/api/authentication/AuthenticationApi'
   import user_service from '../../../views/services/users/user_service';
   import tokensService from '../../../views/services/tokensService';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';
   import { useTeammatesStore } from '../../../views/restaurants/v1/team/stores/teammatesStore';
+  import { useCreateCookAccountFormErrorsStore } from './CreateCookAccountFormErrorsStore'
   import { FormErrorsStoreHelper } from '../../../views/services/FormErrorsStoreHelper';
+  import FormSettableButtons from '../../forms/FormSettableButtons.vue';
+  import FloatLabelInput from '../../forms/FloatLabelInput.vue';
+  import { ButtonSetting } from '../../../views/services/buttons/ButtonSetting';
   
-  const formErrorStore = useFormErrorsStore()
+  const createCookAccountFormErrorsStore = useCreateCookAccountFormErrorsStore()
   const currentUserStore = useCurrentUserStore()
   const restaurantStore = useRestaurantsStore()
   const teammatesStore = useTeammatesStore()
@@ -34,7 +33,19 @@
       user_id: ''
     }
   })
+
   const bindingUser = ref({ email: '' })
+
+  const primaryButton = computed(() => {
+    const button = new ButtonSetting('Create', true,  async () => await sign_up())
+
+    return button
+  })
+
+  const secondaryButton = computed(() => {
+    const button = new ButtonSetting('', false, () => {})
+    return button
+  })
 
   const sign_up = async () => {
     await user_service.requestBase(
@@ -46,7 +57,7 @@
         }
       },
       'get',
-      formErrorStore,
+      createCookAccountFormErrorsStore,
       (response) => {
         bindingUser.value = response.data
       }
@@ -68,9 +79,9 @@
     })
 
     await requester.postCreateUser(
-      formErrorStore, 
+      createCookAccountFormErrorsStore, 
       async (response) => {
-        formErrorStore.setErrors(['User created'])
+        createCookAccountFormErrorsStore.setErrors(['User created'])
         await teammatesStore.fetchTeammates()
         formUser.value = {}
       }
@@ -79,33 +90,30 @@
 </script>
 
 <template>
+  <FormSettableButtons
+    :primary-button="primaryButton" :secondary-button="secondaryButton" :errors-store="createCookAccountFormErrorsStore"
+    @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback" 
+  >
+    <div class="col-lg-6">
+      <FloatLabelInput label="Name" label-id="cook-name">
+        <input id="cook-name" type="text" class="form-control" v-model="formUser.name" />
+      </FloatLabelInput>
 
-  <RegularFormStyle>
-    <form id="cook-form" class="form">      
-      <ErrorsShift :errors-store="formErrorStore" />
+      <FloatLabelInput label="Email" label-id="cook-email">
+        <input id="cook-email" type="text" class="form-control" v-model="formUser.email" />
+      </FloatLabelInput>
 
-      <label for="cook-form">Create Cook</label>
+      <FloatLabelInput label="Bind User Email" label-id="cook-dind-user-email">
+        <input id="cook-dind-user-email" type="text" class="form-control" v-model="bindingUser.email" />
+      </FloatLabelInput>
 
-      <div class="form__content">
-        <label for="cook-name">Name</label>
-        <input id="cook-name" type="text" class="text-input" v-model="formUser.name" />
+      <FloatLabelInput label="Password" label-id="cook-password">
+        <input id="cook-password" type="text" class="form-control" v-model="formUser.password" />
+      </FloatLabelInput>
 
-        <label for="cook-email">Email</label>
-        <input id="cook-name" type="text" class="text-input" v-model="formUser.email" />
-
-        <label for="cook-dind-user-email">Bind User Email</label>
-        <input id="cook-dind-user-email" type="text" class="text-input" v-model="bindingUser.email" />
-
-        <label for="cook-password">Password</label>
-        <input id="cook-password" type="text" class="text-input" v-model="formUser.password" />
-
-        <label for="cook-password-confirmation">Password Confirmation</label>
-        <input id="cook-password-confirmation" type="text" class="text-input" v-model="formUser.password_confirmation" />
-      </div>
-      
-      <div class="form__actions">
-        <button type="button" @click="sign_up">Create Cook</button>
-      </div>
-    </form>
-  </RegularFormStyle>
+      <FloatLabelInput label="Password Confirmation" label-id="cook-password-confirmation">
+        <input id="cook-password" type="text" class="form-control" v-model="formUser.password" />
+      </FloatLabelInput>
+    </div>
+  </FormSettableButtons>
 </template>

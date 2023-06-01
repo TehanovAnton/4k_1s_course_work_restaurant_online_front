@@ -1,13 +1,13 @@
 <script setup>
   import { computed, ref } from 'vue';
   import DishForm from '../../components/dishes/form/DishForm.vue';
-  import Errors from '../../components/errors/Errors.vue';
   import dishApi from '../services/api/model_api'
   import tokensService from '../services/tokensService';
   import dishCreateService from '../services/modelCreateServices/modelCreateService'
   import { useMenusStore } from '../menus/stores/MenusStore';
   import { useContentsStore } from '../restaurants/stores/ContentsStore';
   import { useDishFormErrorsStore } from './stores/dishFormErrorsStore';
+  import { CacncelToRestaurant } from '../services/cancele/CancelToRestaurant';
 
   const props = defineProps(['menu'])
   const emits = defineEmits(['data-change'])
@@ -16,7 +16,12 @@
   const currentMenu = computed(() => menusStore.currentMenu)
   const contentsStore = useContentsStore()
   const dishFormErrorsStore = useDishFormErrorsStore()
-  const dish = ref({ name:'', menu_id: currentMenu.value.id })
+  const dish = ref({
+    name:'',
+    description: '',
+    price_cents: 0,
+    menu_id: currentMenu.value.id
+  })
 
   const createDish = async (modefiedDish) => {
     let args = {
@@ -26,36 +31,28 @@
         headers:''
       }
     }
-    args = args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
-
-    await dishCreateService.createModel(dishApi, args, dishFormErrorsStore, (_response) => {
-      menusStore.updateAndSetCurrent(currentMenu.value, { view:'with_dishes' })
-      contentsStore.setContent('RestaurantShowView')
-    })
+    args = dishApi.formDataArgs(args, modefiedDish.attributes, tokensService.auth_headers())
+  
+    await dishCreateService.createModel(
+      dishApi, 
+      args,
+      dishFormErrorsStore, 
+      (_response) => {
+        menusStore.updateAndSetCurrent(currentMenu.value, { view:'with_dishes' })
+        contentsStore.setContent('RestaurantShowView')
+      })
   }
 
   const showRestaurant = () => {
     dishFormErrorsStore.clearErrors()
-    contentsStore.setContent('RestaurantShowView')
+    new CacncelToRestaurant().cancel()
   }
 
 </script>
 
 <template>
-  <Errors :errors-store="dishFormErrorsStore" />
-
-  <div class="create-container">response
-    <DishForm action-name="create" :dish="dish"
-              @form-submit="createDish"
-              @cancel="showRestaurant" />
-  </div>
+  <DishForm
+    action-name="Create" :dish="dish"
+    @form-submit="createDish" @cancel="showRestaurant"
+  />
 </template>
-
-<style lang="scss">
-  .create-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 50px;
-  }
-</style>

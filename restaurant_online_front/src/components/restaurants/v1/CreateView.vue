@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import RestaurantForm from '../../RestaurantForm.vue';
   import Errors from '../../errors/Errors.vue';
   import restaurant_service from '../../../views/services/restaurants/restaurant_service';
@@ -8,17 +8,23 @@
   import { useContentsStore } from '../../../views/restaurants/stores/ContentsStore';
   import { useRestaurantsStore } from '../../../views/restaurants/stores/RestaurantsStore';  
   import { useCurrentUserStore } from '../../../stores/users/currentUser';
+  import { CacncelToRestaurant } from '../../../views/services/cancele/CancelToRestaurant';
 
   const contentsStore = useContentsStore()
   const restaurantsStore = useRestaurantsStore()
   const currentUserStore = useCurrentUserStore()
   const restaurantFormErrorsStore = useRestaurantFormErrorsStore()
 
+  const currentUser = computed(() => {
+    return currentUserStore.user
+  })
+
   const restaurant = ref({
     id: '',
     email: '',
     address: '',
-    phone: ''
+    phone: '',
+    companies_restaurant_attributes: { company_id: currentUser.value.company_id }
   })
 
   const createRestaurant = async (restaurant) => {
@@ -37,22 +43,13 @@
   }
 
   const showRestaurants = () => {
-    contentsStore.setContent('RestaurantsIndexView')
+    new CacncelToRestaurant().cancel()
   }
 </script>
 
 <template>
   <Errors :errors-store="restaurantFormErrorsStore" />
 
-  <div class="create-rest">
-    <RestaurantForm action-name="Create" :restaurant="restaurant" label="New Restaurant"
+  <RestaurantForm action-name="Create" :restaurant="restaurant" label="New Restaurant"
                   @form-submit="createRestaurant" @cancel="showRestaurants" />
-  </div>
 </template>
-
-<style>
-.create-rest {
-  display: flex;
-  justify-content: space-around;
-}
-</style>

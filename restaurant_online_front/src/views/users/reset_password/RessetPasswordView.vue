@@ -1,11 +1,14 @@
 <script setup>
 
-  import { onBeforeMount, ref } from 'vue';
-  import { AuthenticationApi } from '../../services/authentication/AuthenticationApi'
+  import { computed, onBeforeMount, ref } from 'vue';
+  import { AuthenticationApi } from '../../services/api/authentication/AuthenticationApi'
   import { useResetPasswordFormErrorsStore } from '../reset_password/stores/ResetPasswordFormErrorsStore'
   import tokensService from '../../services/tokensService';
   import router from '../../../router/router';
   import Errors from '../../../components/errors/Errors.vue'
+  import FormSettableButtons from '../../../components/forms/FormSettableButtons.vue';
+  import FloatLabelInput from '../../../components/forms/FloatLabelInput.vue';
+  import { ButtonSetting } from '../../services/buttons/ButtonSetting';
 
   onBeforeMount(() => {
     const headers = router.currentRoute.value.query
@@ -14,6 +17,17 @@
 
   const resetPasswordFormErrorsStore = useResetPasswordFormErrorsStore()
   const formObject = ref({})
+
+  const primaryButton = computed(() => {
+    const button = new ButtonSetting('Submit', true, resetPassword)
+
+    return button
+  })
+
+  const secondaryButton = computed(() => {
+    const button = new ButtonSetting('', false, () => {})
+    return button
+  })
 
   const resetPassword = async () => {
     let args = {
@@ -40,21 +54,18 @@
 </script>
 
 <template>
-  <p>
-    <Errors :errors-store="resetPasswordFormErrorsStore" />
-  </p>
+  <FormSettableButtons
+    :primary-button="primaryButton" :secondary-button="secondaryButton" :errors-store="resetPasswordFormErrorsStore"
+    @primaryBtnClick="primaryButton.callback" @secondaryBtnClick="secondaryButton.callback"
+  >
+    <div class="col-lg-6">
+      <FloatLabelInput label="New Password" label-id="new-password">
+        <input id="new-password" type="text" class="form-control" v-model="formObject.password" />
+      </FloatLabelInput>
 
-  <form>
-    <p>
-      <label for="new-password">New password</label>
-      <input id="new-password" type="text" v-model="formObject.password">
-    </p>
-
-    <p>
-      <label for="new-password-confirmation">New password confirmation</label>
-      <input id="new-password-confirmation" type="text" v-model="formObject.password_confirmation">
-    </p>
-
-    <button type="button" @click="resetPassword">Update</button>
-  </form>
+      <FloatLabelInput label="New Password Confirmation" label-id="new-password-confirmation">
+        <input id="new-password-confirmation" type="text" class="form-control" v-model="formObject.password_confirmation" />
+      </FloatLabelInput>
+    </div>
+  </FormSettableButtons>
 </template>

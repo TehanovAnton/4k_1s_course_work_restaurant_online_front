@@ -9,7 +9,7 @@ export class ModelsStoreHelper {
   }
 
   currentModelExists(currentModel) {
-    return !!currentModel
+    return !!currentModel.id
   }
 
   modelsFilter(models, filterCallBack) {
@@ -28,6 +28,15 @@ export class ModelsStoreHelper {
 
   findModel(modelCollection, model) {
     let foundModel = modelCollection.find(r => r.id === model.id)
+
+    if (!!!foundModel)
+      foundModel = modelCollection[0]
+
+    return foundModel
+  }
+
+  find(modelCollection, predicat) {
+    let foundModel = modelCollection.find(predicat)
 
     if (!!!foundModel)
       foundModel = modelCollection[0]

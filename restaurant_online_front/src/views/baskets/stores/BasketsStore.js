@@ -19,11 +19,15 @@ export const useBasketsStore = defineStore('basketsStore', () => {
   const baskets = ref(initBaskets())
 
   const currentBasket = computed(() => {
-    return baskets.value.filter(basket => basket.restaurantId === currentRestaurantId.value)[0]
+    let basket = baskets.value.filter(basket => basket.restaurantId === currentRestaurantId.value)[0]
+    if (!!basket)
+      return basket
+
+    return {}
   })
 
   const dishes = computed(() => {
-    if (baskets.value.length === 0)
+    if (baskets.value.length === 0 || !!!currentBasket.value || !!!currentBasket.value.dishes)
       return []
 
     let baketDishes = menusStore.allDishes.filter(dish => {
@@ -33,6 +37,16 @@ export const useBasketsStore = defineStore('basketsStore', () => {
     })
 
     return baketDishes
+  })
+
+  const basketDishesPrice = computed(() => {
+    let price = 0
+
+    dishes.value.forEach(dish => {
+      price += parseInt(dish.price_cents) * basketDishCount(dish)
+    })
+
+    return price
   })
 
   const updateSessionBaskets = (callBack) => {
@@ -82,7 +96,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
   }
 
   const basketDishCount = (dish) => {
-    if (!!!currentBasket.value)
+    if (!!!currentBasket.value || !!!currentBasket.value.dishes)
       return 0
   
     let dishes = currentBasket.value.dishes.filter(d => d.dish_id === dish.id)
@@ -114,6 +128,7 @@ export const useBasketsStore = defineStore('basketsStore', () => {
     baskets,
     dishes,
     currentBasket,
+    basketDishesPrice,
     clearBasket,
     addDish,
     removeDish,

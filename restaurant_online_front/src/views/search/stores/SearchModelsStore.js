@@ -11,6 +11,14 @@ export const useSearchModelsStore = defineStore('SearchModelsStore', () => {
     return searchedModels.value
   })
 
+  const restaurants = computed(() => {    
+    return models.value.filter(m => m.type === 'Restaurant')
+  })
+
+  const dishes = computed(() => {
+    return models.value.filter(m => m.type === 'Dish')
+  })
+
   const fetchSearch = async (callback) => {
     let { response, isSuccessful } = await restaurantService.apiRestaurantSearch(searchText.value)
 
@@ -31,6 +39,8 @@ export const useSearchModelsStore = defineStore('SearchModelsStore', () => {
   return {
     fetchSearch,
     search,
+    restaurants,
+    dishes,
     models
   }
 })

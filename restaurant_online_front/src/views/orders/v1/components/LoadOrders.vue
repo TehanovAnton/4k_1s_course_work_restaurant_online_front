@@ -16,7 +16,7 @@
       'order'
     )
 
-  socketService.bindSocket()
+    socketService.bindSocket()
   })
 
   const dataReady = ref(false)

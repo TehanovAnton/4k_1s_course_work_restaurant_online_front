@@ -1,86 +1,82 @@
 <script setup>
-    import ErrorsVue from '../../components/errors/Errors.vue';
-    import axios from 'axios';
-    import router from '../../router/router'
-    import { ref } from 'vue'
+  import ErrorsVue from '../../components/errors/Errors.vue';
+  import axios from 'axios';
+  import router from '../../router/router'
+  import { ref } from 'vue'
+  import DefaultForm from '../../components/forms/DefaultForm.vue';
+  import TextInput from '../../components/forms/FloatLabelInput.vue';
+  import RoleSelect from './inputs/RoleSelect.vue'
+  import { BaseApi } from '../services/api/baseApi';
+  import { useSignUpFormErrorStore } from './stores/SignUpFormErrorStore'
 
-    const customer = ref({
-        name: 'clone3',
-        email: 'clone3@gmail.com',
-        password: 'ewqqwe',
-        password_confirmation: 'ewqqwe',
-        confirm_success_url: '/',
-        type: 'Customer'
-    })
-    const errors = ref([])
+  const signUpFormErrorStore = useSignUpFormErrorStore()
 
-    const sign_up = async () => {
-        let response = await axios.post('http://localhost:3000/auth', customer.value)
-        .catch((error) => {
-            errors.value = error.response.data.errors.full_messages;
-        })
+  const customer = ref({
+      name: 'clone3',
+      email: 'clone3@gmail.com',
+      password: 'ewqqwe',
+      password_confirmation: 'ewqqwe',
+      confirm_success_url: '/',
+      type: 'Customer'
+  })
+  const errors = ref([])
+  const roles = ref([
+    { name: 'Customer', role: 'Customer' },
+    { name: 'Admin', role: 'SuperAdmin' }
+  ])
 
-        if (response && response.status === 200) {
+  const setRole = (role) => {
+    customer.value.type = role
+  }
+
+  const sign_up = async () => {
+    let args = {
+      url: 'http://localhost:3000/auth',
+      data: customer.value,
+      requestOptions: {}
+    }
+    let requester = new BaseApi(args)
+
+    await requester.requestBase(
+      'post',
+      signUpFormErrorStore,
+      (_response) => {
         router.push({ name: 'sign_in' })
-        }
-    }
+      }
+    )
+  }
 
-    const sign_in = () => {
-        router.push({ name:'sign_in' })
-    }
+  const sign_in = () => {
+    router.push({ name:'sign_in' })
+  }
 </script>   
 
 <template>
-    <ErrorsVue :errors="errors"/>
+    <DefaultForm
+      form-label="Registration" primary-button="Sign up" secondary-button="Sign in"
+      :errors-store="signUpFormErrorStore"
+      @primaryBtnClick="sign_up" @secondaryBtnClick="sign_in"
+    >
+      <div class="col-lg-6">
+        <TextInput label-id="customer-name" label="Name">
+          <input type="text" id="customer-name" class="form-control" v-model="customer.name" />
+        </TextInput>
 
-    <form class="sign-up-form centrenize-content-row">
-        <div class="form-elements centrenize-content-column">
-            <input type="text" class="form-element" v-model="customer.name" />
+        <TextInput label-id="customer-email" label="Email">
+          <input type="text" id="customer-email" class="form-control" v-model="customer.email" />
+        </TextInput>
 
-            <input type="text" class="form-element" v-model="customer.email" />
+        <RoleSelect
+          :init-value="roles[0]" :roles="roles" @role-change="setRole"
+        />
 
-            <input type="text" class="form-element" v-model="customer.password" />
+        <TextInput label-id="customer-password" label="Password">
+          <input type="text" id="customer-password" class="form-control" v-model="customer.password" />
+        </TextInput>
 
-            <input type="text" class="form-element" v-model="customer.password_confirmation" />
-            
-            <div>
-                <button type="button" class="form-element" @click="sign_up">Sign Up</button>
-                <button type="button" class="form-element" @click="sign_in">Sign In</button>
-            </div>
-        </div>
-    </form>
+        <TextInput label-id="customer-password_confirmation" label="Password Confirmation">
+          <input type="text" id="customer-password_confirmation" class="form-control" v-model="customer.password" />
+        </TextInput>
+      </div>
+    </DefaultForm>    
 </template>
-
-<style>
-    .block {
-        border: 3px solid black;
-        padding: 3px;
-    }
-
-    .centrenize-content-column {
-        display: flex;
-        justify-content: space-around;        
-        flex-direction: column;
-    }
-
-    .centrenize-content-row {
-        display: flex;
-        justify-content: space-around;
-        flex-direction: row;        
-    }
-
-    .form-elements {
-        width: 20%;
-        height: 100%;        
-    }
-
-    .form-element {
-        margin: 7% 10% 7% 10%;
-        flex: 1;
-        font-size: 25px;
-    }
-
-    .sign-up-form {
-        height: 35em;
-    }
-</style>

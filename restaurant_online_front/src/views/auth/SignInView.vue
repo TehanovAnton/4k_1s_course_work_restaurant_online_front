@@ -7,6 +7,7 @@
   import userService from '../services/users/user_service'
 
   import { useCurrentUserStore } from '../../stores/users/currentUser';
+  import DefaultForm from '../../components/forms/DefaultForm.vue';
   const currentUserStore = useCurrentUserStore()
 
   const customer = ref({
@@ -16,11 +17,13 @@
   const errors = ref([])
 
   const sign_in = async () => {
-    let response = await axios.post('http://localhost:3000/auth/sign_in', customer.value)
-    .catch((error) => {        
+    let response = await axios.post(
+      'http://localhost:3000/auth/sign_in',
+      customer.value
+    ).catch((error) => {        
       errors.value = error.response.data.errors;
     })
-        
+
     if (response && response.status === 200) {          
       tokensService.setAuthTokens(response.headers)
 
@@ -36,55 +39,31 @@
   const sign_up = () => {
     router.push({ name:'sign_up' })
   }
+
+  const resetPassword = () => {
+    router.push({ name:'reset_password_instructions' })
+  }
 </script>
 
 <template>
     <ErrorsVue :errors="errors"/>
-    
-    <form class="sign-in-form centrenize-content-row">
-        <div class="form-elements centrenize-content-column">
-            <input type="text" class="form-element" v-model="customer.email" />
 
-            <input type="text" class="form-element"  v-model="customer.password" />
-            
-            <div>
-                <button type="button" class="form-element" @click="sign_in">Sign In</button>
-                <button type="button" class="form-element" @click="sign_up">Sign Up</button>    
-            </div>
-        </div>        
-    </form>
+    <DefaultForm
+      form-label="Sign in" primary-button="Sign in" secondary-button="Sign up"
+      @primaryBtnClick="sign_in" @secondaryBtnClick="sign_up"
+    >
+      <div class="col-lg-6">
+        <div class="form-floating mb-3">
+          <input v-model="customer.email" type="email" class="form-control" id="customer-email" placeholder="name@example.com" />
+          <label for="customer-email">Email</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input v-model="customer.password" type="text" class="form-control" id="customer-password" />
+          <label for="customer-password">Password</label>
+        </div>
+
+        <a href="#" @click="resetPassword">Forget password</a>
+      </div>
+    </DefaultForm>
 </template>
-
-<style>
-    .block {
-        border: 3px solid black;
-        padding: 3px;
-    }
-
-    .centrenize-content-column {
-        display: flex;
-        justify-content: space-around;        
-        flex-direction: column;
-    }
-
-    .centrenize-content-row {
-        display: flex;
-        justify-content: space-around;
-        flex-direction: row;        
-    }
-
-    .form-elements {
-        width: 20%;
-        height: 100%;        
-    }
-
-    .form-element {
-        margin: 7% 10% 7% 10%;
-        flex: 1;
-        font-size: 25px;
-    }
-
-    .sign-in-form {
-        height: 20em;
-    }
-</style>

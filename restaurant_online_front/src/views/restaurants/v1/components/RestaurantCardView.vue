@@ -1,6 +1,8 @@
 <script setup>
+  import { ref } from 'vue';
+  import ModelShowWrap from '../../../../components/stylecomponents/ModelShowWrap.vue';
   import { useCurrentUserStore } from '../../../../stores/users/currentUser';
-import { useMenusStore } from '../../../menus/stores/MenusStore';
+  import { useMenusStore } from '../../../menus/stores/MenusStore';
   import { useContentsStore } from '../../stores/ContentsStore';
   import { useRestaurantsStore } from '../../stores/RestaurantsStore';
 
@@ -10,63 +12,52 @@ import { useMenusStore } from '../../../menus/stores/MenusStore';
   const menusStore = useMenusStore()
   const currentUserSotre = useCurrentUserStore()
 
-  const showRestaurant = () => {
+  const primaryButton = ref({
+    enable: false,
+    label: '',
+    callBack: () => {}
+  })
+
+  const secondaryButton = ref({
+    enable: false,
+    label: '',
+    callBack: () => {}
+  })
+
+  const showRestaurant = (_e, menu) => {
     restaurantsStore.setModel(props.restaurant)
 
-    if (
-      restaurantsStore.currentRestaurant.menus.length > 0 && !menusStore.ownMenu(menusStore.currentMenu, currentUserSotre.user) ||
-      !!!menusStore.currentMenu
-    )
-      menusStore.setMenu(restaurantsStore.currentRestaurant.menus[0])
+    let defaultMenu = !!!menusStore.currentMenu ? restaurantsStore.currentRestaurant.menus[0] : menusStore.currentMenu
+    menu = !!menu ? menu : defaultMenu
+    menusStore.setMenu(menusStore.findMenu(menu))
 
     contentsStore.setContent('RestaurantShowView')
   }
 </script>
 
 <template>
-  <div class="restaurant-card" @click="showRestaurant">
-    <h2>{{ restaurant.name }}</h2>
-    <div class="restaurant-info">
-      <p><strong>Email:</strong> {{ restaurant.email }}</p>
-      <p><strong>Address:</strong> {{ restaurant.address }}</p>
-      <p><strong>Phone:</strong> {{ restaurant.phone }}</p>
+  <ModelShowWrap
+    :primary-button="primaryButton" :secondary-button="secondaryButton" :label="restaurant.name"
+    @wrap-click="showRestaurant($event, null)"
+  >
+    <div class="row bg-transparent">
+      <div class="col">
+        <h5 class="card-title d-flex justify-content-around">{{ restaurant.email }}</h5>
+        <h5 class="card-title d-flex justify-content-around">{{ restaurant.address }}</h5>
+        <h5 class="card-title d-flex justify-content-around">{{ restaurant.phone }}</h5>
+      </div>
+      
+      <div class="col d-flex justify-content-around">
+        <div class="list-group">
+          <a
+            v-for="menu in restaurant.menus"
+            @click="showRestaurant($event, menu)"
+            class="list-group-item list-group-item-action"
+          >
+            {{ menu.name }}
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="menu-list">
-      <h3>Menus:</h3>
-      <ul>
-        <li v-for="menu in restaurant.menus" :key="menu.id">{{ menu.name }}</li>
-      </ul>
-    </div>
-  </div>
+  </ModelShowWrap>
 </template>
-
-<style lang="scss" scoped>
-  .restaurant-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #f2f2f2;
-    }
-
-    .restaurant-info {
-      margin-bottom: 10px;
-    }
-
-    .menu-list {
-      margin-top: 10px;
-
-      ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-
-        li {
-          margin-bottom: 5px;
-        }
-      }
-    }
-  }
-</style>

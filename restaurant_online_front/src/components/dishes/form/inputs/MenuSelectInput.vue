@@ -14,16 +14,9 @@
 </script>
 
 <template>
-  <label for="menu-slect">Menu</label>
-  <select id="menu-slect" class="text-input menu-select" v-model="choosenMenu" @change="setMenu">
+  <select v-model="choosenMenu" @change="setMenu" class="form-select form-select-lg mb-3" aria-label="Default select example">
     <option v-for="menu in menus" v-bind:value="menu">
       {{ menu.name }}
     </option>
   </select>
 </template>
-
-<style>
-  .menu-select {
-    background: none;
-  }
-</style>

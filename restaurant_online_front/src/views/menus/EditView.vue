@@ -37,17 +37,6 @@
 <template>
   <Errors :errors-store="menuFormErrorsStore" />
 
-  <div class="edit-menu-container">
-    <MenuForm :menu="currentMenuCopy" action-name="update" :from-label="'Edit Menu'"
+  <MenuForm :menu="currentMenuCopy" action-name="update" from-label="Menu"
             @form-submit="updatMenu" @cancel="showRestaurant"/>
-  </div>
 </template>
-
-<style lang="scss">
-  .edit-menu-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 30px;
-  }
-</style>

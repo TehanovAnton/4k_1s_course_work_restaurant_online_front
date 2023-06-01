@@ -12,8 +12,10 @@
 </script>
 
 <template>
-  <label for="d-name">Name</label>
-  <input id='d-name' class="text-input" v-model="name.name" @change="setName" />
+  <div class="form-floating mb-3">
+    <input v-model="name.name" @change="setName" type="text" class="form-control" id="dish-name" placeholder="name@example.com" />
+    <label for="dish-name">Name</label>
+  </div>
 </template>
 
 <style>

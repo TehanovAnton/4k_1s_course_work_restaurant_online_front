@@ -1,12 +1,15 @@
 <script setup>
   import { ref } from 'vue';
-  import RegularFormStyle from './stylecomponents/RegularFormStyle.vue';
+  import DefaultForm from './forms/DefaultForm.vue';
+  import FloatLabelInput from './forms/FloatLabelInput.vue';
+
   const props = defineProps(['restaurant', 'actionName', 'label'])
   const emits = defineEmits(['formSubmit', 'cancel'])
-
   const modefiedRestaurant = ref({ 
     id: props.restaurant.id,
-    updateAttributes: {}
+    updateAttributes: {
+      companies_restaurant_attributes: props.restaurant.companies_restaurant_attributes
+    }
   })
 
   const inlcudeAttribute = (attr) => {
@@ -15,27 +18,22 @@
 </script>
 
 <template>
-  <RegularFormStyle>
-    <div class="form">
-      <label for="r-name">{{ label }}</label>
-      <div class="form__content">
-        <label for="r-name">Name</label>
-        <input id='r-name' v-model="restaurant.name" class="text-input" @change="inlcudeAttribute('name')" />
+  <DefaultForm
+    :form-label="label" :primary-button="actionName" secondary-button="Cancel"
+    @primaryBtnClick="$emit('formSubmit', modefiedRestaurant)" @secondaryBtnClick="$emit('cancel')"
+  >
+    <div class="col-lg-6">
+      <FloatLabelInput label-id="restaurant-name" label="Name">
+        <input type="text" class="form-control" id="restaurant-name" v-model="restaurant.name" @change="inlcudeAttribute('name')" />
+      </FloatLabelInput>
 
-        <label for="r-email">Email</label>
-        <input id='r-email' v-model="restaurant.email" class="text-input" @change="inlcudeAttribute('email')" />
-        
-        <label for="r-address">Address</label>
-          <input id='r-address' v-model="restaurant.address" class="text-input" @change="inlcudeAttribute('address')" />
-      </div>
+      <FloatLabelInput label-id="restaurant-email" label="Email">
+        <input type="text" class="form-control" id="restaurant-email" v-model="restaurant.email" @change="inlcudeAttribute('email')" />
+      </FloatLabelInput>
 
-      <div class="form__actions">
-        <button type="button" @click="$emit('formSubmit', modefiedRestaurant)">
-          {{ actionName }}
-        </button>
-
-        <button type="button" @click="$emit('cancel')">back</button>
-      </div>
+      <FloatLabelInput label-id="restaurant-adrress" label="Adrress">
+        <input type="text" class="form-control" id="restaurant-adrress" v-model="restaurant.address" @change="inlcudeAttribute('address')" />
+      </FloatLabelInput>
     </div>
-  </RegularFormStyle>
+  </DefaultForm>
 </template>

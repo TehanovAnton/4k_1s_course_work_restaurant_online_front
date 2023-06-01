@@ -16,27 +16,18 @@
 </script>
 
 <template>
-  <p>
-    <input type="file"
-            accept="image/*"
-            name="image"
-            id="file"
-            class="image-input"
-            @change="setImage"
-            setImage>
-  </p>
-
-  <p>
-    <label for="file">
-      Upload Image
-    </label>
-  </p>
-
-  <div class="img-container">
+  <div class="img-container" v-if="image.src">
     <img id="output"
           width="300"
           height="200"
           :src="image.src"/>
+  </div>
+
+  <div class="mb-3">
+    <label for="dish-image" climage.srcass="form-label">
+      Image
+    </label>
+    <input @change="setImage" class="form-control" type="file" id="dish-image">
   </div>
 </template>
 

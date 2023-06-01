@@ -7,7 +7,7 @@
 
   const props = defineProps(['user'])  
   const emits = defineEmits(['data-change'])
-// 
+
   const modes = ref(['show', 'edit', 'delete'])
   const modesProperties = ref({
     show:{ action:'show', allowed:true, visible:true },
@@ -18,7 +18,7 @@
   const modesClass = ref('user-class')
   const setMode = (modeName) => currentMode.value = modeName  
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
-// 
+
   const showDataChange = () => {    
     setMode('show')
     emits('data-change')

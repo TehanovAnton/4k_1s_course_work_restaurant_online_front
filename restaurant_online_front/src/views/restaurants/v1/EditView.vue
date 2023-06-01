@@ -37,29 +37,7 @@ const updatRestaurant = async (modefiedRestaurant) => {
 
 <template>  
   <Errors :errors-store="restaurantFormErrorsStore" />
-  <div class="edit-restaurant">
-    <RestaurantForm :restaurant="contentRestaurant" :action-name="'Update'" label="Edit Restaurant"
+  
+  <RestaurantForm :restaurant="contentRestaurant" :action-name="'Update'" label="Restaurant"
                     @form-submit="updatRestaurant" @cancel="showRestaurant" />
-  </div>
 </template>
-
-<style>
-  .models-content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .dish {
-    background-color: darkgray;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: inset 0 0 5px 2px rgb(207, 168, 168);
-    margin: 5px 0px 0 0px;
-  }
-
-  .edit-restaurant {
-    display: flex;
-    justify-content: space-around;
-  }
-</style>
