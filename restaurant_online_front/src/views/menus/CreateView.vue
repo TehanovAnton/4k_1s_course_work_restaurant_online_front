@@ -24,7 +24,7 @@
 
   const createMenu = async (modefiedMenu) => {
     let args = {
-      url: `http://localhost:3000/restaurants/${currentRestaurant.value.id}/menus`,
+      url: `${import.meta.env.VITE_BACK_HOST}/restaurants/${currentRestaurant.value.id}/menus`,
       data: modefiedMenu.attributes,
       requestOptions: {     
         headers: tokensService.auth_headers()

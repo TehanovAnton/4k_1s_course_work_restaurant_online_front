@@ -30,7 +30,7 @@ export const useDishesStore = defineStore('dishesStore', () => {
 
   const fetchDishes = async (callback) => {
     let args = { 
-      getUrl: `http://localhost:3000/menus/${currentMenu.value.id}/dishes?`,
+      getUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${currentMenu.value.id}/dishes?`,
       requestOptions: { 
         headers: tokensService.auth_headers()
       }

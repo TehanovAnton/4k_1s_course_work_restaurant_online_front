@@ -31,7 +31,7 @@
 
   const sendResetPasswordInstructions = async () => {
     let args = {
-      url: 'http://localhost:3000/users/send_reset_password',
+      url: `${import.meta.env.VITE_BACK_HOST}/users/send_reset_password`,
       requestOptions: {
         params: { reset_password: { email: customer.value.email } }
       }

@@ -91,7 +91,7 @@
 
   const updateUser = async () => {
     let args = {
-      url: `http://localhost:3000/users/${currentUser.value.id}`,
+      url: `${import.meta.env.VITE_BACK_HOST}/users/${currentUser.value.id}`,
       data: { user: user.value },
       requestOptions: {
         headers: tokensService.auth_headers()

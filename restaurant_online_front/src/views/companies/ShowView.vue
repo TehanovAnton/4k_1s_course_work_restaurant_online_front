@@ -65,7 +65,7 @@
 
   const updateCompany = async () => {
     let args = {
-      url: `http://localhost:3000/companies/${currentUserStore.user.company.id}`,
+      url: `${import.meta.env.VITE_BACK_HOST}/companies/${currentUserStore.user.company.id}`,
       data: { company: formObject.value },
       requestOptions: {
         headers: tokensService.auth_headers()

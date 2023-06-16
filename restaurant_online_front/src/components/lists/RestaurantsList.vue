@@ -37,7 +37,7 @@ const dataReady = ref(false)
 
 const createRestaurantModeArgs = computed(() => {
   return {
-    canCreateUrl: `http://localhost:3000/restaurants/can_create`,
+    canCreateUrl: `${import.meta.env.VITE_BACK_HOST}/restaurants/can_create`,
     requestOptions: {
       headers: tokensService.auth_headers()
     }
@@ -45,7 +45,7 @@ const createRestaurantModeArgs = computed(() => {
 })
 const editRestaurantModeArgs = computed(() => {
     return {
-      canUpdateUrl: `http://localhost:3000/restaurants/can_create`,
+      canUpdateUrl: `${import.meta.env.VITE_BACK_HOST}/restaurants/can_create`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }

@@ -4,7 +4,7 @@ import tokensService from '../../services/tokensService';
 import { BaseApi } from '../api/baseApi'
 
 const apiIndexOrders = async (userId) => {
-  let response = await axios.get(`http://localhost:3000/users/${userId}/orders`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/users/${userId}/orders`,
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
 
@@ -15,7 +15,7 @@ const apiIndexOrders = async (userId) => {
 }
 
 const apiIndexCooksOrders = async (restaurantId) => {
-  let response = await axios.get(`http://localhost:3000/cooks/restaurants/${restaurantId}/orders`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/cooks/restaurants/${restaurantId}/orders`,
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
 
@@ -26,7 +26,7 @@ const apiIndexCooksOrders = async (restaurantId) => {
 }
 
 const apiGetOrder = async (orderId) => {  
-  let response = await axios.get(`http://localhost:3000/orders/${orderId}`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/orders/${orderId}`,
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
 
@@ -38,7 +38,7 @@ const apiGetOrder = async (orderId) => {
 
 const apiCreateOrder = async (order, errorsStore, successCallback) => {
   let args = {
-    url: `http://localhost:3000/users/${order.user_id}/orders`,
+    url: `${import.meta.env.VITE_BACK_HOST}/users/${order.user_id}/orders`,
     data: { order: order.attributes },
     requestOptions: {
       headers: tokensService.auth_headers()
@@ -54,7 +54,7 @@ const apiCreateOrder = async (order, errorsStore, successCallback) => {
 }
 
 const apiCreateRating = async (orderId, rating) => {
-  let createUrl = `http://localhost:3000/orders/${orderId}/ratings`
+  let createUrl = `${import.meta.env.VITE_BACK_HOST}/orders/${orderId}/ratings`
   let data = rating
 
   let response = await axios.post(
@@ -70,7 +70,7 @@ const apiCreateRating = async (orderId, rating) => {
 }
 
 const apiDestroyRating = async (rating) => {
-  let destroyUrl = `http://localhost:3000//ratings/${rating.id}`
+  let destroyUrl = `${import.meta.env.VITE_BACK_HOST}//ratings/${rating.id}`
 
   let response = await axios.delete(
     destroyUrl,
@@ -84,7 +84,7 @@ const apiDestroyRating = async (rating) => {
 }
 
 const apiUpdateOrderState = async (orderStateId, orderState) => {
-  let udpateUrl = `http://localhost:3000/cooks/order_states/${orderStateId}/transition`
+  let udpateUrl = `${import.meta.env.VITE_BACK_HOST}/cooks/order_states/${orderStateId}/transition`
   let data = orderState
 
   let response = await axios.put(
@@ -100,7 +100,7 @@ const apiUpdateOrderState = async (orderStateId, orderState) => {
 }
 
 const apiUpdateOrder = async (order) => {
-  let updateUrl = `http://localhost:3000/orders/${order.id}`
+  let updateUrl = `${import.meta.env.VITE_BACK_HOST}/orders/${order.id}`
   let data = { order: order.attributes }
 
   let response = await axios.put(
@@ -116,7 +116,7 @@ const apiUpdateOrder = async (order) => {
 }
 
 const apiDestroyOrder = async (orderId) => {  
-  let response = await axios.delete(`http://localhost:3000/orders/${orderId}`,
+  let response = await axios.delete(`${import.meta.env.VITE_BACK_HOST}/orders/${orderId}`,
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
 
@@ -127,7 +127,7 @@ const apiDestroyOrder = async (orderId) => {
 }
 
 const apiCancelOrder = async (orderId) => {  
-  let response = await axios.put(`http://localhost:3000/orders/${orderId}/cancel`,
+  let response = await axios.put(`${import.meta.env.VITE_BACK_HOST}/orders/${orderId}/cancel`,
                                  {},
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
@@ -139,7 +139,7 @@ const apiCancelOrder = async (orderId) => {
 }
 
 const apiCanUpdateOrder = async (order) => {
-  let canUpdateUrl = `http://localhost:3000/orders/${order.id}/can_update`
+  let canUpdateUrl = `${import.meta.env.VITE_BACK_HOST}/orders/${order.id}/can_update`
     
   let response = await axios.get(
     canUpdateUrl, 
@@ -153,7 +153,7 @@ const apiCanUpdateOrder = async (order) => {
 }
 
 const apiCanDestroyOrder = async (order) => {
-  let canDeleteUrl = `http://localhost:3000/orders/${order.id}/can_destroy`
+  let canDeleteUrl = `${import.meta.env.VITE_BACK_HOST}/orders/${order.id}/can_destroy`
     
   let response = await axios.get(
     canDeleteUrl, 
@@ -167,7 +167,7 @@ const apiCanDestroyOrder = async (order) => {
 }
 
 const apiCanCreateOrder = async (user) => {
-  let canCreateUrl = `http://localhost:3000/users/${user.id}/orders/can_create`
+  let canCreateUrl = `${import.meta.env.VITE_BACK_HOST}/users/${user.id}/orders/can_create`
     
   let response = await axios.get(
     canCreateUrl, 

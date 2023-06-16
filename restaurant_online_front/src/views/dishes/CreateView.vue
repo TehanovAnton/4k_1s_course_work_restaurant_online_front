@@ -25,7 +25,7 @@
 
   const createDish = async (modefiedDish) => {
     let args = {
-      postUrl: `http://localhost:3000/menus/${currentMenu.value.id}/dishes`,
+      postUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${currentMenu.value.id}/dishes`,
       data:'',
       requestOptions: { 
         headers:''

@@ -5,7 +5,7 @@ import { BaseApi } from '../api/baseApi';
 
 const apiRestaurantTeam = async (restaurantId, errorsStore, successCallback) => {
   let args = {
-    url: `http://localhost:3000/restaurants_teams/restaurants/${restaurantId}/team`,
+    url: `${import.meta.env.VITE_BACK_HOST}/restaurants_teams/restaurants/${restaurantId}/team`,
     requestOptions: {
       headers: tokensService.auth_headers()
     }
@@ -16,7 +16,8 @@ const apiRestaurantTeam = async (restaurantId, errorsStore, successCallback) => 
 } 
 
 const apiIndexRestaurants = async (authHeaders) => {
-  let response = await axios.get('http://localhost:3000/restaurants?resataurant_view=normal',
+  console.log(import.meta.env.MODE)
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/restaurants?resataurant_view=normal`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
 
@@ -26,7 +27,7 @@ const apiIndexRestaurants = async (authHeaders) => {
 }
 
 const apiGetRestaurant = async (authHeaders, restaurantId) => {  
-  let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurantId}`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
 
@@ -36,7 +37,7 @@ const apiGetRestaurant = async (authHeaders, restaurantId) => {
 }
 
 const apiUpdateRestaurants = async (authHeaders, restaurant, errorsStore, successCallback) => {
-  let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
+  let updateUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurant.id}`
   let data = restaurant.updateAttributes
   
   let response = await axios.put(
@@ -59,7 +60,7 @@ const apiUpdateRestaurants = async (authHeaders, restaurant, errorsStore, succes
 }
 
 const apiCanUpdateRestaurant = async (authHeaders, restaurant) => {
-  let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/can_update`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurant.id}/can_update`
   
   let response = await axios.get(
     canUrl, 
@@ -70,7 +71,7 @@ const apiCanUpdateRestaurant = async (authHeaders, restaurant) => {
 }
 
 const apiCreateRestaurants = async (authHeaders, restaurant, errorsStore, successCallback) => {
-  let createUrl = `http://localhost:3000/restaurants`
+  let createUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants`
   let data = { restaurant: restaurant }  
   
   let response = await axios.post(
@@ -93,7 +94,7 @@ const apiCreateRestaurants = async (authHeaders, restaurant, errorsStore, succes
 }
 
 const apiCanCreateRestaurants = async (authHeaders) => {
-  let canUrl = `http://localhost:3000/restaurants/can_create`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/can_create`
   
   let response = await axios.get(
     canUrl,
@@ -104,7 +105,7 @@ const apiCanCreateRestaurants = async (authHeaders) => {
 }
 
 const apiDestroyRestaurants = async (authHeaders, restaurant) => {
-  let updateUrl = `http://localhost:3000/restaurants/${restaurant.id}`
+  let updateUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurant.id}`
   
   let response = await axios.delete(
     updateUrl,
@@ -115,7 +116,7 @@ const apiDestroyRestaurants = async (authHeaders, restaurant) => {
 }
 
 const apiCanDestroyRestaurant = async (authHeaders, restaurant) => {
-  let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/can_destroy`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurant.id}/can_destroy`
   
   let response = await axios.get(
     canUrl,
@@ -126,7 +127,7 @@ const apiCanDestroyRestaurant = async (authHeaders, restaurant) => {
 }
 
 const apiRestaurantSearch = async (matchExpression) => {
-  let searchUrl = `http://localhost:3000/restaurants/search`  
+  let searchUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/search`  
   let data = { match_expression: matchExpression }
 
   let response = await axios.get(

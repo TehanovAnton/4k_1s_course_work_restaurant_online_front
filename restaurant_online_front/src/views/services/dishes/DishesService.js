@@ -10,7 +10,7 @@ const urlOptionsEditor = (url, options) => {
 }
 
 const apiShowDish = async (dish) => {
-  let response = await axios.get(`http://localhost:3000/dishes/${dish.id}`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/dishes/${dish.id}`,
                                  { headers: tokensService.auth_headers() })
                             .catch(errorshandler)
 
@@ -21,7 +21,7 @@ const apiShowDish = async (dish) => {
 }
 
 const apiCanUpdateDish = async (dish) => {
-  let canUpdateUrl = `http://localhost:3000/dishes/${dish.id}/can_update`
+  let canUpdateUrl = `${import.meta.env.VITE_BACK_HOST}/dishes/${dish.id}/can_update`
     
   let response = await axios.get(
     canUpdateUrl, 
@@ -35,7 +35,7 @@ const apiCanUpdateDish = async (dish) => {
 }
 
 const apiCanDestroyDish = async (dish) => {
-  let canDeleteUrl = `http://localhost:3000/dishes/${dish.id}/can_destroy`
+  let canDeleteUrl = `${import.meta.env.VITE_BACK_HOST}/dishes/${dish.id}/can_destroy`
     
   let response = await axios.get(
     canDeleteUrl, 
@@ -49,7 +49,7 @@ const apiCanDestroyDish = async (dish) => {
 }
 
 const apiCanCreateDish = async (menu) => {
-  let canCreateUrl = `http://localhost:3000/menus/${menu.id}/dishes/can_create`
+  let canCreateUrl = `${import.meta.env.VITE_BACK_HOST}/menus/${menu.id}/dishes/can_create`
     
   let response = await axios.get(
     canCreateUrl, 

@@ -67,7 +67,7 @@
 
   const updateOrder = async (formOrder) => {
     let args = {
-      url: `http://localhost:3000/orders/${ordersStore.order.id}`,
+      url: `${import.meta.env.VITE_BACK_HOST}/orders/${ordersStore.order.id}`,
       data: { order: formOrder.attributes },
       requestOptions: {
         headers: tokensService.auth_headers()

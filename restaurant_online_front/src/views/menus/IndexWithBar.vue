@@ -26,7 +26,7 @@ const selectedModeStore = useSelectedModeStore()
 const currentMenu = ref({})
 const createMenuModeArgs = computed(() => {
   return {
-    canCreateUrl: `http://localhost:3000/restaurants/${props.restaurant.id}/menus/can_create`,
+    canCreateUrl: `${import.meta.env.VITE_BACK_HOST}/restaurants/${props.restaurant.id}/menus/can_create`,
     requestOptions: {
       headers: tokensService.auth_headers()
     }
@@ -34,7 +34,7 @@ const createMenuModeArgs = computed(() => {
 })
 const editMenuModeArgs = computed(() => {
   return {
-    canUpdateUrl: `http://localhost:3000/menus/${currentMenu.value.id}/can_update`,
+    canUpdateUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${currentMenu.value.id}/can_update`,
     requestOptions: {
       headers: tokensService.auth_headers()
     }
@@ -42,7 +42,7 @@ const editMenuModeArgs = computed(() => {
 })
 const destroyMenuArgs = computed(() => {
   return {
-    canDestroyUrl: `http://localhost:3000/menus/${currentMenu.value.id}/can_destroy`,
+    canDestroyUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${currentMenu.value.id}/can_destroy`,
     requestOptions: {
       headers: tokensService.auth_headers()
     }
@@ -108,7 +108,7 @@ const dishes = computed(() => {
 })
 
 const refreshMenus = async () => {
-  let url = menuApi.urlOptionsEditor(`http://localhost:3000/restaurants/${props.restaurant.id}/menus?`, 
+  let url = menuApi.urlOptionsEditor(`${import.meta.env.VITE_BACK_HOST}/restaurants/${props.restaurant.id}/menus?`, 
                                      { view: 'with_dishes' })
   let args = { 
     getUrl: url,
@@ -187,7 +187,7 @@ const refreshDishes = (dishes) => {
 
   <div v-if="currentMenuMode == 'delete' && modeAlowability('delete')">
     <DeleteModelVue :record="currentMenu"
-                    :destroy-url="`http://localhost:3000/menus/${currentMenu.id}`"
+                    :destroy-url="`${import.meta.env.VITE_BACK_HOST}/menus/${currentMenu.id}`"
                     @deleted-sucessfully="resetIndex" />
   </div>
 </template>

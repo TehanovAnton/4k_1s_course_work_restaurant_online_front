@@ -12,7 +12,7 @@
 
   const editMenuModeArgs = computed(() => {
     return {
-      canUpdateUrl: `http://localhost:3000/menus/${props.menu.id}/can_update`,
+      canUpdateUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${props.menu.id}/can_update`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -21,7 +21,7 @@
 
   const deleteMenuModeArgs = computed(() => {
     return {
-      canDestroyUrl: `http://localhost:3000/menus/${props.menu.id}/can_destroy`,
+      canDestroyUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${props.menu.id}/can_destroy`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }

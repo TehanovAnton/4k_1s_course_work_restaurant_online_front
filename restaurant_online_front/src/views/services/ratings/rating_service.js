@@ -3,7 +3,7 @@ import { errorshandler, isSuccessful, setHeadersIfSuccessful } from '../../servi
 import tokensService from '../../services/tokensService';
 
 const apiPostRating = async (orderId, rating) => {
-  let createUrl = `http://localhost:3000/orders/${orderId}/post_rating`
+  let createUrl = `${import.meta.env.VITE_BACK_HOST}/orders/${orderId}/post_rating`
   let data = rating
 
   let response = await axios.post(
@@ -19,7 +19,7 @@ const apiPostRating = async (orderId, rating) => {
 }
 
 const apiDestroyRating = async (orderId) => {
-  let destroyUrl = `http://localhost:3000/orders/${orderId}/destroy_rating`
+  let destroyUrl = `${import.meta.env.VITE_BACK_HOST}/orders/${orderId}/destroy_rating`
 
   let response = await axios.delete(
     destroyUrl,

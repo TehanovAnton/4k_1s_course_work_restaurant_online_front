@@ -18,7 +18,7 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
 
   const createModeArgs = computed(() => {
     return {
-      canCreateUrl: `http://localhost:3000/menus/${menu_id.value}/dishes/can_create`,
+      canCreateUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${menu_id.value}/dishes/can_create`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -26,7 +26,7 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
   })
   const editModeArgs = computed(() =>{
     return {
-      canUpdateUrl: `http://localhost:3000/dishes/${dish_id.value}/can_update`,
+      canUpdateUrl: `${import.meta.env.VITE_BACK_HOST}/dishes/${dish_id.value}/can_update`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -34,7 +34,7 @@ export const useCurrentDishModeStore = defineStore('CurrentDishMode', () => {
   })
   const destroyArgs = computed(() => {
     return {
-      canDestroyUrl: `http://localhost:3000/dishes/${dish_id.value}/can_destroy`,
+      canDestroyUrl: `${import.meta.env.VITE_BACK_HOST}/dishes/${dish_id.value}/can_destroy`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }

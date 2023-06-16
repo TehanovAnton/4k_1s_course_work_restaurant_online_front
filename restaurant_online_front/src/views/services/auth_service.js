@@ -4,7 +4,7 @@ import tokensService from './tokensService';
 import { errorshandler, isSuccessful } from './common_methods';
 
 const apiSignOut = async () => {
-  let signOutUrl = 'http://localhost:3000/auth/sign_out'
+  let signOutUrl = `${import.meta.env.VITE_BACK_HOST}/auth/sign_out`
   
   let response = await axios.delete(
     signOutUrl,

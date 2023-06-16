@@ -24,7 +24,7 @@
 
   const updateDish = async (modefiedDish) => {
     let args = {
-      updateUrl: `http://localhost:3000/dishes/${modefiedDish.id}`,
+      updateUrl: `${import.meta.env.VITE_BACK_HOST}/dishes/${modefiedDish.id}`,
       data: '',
       requestOptions: {
         headers: ''

@@ -18,7 +18,7 @@
 
   const sign_in = async () => {
     let response = await axios.post(
-      'http://localhost:3000/auth/sign_in',
+      `${import.meta.env.VITE_BACK_HOST}/auth/sign_in`,
       customer.value
     ).catch((error) => {        
       errors.value = error.response.data.errors;

@@ -24,7 +24,7 @@
 
   const createRestaurantModeArgs = computed(() => {
     return {
-      canCreateUrl: `http://localhost:3000/restaurants/can_create`,
+      canCreateUrl: `${import.meta.env.VITE_BACK_HOST}/restaurants/can_create`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }

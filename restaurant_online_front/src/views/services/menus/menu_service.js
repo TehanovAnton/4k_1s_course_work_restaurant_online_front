@@ -3,7 +3,7 @@ import { errorshandler, isSuccessful, processableErrors } from '../common_method
 import tokensService from '../../services/tokensService';
 
 const apiIndexMenus = async (authHeaders, restaurantId, options) => {
-  let getUrl = `http://localhost:3000/restaurants/${restaurantId}/menus?`
+  let getUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurantId}/menus?`
 
   if (!!options['view'])
     getUrl += `view=${options['view']}`
@@ -18,7 +18,7 @@ const apiIndexMenus = async (authHeaders, restaurantId, options) => {
 }
 
 const apiGetMenu = async (authHeaders, menuId) => {
-  let response = await axios.get(`http://localhost:3000/menus/${menuId}`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/menus/${menuId}`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
   
@@ -26,7 +26,7 @@ const apiGetMenu = async (authHeaders, menuId) => {
 }
 
 const apiShowMenu = async (authHeaders, menu) => {
-  let response = await axios.get(`http://localhost:3000/menus/${menu.id}`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/menus/${menu.id}`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
   
@@ -34,7 +34,7 @@ const apiShowMenu = async (authHeaders, menu) => {
 }
 
 const apiUpdateMenu = async (authHeaders, menu, errorsStore, successCallback) => {
-  let updateUrl = `http://localhost:3000/menus/${menu.id}`
+  let updateUrl = `${import.meta.env.VITE_BACK_HOST}/menus/${menu.id}`
   let data = menu.attributes
     
   let response = await axios.put(
@@ -57,7 +57,7 @@ const apiUpdateMenu = async (authHeaders, menu, errorsStore, successCallback) =>
 }
 
 const apiCreateMenu = async (authHeaders, menu) => {
-  let createUrl = `http://localhost:3000/restaurants/${menu.restaurant_id}/menus`
+  let createUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/${menu.restaurant_id}/menus`
   let data = { menu: menu }  
 
   let response = await axios.post(
@@ -70,7 +70,7 @@ const apiCreateMenu = async (authHeaders, menu) => {
 }
 
 const apiDestroyMenu = async (authHeaders, menu) => {
-  let destroyUrl = `http://localhost:3000/menus/${menu.id}`
+  let destroyUrl = `${import.meta.env.VITE_BACK_HOST}/menus/${menu.id}`
   
   let response = await axios.delete(
     destroyUrl,
@@ -81,7 +81,7 @@ const apiDestroyMenu = async (authHeaders, menu) => {
 }
 
 const apiCanUpdateMenu = async (authHeaders, menu) => {
-  let canUrl = `http://localhost:3000/menus/${menu.id}/can_update`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/menus/${menu.id}/can_update`
   
   let response = await axios.get(
     canUrl, 
@@ -92,7 +92,7 @@ const apiCanUpdateMenu = async (authHeaders, menu) => {
 }
 
 const apiCanCreateMenu = async (authHeaders, restaurant) => {
-  let canUrl = `http://localhost:3000/restaurants/${restaurant.id}/menus/can_create`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurant.id}/menus/can_create`
   
   let response = await axios.get(
     canUrl,
@@ -103,7 +103,7 @@ const apiCanCreateMenu = async (authHeaders, restaurant) => {
 }
 
 const apiCanDestroyMenu = async (authHeaders, menu) => {
-  let canUrl = `http://localhost:3000/menus/${menu.id}/can_destroy`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/menus/${menu.id}/can_destroy`
   
   let response = await axios.get(
     canUrl,

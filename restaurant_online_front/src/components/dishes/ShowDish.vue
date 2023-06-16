@@ -11,7 +11,7 @@
 
   const editDishModeArgs = computed(() => {
     return {
-      canUpdateUrl: `http://localhost:3000/dishes/${props.dish.id}/can_update`,
+      canUpdateUrl: `${import.meta.env.VITE_BACK_HOST}/dishes/${props.dish.id}/can_update`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -20,7 +20,7 @@
 
   const destroyDishModeArgs = computed(() => {
     return {
-      canDestroyUrl: `http://localhost:3000/dishes/${props.dish.id}/can_destroy`,
+      canDestroyUrl: `${import.meta.env.VITE_BACK_HOST}/dishes/${props.dish.id}/can_destroy`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -50,7 +50,7 @@
 
   const destroyDish = async () => {
     let args = {
-      deleteUrl: `http://localhost:3000/dishes/${props.dish.id}`,
+      deleteUrl: `${import.meta.env.VITE_BACK_HOST}/dishes/${props.dish.id}`,
       requestOptions: { headers: tokensService.auth_headers() },
     }
 

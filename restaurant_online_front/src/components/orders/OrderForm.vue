@@ -80,7 +80,7 @@
   }
 
   const getMenuDishes = async (menuId) => {
-    let url = dishesService.urlOptionsEditor(`http://localhost:3000/menus/${menuId}/dishes?`, 
+    let url = dishesService.urlOptionsEditor(`${import.meta.env.VITE_BACK_HOST}/menus/${menuId}/dishes?`, 
                                              { view: false })
     let args = { 
       getUrl: url,

@@ -3,7 +3,7 @@ import { errorshandler, isSuccessful, setHeadersIfSuccessful, responseHandler } 
 import tokensService from '../../services/tokensService';
 
 const apiGetOrderMessges = async (orderId) => {
-  let response = await axios.get(`http://localhost:3000/orders/${orderId}/order_messages`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/orders/${orderId}/order_messages`,
     { headers: tokensService.auth_headers() })
   .catch(errorshandler)  
 
@@ -12,7 +12,7 @@ const apiGetOrderMessges = async (orderId) => {
 
 const apiPostOrderMessges = async (orderId, message) => {
   let data = message  
-  let response = await axios.post(`http://localhost:3000/orders/${orderId}/post_message`,
+  let response = await axios.post(`${import.meta.env.VITE_BACK_HOST}/orders/${orderId}/post_message`,
     data,
     { headers: tokensService.auth_headers() })
   .catch(errorshandler)
@@ -22,7 +22,7 @@ const apiPostOrderMessges = async (orderId, message) => {
 
 const apiDeleteOrderMessge = async (orderId, messageId) => {
   let data = { message_id:messageId }
-  let response = await axios.delete(`http://localhost:3000/orders/${orderId}/delete_message`,
+  let response = await axios.delete(`${import.meta.env.VITE_BACK_HOST}/orders/${orderId}/delete_message`,
     {
       headers: tokensService.auth_headers(),
       data: data
@@ -33,7 +33,7 @@ const apiDeleteOrderMessge = async (orderId, messageId) => {
 }
 
 const apiGetRestaurantMessges = async (restaurantId) => {
-  let response = await axios.get(`http://localhost:3000/restaurants/${restaurantId}/restaurant_messages`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurantId}/restaurant_messages`,
     { headers: tokensService.auth_headers() })
   .catch(errorshandler)  
 
@@ -42,7 +42,7 @@ const apiGetRestaurantMessges = async (restaurantId) => {
 
 const apiPostRestaurantMessges = async (restaurantId, message) => {
   let data = message  
-  let response = await axios.post(`http://localhost:3000/restaurants/${restaurantId}/post_message`,
+  let response = await axios.post(`${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurantId}/post_message`,
     data,
     { headers: tokensService.auth_headers() })
   .catch(errorshandler)
@@ -52,7 +52,7 @@ const apiPostRestaurantMessges = async (restaurantId, message) => {
 
 const apiDeleteRestaurantMessage = async (restaurantId, messageId) => {
   let data = { message_id:messageId }
-  let response = await axios.delete(`http://localhost:3000/restaurants/${restaurantId}/delete_message`,
+  let response = await axios.delete(`${import.meta.env.VITE_BACK_HOST}/restaurants/${restaurantId}/delete_message`,
     {
       headers: tokensService.auth_headers(),
       data: data

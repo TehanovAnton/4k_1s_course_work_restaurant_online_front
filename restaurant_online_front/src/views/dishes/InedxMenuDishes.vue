@@ -91,7 +91,7 @@
   const modeAlowability = (mode) => modesProperties.value[mode].allowed
 
   const refreshDishes = async () => {
-    let url = `http://localhost:3000/menus/${menu.value.id}/dishes`
+    let url = `${import.meta.env.VITE_BACK_HOST}/menus/${menu.value.id}/dishes`
     let args = { 
       getUrl: url,
       requestOptions: { 
@@ -169,7 +169,7 @@
   <div v-if="currentMode == 'delete'">
     <DeleteModel @deleted-sucessfully="refreshDishes()"
                 :record="currentDish"
-                :destroy-url="`http://localhost:3000/dishes/${currentDish.id}`">
+                :destroy-url="`${import.meta.env.VITE_BACK_HOST}/dishes/${currentDish.id}`">
       <ModesSelect :modes="modes"
                    :current-mode-stor="currentDishModeStore"
                    :selected-mode-store="selectedModeStore"

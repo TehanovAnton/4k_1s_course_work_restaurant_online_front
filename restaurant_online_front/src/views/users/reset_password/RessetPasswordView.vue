@@ -31,7 +31,7 @@
 
   const resetPassword = async () => {
     let args = {
-      url: 'http://localhost:3000/auth/password',
+      url: `${import.meta.env.VITE_BACK_HOST}/auth/password`,
       data: { 
         password: formObject.value.password,
         password_confirmation: formObject.value.password_confirmation,

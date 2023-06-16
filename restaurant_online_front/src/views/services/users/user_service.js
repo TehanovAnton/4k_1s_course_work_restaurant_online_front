@@ -3,7 +3,7 @@ import { errorshandler, isSuccessful, axiosMethods, processableErrors } from '..
 import tokensService from '../../services/tokensService';
 
 const apiShowUser = async (authHeaders, user_id) => {
-  let response = await axios.get(`http://localhost:3000/users/${user_id}`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/users/${user_id}`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
   
@@ -11,7 +11,7 @@ const apiShowUser = async (authHeaders, user_id) => {
 }
 
 const apiShowUserByEmail = async (authHeaders, userEmail) => {
-  let response = await axios.get(`http://localhost:3000/users/show_by_email`,
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/users/show_by_email`,
                                  { 
                                   headers: authHeaders,
                                   params: { email: userEmail }
@@ -22,7 +22,7 @@ const apiShowUserByEmail = async (authHeaders, userEmail) => {
 }
 
 const apiIndexUsers = async (authHeaders) => {
-  let response = await axios.get('http://localhost:3000/users',
+  let response = await axios.get(`${import.meta.env.VITE_BACK_HOST}/users`,
                                  { headers: authHeaders })
                             .catch(errorshandler)
 
@@ -32,7 +32,7 @@ const apiIndexUsers = async (authHeaders) => {
 }
 
 const apiUpdateUser = async (authHeaders, user) => {
-  let updateUrl = `http://localhost:3000/users/${user.id}`
+  let updateUrl = `${import.meta.env.VITE_BACK_HOST}/users/${user.id}`
   let data = { user: user }
     
   let response = await axios.put(
@@ -45,7 +45,7 @@ const apiUpdateUser = async (authHeaders, user) => {
 }
 
 const apiCreateUser = async (authHeaders, user) => {
-  let createUrl = `http://localhost:3000/users `
+  let createUrl = `${import.meta.env.VITE_BACK_HOST}/users `
   let data = { user: user }  
 
   let response = await axios.post(
@@ -58,7 +58,7 @@ const apiCreateUser = async (authHeaders, user) => {
 }
 
 const apiDestroyUser = async (authHeaders, user) => {
-  let destroyUrl = `http://localhost:3000/users/${user.id}`
+  let destroyUrl = `${import.meta.env.VITE_BACK_HOST}/users/${user.id}`
   
   let response = await axios.delete(
     destroyUrl,
@@ -69,7 +69,7 @@ const apiDestroyUser = async (authHeaders, user) => {
 }
 
 const apiCanUpdateUser = async (authHeaders, user) => {
-  let canUrl = `http://localhost:3000/users/${user.id}/can_update`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/users/${user.id}/can_update`
   
   let response = await axios.get(
     canUrl, 
@@ -80,7 +80,7 @@ const apiCanUpdateUser = async (authHeaders, user) => {
 }
 
 const apiCanCreateUser = async (authHeaders) => {
-  let canUrl = `http://localhost:3000/users/can_create`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/users/can_create`
   
   let response = await axios.get(
     canUrl,
@@ -91,7 +91,7 @@ const apiCanCreateUser = async (authHeaders) => {
 }
 
 const apiCanDestroyUser = async (authHeaders, user) => {
-  let canUrl = `http://localhost:3000/users/${user.id}/can_destroy`
+  let canUrl = `${import.meta.env.VITE_BACK_HOST}/users/${user.id}/can_destroy`
   
   let response = await axios.get(
     canUrl,

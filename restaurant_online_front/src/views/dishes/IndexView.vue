@@ -28,7 +28,7 @@
 
   const createDishModeArgs = computed(() => {
     return {
-      canCreateUrl: `http://localhost:3000/menus/${menu.value.id}/dishes/can_create`,
+      canCreateUrl: `${import.meta.env.VITE_BACK_HOST}/menus/${menu.value.id}/dishes/can_create`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -52,7 +52,7 @@
 
   const getDishes = async () => {    
     let menuId = route.params['menuId']
-    let url = dishesService.urlOptionsEditor(`http://localhost:3000/menus/${menuId}/dishes?`, 
+    let url = dishesService.urlOptionsEditor(`${import.meta.env.VITE_BACK_HOST}/menus/${menuId}/dishes?`, 
                                              { view: 'with_menus' })
     let args = { 
       getUrl: url,

@@ -26,7 +26,7 @@
 
   const deleteDish = async () => {
     let args = {
-      deleteUrl: `http://localhost:3000/dishes/${props.dish.id}`,
+      deleteUrl: `${import.meta.env.VITE_BACK_HOST}/dishes/${props.dish.id}`,
       requestOptions: { headers: tokensService.auth_headers() },
     }
 

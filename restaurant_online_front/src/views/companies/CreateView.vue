@@ -21,7 +21,7 @@
 
   const createCompany = async (formCompany) => {
     let args = {
-      url: 'http://localhost:3000/companies',
+      url: `${import.meta.env.VITE_BACK_HOST}/companies`,
       data: { company: formCompany },
       requestOptions: {
         headers: tokensService.auth_headers()

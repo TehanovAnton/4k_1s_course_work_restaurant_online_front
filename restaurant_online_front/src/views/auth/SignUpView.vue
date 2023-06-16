@@ -31,7 +31,7 @@
 
   const sign_up = async () => {
     let args = {
-      url: 'http://localhost:3000/auth',
+      url: `${import.meta.env.VITE_BACK_HOST}/auth`,
       data: customer.value,
       requestOptions: {}
     }

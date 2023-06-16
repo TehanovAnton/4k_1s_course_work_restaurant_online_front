@@ -50,7 +50,7 @@
   const sign_up = async () => {
     await user_service.requestBase(
       {
-        url: `http://localhost:3000/users/show_by_email`,
+        url: `${import.meta.env.VITE_BACK_HOST}/users/show_by_email`,
         data: {
           headers: tokensService.auth_headers(),
           params: { email: bindingUser.value.email }
@@ -71,7 +71,7 @@
     formUser.value.restaurants_cook_attributes = { restaurant_id: currentRestaurant.value.id }
     
     const requester = new AuthenticationApi({
-      url: `http://localhost:3000/restaurants_teams/restaurants/${currentRestaurant.value.id}/create_cook`,
+      url: `${import.meta.env.VITE_BACK_HOST}/restaurants_teams/restaurants/${currentRestaurant.value.id}/create_cook`,
       data: { user: formUser.value },
       requestOptions: {
         headers: tokensService.auth_headers()

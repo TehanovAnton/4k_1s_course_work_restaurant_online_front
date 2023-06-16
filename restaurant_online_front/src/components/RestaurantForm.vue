@@ -8,7 +8,10 @@
   const modefiedRestaurant = ref({ 
     id: props.restaurant.id,
     updateAttributes: {
-      companies_restaurant_attributes: props.restaurant.companies_restaurant_attributes
+      companies_restaurant_attributes: props.restaurant.companies_restaurant_attributes,
+      email: 'Minsky@gmail.com',
+      address: 'pobeditelei 5',
+      name: 'Minsky'
     }
   })
 

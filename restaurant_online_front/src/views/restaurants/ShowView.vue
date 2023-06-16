@@ -13,7 +13,7 @@
 
   const editRestaurantModeArgs = computed(() => {
     return {
-      canUpdateUrl: `http://localhost:3000/restaurants/can_create`,
+      canUpdateUrl: `${import.meta.env.VITE_BACK_HOST}/restaurants/can_create`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -22,7 +22,7 @@
 
   const deleteRestaurantModeArgs = computed(() => {
     return {
-      canDestroyUrl: `http://localhost:3000/restaurants/can_create`,
+      canDestroyUrl: `${import.meta.env.VITE_BACK_HOST}/restaurants/can_create`,
       requestOptions: {
         headers: tokensService.auth_headers()
       }
@@ -53,7 +53,7 @@
 
   const destroyRestaurant = async () => {
     let args = {
-      deleteUrl: `http://localhost:3000/restaurants/${props.restaurant.id}`,
+      deleteUrl: `${import.meta.env.VITE_BACK_HOST}/restaurants/${props.restaurant.id}`,
       requestOptions: { headers: tokensService.auth_headers() },
     }
     let { response, isSuccessful } = await restaurantApi.apiDeletModel(args)
